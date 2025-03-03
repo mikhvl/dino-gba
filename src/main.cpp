@@ -40,11 +40,13 @@ inline void control_player(bn::sprite_ptr& player, bn::sprite_animate_action<2>&
     // animation test
     if(bn::keypad::left_pressed())
     {
+        player.set_horizontal_flip(true);
         action = bn::create_sprite_animate_action_forever(
             player, run_speed, bn::sprite_items::dino.tiles_item(), 1, 2);
     } 
     else if(bn::keypad::right_pressed())
     {
+        player.set_horizontal_flip(false);
         action = bn::create_sprite_animate_action_forever(
             player, run_speed, bn::sprite_items::dino.tiles_item(), 1, 2);
     }
