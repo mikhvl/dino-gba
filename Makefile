@@ -28,9 +28,9 @@
 #
 # All directories are specified relative to the project directory where the makefile is found.
 #---------------------------------------------------------------------------------------------------------------------
-TARGET      	:=  $(notdir $(CURDIR))
+TARGET      	:=  dino
 BUILD       	:=  build
-LIBBUTANO   	:=  ../butano
+LIBBUTANO   	:=  butano
 PYTHON      	:=  python
 SOURCES     	:=  src
 INCLUDES    	:=  include
@@ -38,8 +38,8 @@ DATA        	:=
 GRAPHICS    	:=  graphics
 AUDIO       	:=  audio
 DMGAUDIO    	:=  dmg_audio
-ROMTITLE    	:=  DINO
-ROMCODE     	:=  SBTP
+ROMTITLE    	:=  DINO GBA
+ROMCODE     	:=  DINO
 USERFLAGS   	:=  
 USERCXXFLAGS	:=  
 USERASFLAGS 	:=  
