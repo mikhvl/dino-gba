@@ -32,6 +32,8 @@
 *.app
 
 # Butano
+butano
+common
 build
 *.gba
 *.elf
