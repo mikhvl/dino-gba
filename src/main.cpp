@@ -22,13 +22,14 @@
 constexpr bn::fixed speed = 2;
 constexpr int anim_speed = 5;
 constexpr int spr_offset = 4;
+constexpr bn::fixed grnd_level = 32;
 
 
 class Player
 {
 public:
-    Player(bn::fixed x = 0, bn::fixed y = 32)
-        : pos(x, y)
+    Player(bn::fixed x = 0, bn::fixed y = grnd_level)
+        : pos(x, bn::min(y, grnd_level))
         , spr(bn::sprite_items::dino.create_sprite(
                 pos.x() + (_face_left ? -spr_offset : spr_offset), pos.y()))
         , act(bn::create_sprite_animate_action_forever(
@@ -49,21 +50,24 @@ public:
     }
     
 private:
+    bn::fixed_point pos;
+    bn::fixed g = 3;
+    bn::fixed y_speed = 0;
+    
     bool _face_left = false;
-    bool _standing = true;
+    bool _standing = pos.y() <= grnd_level;
     enum run_states { not_run, start_run, full_run };
     enum jmp_states { not_jmp, start_jmp, full_jmp };
     run_states _run = not_run;
     jmp_states _jmp = not_jmp;
     
-    bn::fixed_point pos;
     bn::sprite_ptr spr;
     bn::sprite_animate_action<2> act;
     bn::sprite_ptr box; // hitbox test
     
     void player_input()
     {
-        // horizontal movement
+    // horizontal movement
         if(bn::keypad::left_pressed())
         {
             _run = start_run;
@@ -80,13 +84,13 @@ private:
         }
         else _run = not_run;
         
-        // vertical movement
-        if(bn::keypad::up_pressed())
+    // vertical movement
+        if(bn::keypad::a_pressed() && _standing)
         {
             _standing = false;
             _jmp = start_jmp;
         }
-        else if(bn::keypad::up_held()) _jmp = full_jmp;
+        else if(bn::keypad::a_held() && !_standing) _jmp = full_jmp;
         else _jmp = not_jmp;
     }
     
