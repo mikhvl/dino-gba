@@ -47,18 +47,19 @@ public:
     }
     
 private:
-    const int anim_frames = 5;
+    const int anim_frames = 4;
     const int spr_offset = 4;
+    bn::fixed g = 0.2;
+    bn::fixed max_y_speed = 4;
     
     bn::fixed_point pos;
-    bn::fixed g = 0.2;
     bn::fixed x_speed = 2;
     bn::fixed y_speed = 0;
     
     bool _face_left = false;
     bool _standing = pos.y() == grnd_level;
     enum run_states { not_run, start_run, full_run };
-    enum jmp_states { not_jmp, start_jmp, full_jmp };
+    enum jmp_states { not_jmp, start_jmp, full_jmp, fall_jmp, end_jmp };
     run_states _run = not_run;
     jmp_states _jmp = not_jmp;
     
@@ -89,28 +90,33 @@ private:
         if(bn::keypad::a_pressed() && _standing)
         {
             _standing = false;
-            y_speed += 5;
+            y_speed += max_y_speed;
             _jmp = start_jmp;
         }
-        else if(bn::keypad::a_held() && !_standing) _jmp = full_jmp;
+        else if(bn::keypad::a_held() && !_standing && _jmp != fall_jmp) _jmp = full_jmp;
+        // fall_jmp is handled by interact()
         else _jmp = not_jmp;
     }
     
     void interact()
     {
+    // horizontal movement
         if(_run == start_run || _run == full_run)
         {
             pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
             spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
         }
         
+    // vertical movement
         if(!_standing)
         {
             pos.set_y(pos.y() - y_speed);
             y_speed -= g;
+            if(y_speed < 0 && _jmp != fall_jmp) _jmp = fall_jmp;
             if(pos.y() > grnd_level)
             {
                 _standing = true;
+                _jmp = end_jmp;
                 y_speed = 0;
                 pos.set_y(grnd_level);
             }
