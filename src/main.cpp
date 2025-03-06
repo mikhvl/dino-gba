@@ -95,10 +95,9 @@ private:
     
     void animate()
     {
-        spr.set_horizontal_flip(face_left);
-        
         if(state == run_start)
         {
+            spr.set_horizontal_flip(face_left);
             act = bn::create_sprite_animate_action_forever(
                     spr, anim_speed, bn::sprite_items::dino.tiles_item(),
                     1, 2);
