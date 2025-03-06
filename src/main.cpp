@@ -27,8 +27,9 @@ constexpr int spr_offset = 4;
 class Player
 {
 public:
-    Player()
-        : spr(bn::sprite_items::dino.create_sprite(
+    Player(bn::fixed x = 0, bn::fixed y = 32)
+        : pos(x, y)
+        , spr(bn::sprite_items::dino.create_sprite(
                 pos.x() + (_face_left ? -spr_offset : spr_offset), pos.y()))
         , act(bn::create_sprite_animate_action_forever(
                 spr, anim_speed, bn::sprite_items::dino.tiles_item(),
@@ -41,8 +42,8 @@ public:
     
     void update()
     {
-        change_state();
-        move();
+        player_input();
+        interact();
         animate();
         box_update();
     }
@@ -55,12 +56,12 @@ private:
     run_states _run = not_run;
     jmp_states _jmp = not_jmp;
     
-    bn::fixed_point pos = {0, 32};
+    bn::fixed_point pos;
     bn::sprite_ptr spr;
     bn::sprite_animate_action<2> act;
     bn::sprite_ptr box; // hitbox test
     
-    void change_state()
+    void player_input()
     {
         // horizontal movement
         if(bn::keypad::left_pressed())
@@ -89,7 +90,7 @@ private:
         else _jmp = not_jmp;
     }
     
-    void move()
+    void interact()
     {
         if(_run == start_run || _run == full_run)
         {
