@@ -18,10 +18,7 @@
 
 #include "bn_sprite_items_gatito.h"
 
-
-constexpr bn::fixed speed = 2;
-constexpr int anim_speed = 5;
-constexpr int spr_offset = 4;
+// game constants
 constexpr bn::fixed grnd_level = 32;
 
 
@@ -33,7 +30,7 @@ public:
         , spr(bn::sprite_items::dino.create_sprite(
                 pos.x() + (_face_left ? -spr_offset : spr_offset), pos.y()))
         , act(bn::create_sprite_animate_action_forever(
-                spr, anim_speed, bn::sprite_items::dino.tiles_item(),
+                spr, anim_frames, bn::sprite_items::dino.tiles_item(),
                 0, 0))
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y()))
     {
@@ -50,12 +47,16 @@ public:
     }
     
 private:
+    const int anim_frames = 5;
+    const int spr_offset = 4;
+    
     bn::fixed_point pos;
-    bn::fixed g = 3;
+    bn::fixed g = 0.2;
+    bn::fixed x_speed = 2;
     bn::fixed y_speed = 0;
     
     bool _face_left = false;
-    bool _standing = pos.y() <= grnd_level;
+    bool _standing = pos.y() == grnd_level;
     enum run_states { not_run, start_run, full_run };
     enum jmp_states { not_jmp, start_jmp, full_jmp };
     run_states _run = not_run;
@@ -98,7 +99,7 @@ private:
     {
         if(_run == start_run || _run == full_run)
         {
-            pos.set_x(pos.x() + (_face_left ? -speed : speed));
+            pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
             spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
         }
     }
@@ -109,13 +110,13 @@ private:
         {
             spr.set_horizontal_flip(_face_left);
             act = bn::create_sprite_animate_action_forever(
-                    spr, anim_speed, bn::sprite_items::dino.tiles_item(),
+                    spr, anim_frames, bn::sprite_items::dino.tiles_item(),
                     1, 2);
         }
         else if(_run == not_run)
         {
             act = bn::create_sprite_animate_action_forever(
-                    spr, anim_speed, bn::sprite_items::dino.tiles_item(),
+                    spr, anim_frames, bn::sprite_items::dino.tiles_item(),
                     0, 0);
         }
         
