@@ -47,15 +47,18 @@ public:
     }
     
 private:
+// some player constants
     const int anim_frames = 4;
     const int spr_offset = 4;
-    bn::fixed g = 0.2;
-    bn::fixed max_y_speed = 4;
-    
+    const bn::fixed g = 0.2;
+    const bn::fixed max_y_speed = 4;
+
+// player variables
     bn::fixed_point pos;
     bn::fixed x_speed = 2;
     bn::fixed y_speed = 0;
-    
+
+// state logic
     bool _face_left = false;
     bool _standing = pos.y() == grnd_level;
     enum run_states { not_run, start_run, full_run };
@@ -63,6 +66,7 @@ private:
     run_states _run = not_run;
     jmp_states _jmp = not_jmp;
     
+// sprites, animation
     bn::sprite_ptr spr;
     bn::sprite_animate_action<2> act;
     bn::sprite_ptr box; // hitbox test
@@ -142,7 +146,7 @@ private:
                         1, 2);
             }
         }
-        else
+        else // not _standing
         {
             spr.set_horizontal_flip(_face_left);
             if(_jmp == start_jmp || _jmp == full_jmp)
