@@ -126,18 +126,37 @@ private:
     
     void animate()
     {
-        if(_run == start_run)
+        if(_standing)
+        {
+            if(_run == not_run)
+            {
+                act = bn::create_sprite_animate_action_forever(
+                        spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                        0, 0);
+            }
+            else if(_run == start_run || _jmp == end_jmp)
+            {
+                spr.set_horizontal_flip(_face_left);
+                act = bn::create_sprite_animate_action_forever(
+                        spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                        1, 2);
+            }
+        }
+        else
         {
             spr.set_horizontal_flip(_face_left);
-            act = bn::create_sprite_animate_action_forever(
-                    spr, anim_frames, bn::sprite_items::dino.tiles_item(),
-                    1, 2);
-        }
-        else if(_run == not_run)
-        {
-            act = bn::create_sprite_animate_action_forever(
-                    spr, anim_frames, bn::sprite_items::dino.tiles_item(),
-                    0, 0);
+            if(_jmp == start_jmp || _jmp == full_jmp)
+            {
+                act = bn::create_sprite_animate_action_forever(
+                        spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                        3, 3);
+            }
+            else if(_jmp == fall_jmp)
+            {
+                act = bn::create_sprite_animate_action_forever(
+                        spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                        4, 4);
+            }
         }
         
         act.update();
