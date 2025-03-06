@@ -89,6 +89,7 @@ private:
         if(bn::keypad::a_pressed() && _standing)
         {
             _standing = false;
+            y_speed += 5;
             _jmp = start_jmp;
         }
         else if(bn::keypad::a_held() && !_standing) _jmp = full_jmp;
@@ -101,6 +102,19 @@ private:
         {
             pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
             spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
+        }
+        
+        if(!_standing)
+        {
+            pos.set_y(pos.y() - y_speed);
+            y_speed -= g;
+            if(pos.y() > grnd_level)
+            {
+                _standing = true;
+                y_speed = 0;
+                pos.set_y(grnd_level);
+            }
+            spr.set_y(pos.y());
         }
     }
     
