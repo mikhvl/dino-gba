@@ -113,10 +113,7 @@ private:
         else _run = not_run;
         
     // vertical movement
-        if(bn::keypad::a_pressed() && is_on_ground())
-        {
-            _jump = start_jump;
-        }
+        if(bn::keypad::a_pressed() && is_on_ground()) _jump = start_jump;
         else
         {
             if(is_falling() || is_on_ground()) _jump = not_jump;
