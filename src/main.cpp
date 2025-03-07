@@ -1,4 +1,5 @@
 #include "bn_core.h"
+#include "bn_math.h"
 #include "bn_fixed.h"
 #include "bn_fixed_point.h"
 #include "bn_rect.h"
@@ -59,7 +60,7 @@ private:
     bn::fixed y_speed = 0;
 
 // state logic
-// note: this state mindf/ckery is killing me
+// note: this state mindf/ckery is KILLING ME
     enum run_states  { start_run, full_run, end_run, not_run };
     enum jump_states { start_jump, full_jump, end_jump, not_jump };
     enum fall_states { start_fall, full_fall, end_fall, not_fall };
@@ -75,11 +76,14 @@ private:
     bn::sprite_animate_action<2> act;
     bn::sprite_ptr box; // hitbox test
 
-// functions
+// state functions
     bool is_on_ground() { return _jump == not_jump && (_fall == not_fall || _fall == end_fall); }
     bool is_running() { return _run == start_run || _run == full_run; }
     bool is_jumping() { return _jump == start_jump || _jump == full_jump; } // maybe _jump == end_jump
     bool is_falling() { return _fall == start_fall || _fall == full_fall; }
+
+// update functions
+    void set_flip() { spr.set_horizontal_flip(_face_left); }
     
     void player_input()
     {
@@ -88,11 +92,13 @@ private:
         {
             _run = start_run;
             _face_left = true;
+            set_flip();
         }
         else if(bn::keypad::right_pressed())
         {
             _run = start_run;
             _face_left = false;
+            set_flip();
         }
         
         else if(bn::keypad::left_held())      _run = full_run;
@@ -125,13 +131,12 @@ private:
         if(is_running())
         {
             pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
+            spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
         }
         
     // vertical movement
         if(is_on_ground() && pos.y() < ground_level) _fall = start_fall; // air spawn
-    
-        if(_jump == start_jump) y_speed += max_y_speed;
-        
+        if(_jump == start_jump) y_speed += max_y_speed; // jump momentum
         if(_fall == end_fall) _fall = not_fall;
         
         if(!is_on_ground())
@@ -145,30 +150,29 @@ private:
                 else if(_fall == start_fall) _fall = full_fall;
             }
             
-            if(pos.y() > ground_level)
+            if(pos.y() > ground_level) // landing
             {
                 pos.set_y(ground_level);
                 y_speed = 0;
                 _fall = end_fall;
             }
+            
+            spr.set_y(pos.y());
         }
     }
     
     void animate()
     {
-        spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
-        spr.set_y(pos.y());
-        
-        spr.set_horizontal_flip(_face_left);
-        
         if(is_on_ground())
         {
+        // idle
             if(_run == end_run || (_run == not_run && _fall == end_fall))
             {
                 act = bn::create_sprite_animate_action_forever(
                         spr, anim_frames, bn::sprite_items::dino.tiles_item(),
                         0, 0);
             }
+        // run
             else if(_run == start_run || (_run == full_run && _fall == end_fall))
             {
                 act = bn::create_sprite_animate_action_forever(
@@ -176,14 +180,16 @@ private:
                         1, 2);
             }
         }
-        else // jump/fall
+        else // if(is_on_ground())
         {
+        // jump
             if(_jump == start_jump)
             {
                 act = bn::create_sprite_animate_action_forever(
                         spr, anim_frames, bn::sprite_items::dino.tiles_item(),
                         3, 3);
             }
+        // fall
             else if(_fall == start_fall)
             {
                 act = bn::create_sprite_animate_action_forever(
