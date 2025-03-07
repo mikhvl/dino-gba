@@ -115,15 +115,15 @@ private:
         {
             _jump = start_jump;
         }
-        else if(bn::keypad::a_held() && !is_falling() && !is_on_ground())
+        else
         {
-            _jump = full_jump;
+            if(is_falling() || is_on_ground()) _jump = not_jump;
+            else
+            {
+                if(bn::keypad::a_held() && _jump != end_jump) _jump = full_jump;
+                else if(bn::keypad::a_released()) _jump = end_jump;
+            }
         }
-        else if(bn::keypad::a_released() && !is_falling() && !is_on_ground())
-        {
-            _jump = end_jump;
-        }
-        else if(is_falling() || is_on_ground()) _jump = not_jump;
     }
     
     void interact()
