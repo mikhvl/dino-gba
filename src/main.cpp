@@ -84,7 +84,11 @@ private:
     bool is_falling() { return _fall == start_fall || _fall == full_fall; }
 
 // update functions
-    void set_flip() { spr.set_horizontal_flip(_face_left); }
+    void set_flip(bool flip)
+    {
+        _face_left = flip;
+        spr.set_horizontal_flip(_face_left);
+    }
     
     void player_input()
     {
@@ -92,14 +96,12 @@ private:
         if(bn::keypad::left_pressed())
         {
             _run = start_run;
-            _face_left = true;
-            set_flip();
+            set_flip(true);
         }
         else if(bn::keypad::right_pressed())
         {
             _run = start_run;
-            _face_left = false;
-            set_flip();
+            set_flip(false);
         }
         
         else if(bn::keypad::left_held())      _run = full_run;
