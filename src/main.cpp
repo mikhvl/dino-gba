@@ -21,6 +21,7 @@
 
 // game constants
 constexpr bn::fixed ground_level = 32;
+constexpr bn::fixed bound = 114;
 
 
 class Player
@@ -131,6 +132,12 @@ private:
         if(is_running())
         {
             pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
+            spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
+        }
+        
+        if(bn::abs(pos.x()) > bound) // level bounds
+        {
+            pos.set_x(pos.x() < 0 ? -bound : bound);
             spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
         }
         
