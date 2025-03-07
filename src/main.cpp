@@ -19,14 +19,14 @@
 #include "bn_sprite_items_gatito.h"
 
 // game constants
-constexpr bn::fixed grnd_level = 32;
+constexpr bn::fixed ground_level = 32;
 
 
 class Player
 {
 public:
-    Player(bn::fixed x = 0, bn::fixed y = grnd_level)
-        : pos(x, bn::min(y, grnd_level))
+    Player(bn::fixed x = 0, bn::fixed y = ground_level)
+        : pos(x, bn::min(y, ground_level))
         , spr(bn::sprite_items::dino.create_sprite(
                 pos.x() + (_face_left ? -spr_offset : spr_offset), pos.y()))
         , act(bn::create_sprite_animate_action_forever(
@@ -59,17 +59,27 @@ private:
     bn::fixed y_speed = 0;
 
 // state logic
+// note: this state mindf/ckery is killing me
+    enum run_states  { start_run, full_run, end_run, not_run };
+    enum jump_states { start_jump, full_jump, end_jump, not_jump };
+    enum fall_states { start_fall, full_fall, end_fall, not_fall };
+    
+    run_states  _run  = not_run;
+    jump_states _jump = not_jump;
+    fall_states _fall = not_fall;
+    
     bool _face_left = false;
-    bool _standing = pos.y() == grnd_level;
-    enum run_states { not_run, start_run, full_run };
-    enum jmp_states { not_jmp, start_jmp, full_jmp, fall_jmp, end_jmp };
-    run_states _run = not_run;
-    jmp_states _jmp = not_jmp;
     
 // sprites, animation
     bn::sprite_ptr spr;
     bn::sprite_animate_action<2> act;
     bn::sprite_ptr box; // hitbox test
+
+// functions
+    bool is_on_ground() { return _jump == not_jump && (_fall == not_fall || _fall == end_fall); }
+    bool is_running() { return _run == start_run || _run == full_run; }
+    bool is_jumping() { return _jump == start_jump || _jump == full_jump; } // maybe _jump == end_jump
+    bool is_falling() { return _fall == start_fall || _fall == full_fall; }
     
     void player_input()
     {
@@ -84,78 +94,97 @@ private:
             _run = start_run;
             _face_left = false;
         }
-        else if(bn::keypad::left_held() || bn::keypad::right_held())
-        {
-            _run = full_run;
-        }
+        
+        else if(bn::keypad::left_held())      _run = full_run;
+        else if(bn::keypad::left_released())  _run = end_run;
+        
+        else if(bn::keypad::right_held())     _run = full_run;
+        else if(bn::keypad::right_released()) _run = end_run;
+        
         else _run = not_run;
         
     // vertical movement
-        if(bn::keypad::a_pressed() && _standing)
+        if(bn::keypad::a_pressed() && is_on_ground())
         {
-            _standing = false;
-            y_speed += max_y_speed;
-            _jmp = start_jmp;
+            _jump = start_jump;
         }
-        else if(bn::keypad::a_held() && !_standing && _jmp != fall_jmp) _jmp = full_jmp;
-        // fall_jmp is handled by interact()
-        else _jmp = not_jmp;
+        else if(bn::keypad::a_held() && !is_falling() && !is_on_ground())
+        {
+            _jump = full_jump;
+        }
+        else if(bn::keypad::a_released() && !is_falling() && !is_on_ground())
+        {
+            _jump = end_jump;
+        }
+        else if(is_falling() || is_on_ground()) _jump = not_jump;
     }
     
     void interact()
     {
     // horizontal movement
-        if(_run == start_run || _run == full_run)
+        if(is_running())
         {
             pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
-            spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
         }
         
     // vertical movement
-        if(!_standing)
+        if(is_on_ground() && pos.y() < ground_level) _fall = start_fall; // air spawn
+    
+        if(_jump == start_jump) y_speed += max_y_speed;
+        
+        if(_fall == end_fall) _fall = not_fall;
+        
+        if(!is_on_ground())
         {
             pos.set_y(pos.y() - y_speed);
             y_speed -= g;
-            if(y_speed < 0 && _jmp != fall_jmp) _jmp = fall_jmp;
-            if(pos.y() > grnd_level)
+            
+            if(y_speed < 0)
             {
-                _standing = true;
-                _jmp = end_jmp;
-                y_speed = 0;
-                pos.set_y(grnd_level);
+                if(_fall == not_fall) _fall = start_fall;
+                else if(_fall == start_fall) _fall = full_fall;
             }
-            spr.set_y(pos.y());
+            
+            if(pos.y() > ground_level)
+            {
+                pos.set_y(ground_level);
+                y_speed = 0;
+                _fall = end_fall;
+            }
         }
     }
     
     void animate()
     {
-        if(_standing)
+        spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
+        spr.set_y(pos.y());
+        
+        spr.set_horizontal_flip(_face_left);
+        
+        if(is_on_ground())
         {
-            if(_run == not_run)
+            if(_run == end_run || (_run == not_run && _fall == end_fall))
             {
                 act = bn::create_sprite_animate_action_forever(
                         spr, anim_frames, bn::sprite_items::dino.tiles_item(),
                         0, 0);
             }
-            else if(_run == start_run || _jmp == end_jmp)
+            else if(_run == start_run || (_run == full_run && _fall == end_fall))
             {
-                spr.set_horizontal_flip(_face_left);
                 act = bn::create_sprite_animate_action_forever(
                         spr, anim_frames, bn::sprite_items::dino.tiles_item(),
                         1, 2);
             }
         }
-        else // not _standing
+        else // jump/fall
         {
-            spr.set_horizontal_flip(_face_left);
-            if(_jmp == start_jmp || _jmp == full_jmp)
+            if(_jump == start_jump)
             {
                 act = bn::create_sprite_animate_action_forever(
                         spr, anim_frames, bn::sprite_items::dino.tiles_item(),
                         3, 3);
             }
-            else if(_jmp == fall_jmp)
+            else if(_fall == start_fall)
             {
                 act = bn::create_sprite_animate_action_forever(
                         spr, anim_frames, bn::sprite_items::dino.tiles_item(),
