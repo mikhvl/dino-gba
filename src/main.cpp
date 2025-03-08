@@ -115,6 +115,8 @@ private:
         else _run = not_run;
         
     // vertical movement
+    // note: AAAAAAAAAAAAAAAAAAAAAAAAAAA 
+    // note: hmm ok at the second glance it's not so bad
         if(bn::keypad::a_pressed() && is_on_ground()) _jump = start_jump;
         else
         {
