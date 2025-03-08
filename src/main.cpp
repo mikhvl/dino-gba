@@ -58,7 +58,7 @@ private:
 
 // player variables
     bn::fixed_point pos;
-    bn::fixed x_speed = 2;
+    const bn::fixed x_speed = 2;
     bn::fixed y_speed = 0;
 
 // state logic
