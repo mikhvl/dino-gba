@@ -36,6 +36,7 @@ public:
                 0, 0))
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y()))
     {
+        if(is_on_ground() && pos.y() < ground_level) _fall = start_fall; // air spawn
         box.set_scale(0.5);
         box.set_visible(false);
     }
@@ -141,7 +142,6 @@ private:
         }
         
     // vertical movement
-        if(is_on_ground() && pos.y() < ground_level) _fall = start_fall; // air spawn
         if(_jump == start_jump) y_speed = max_y_speed; // jump momentum
         if(_fall == end_fall || _jump == start_jump) _fall = not_fall;
         
