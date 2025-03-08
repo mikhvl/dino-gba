@@ -57,7 +57,6 @@ private:
     const bn::fixed start_y_speed = 4;
     const bn::fixed release_y_speed = 1;
     const bn::fixed x_speed = 2;
-    
 
 // player variables
     bn::fixed_point pos;
@@ -122,8 +121,8 @@ private:
             if(is_falling() || is_on_ground()) _jump = not_jump;
             else
             {
-                if(_jump == release_jump || _jump == end_jump) _jump = end_jump;
-                else
+                if(_jump == release_jump) _jump = end_jump;
+                else if(_jump != end_jump)
                 {
                     if(bn::keypad::a_held()) _jump = full_jump;
                     else if(bn::keypad::a_released()) _jump = release_jump;
