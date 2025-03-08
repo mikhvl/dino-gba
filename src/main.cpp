@@ -54,11 +54,13 @@ private:
     const int anim_frames = 4;
     const int spr_offset = 4;
     const bn::fixed g = 0.2;
-    const bn::fixed max_y_speed = 4;
+    const bn::fixed start_y_speed = 4;
+    const bn::fixed release_y_speed = 1;
+    const bn::fixed x_speed = 2;
+    
 
 // player variables
     bn::fixed_point pos;
-    const bn::fixed x_speed = 2;
     bn::fixed y_speed = 0;
 
 // state logic
@@ -146,14 +148,20 @@ private:
         }
         
     // vertical movement
-        if(_jump == start_jump) y_speed = max_y_speed; // jump momentum
-        if(_fall == end_fall || _jump == start_jump) _fall = not_fall;
+        if(_jump == start_jump) y_speed = start_y_speed; // initial jump momentum
+        if(_fall == end_fall || _jump == start_jump) _fall = not_fall; // resets fall state
         
         if(!is_on_ground())
         {
             pos.set_y(pos.y() - y_speed);
             y_speed -= g;
-            
+        
+        // button release
+            if(y_speed > release_y_speed && _jump == release_jump)
+            {
+                y_speed = release_y_speed;
+            }
+        
         // falling
             if(y_speed < 0)
             {
