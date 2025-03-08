@@ -64,7 +64,7 @@ private:
 // state logic
 // note: this state mindf/ckery is KILLING ME
     enum run_states  { start_run, full_run, end_run, not_run };
-    enum jump_states { start_jump, full_jump, end_jump, not_jump };
+    enum jump_states { start_jump, full_jump, release_jump, end_jump, not_jump };
     enum fall_states { start_fall, full_fall, end_fall, not_fall };
     
     run_states  _run  = not_run;
@@ -120,8 +120,12 @@ private:
             if(is_falling() || is_on_ground()) _jump = not_jump;
             else
             {
-                if(bn::keypad::a_held() && _jump != end_jump) _jump = full_jump;
-                else if(bn::keypad::a_released()) _jump = end_jump;
+                if(_jump == release_jump || _jump == end_jump) _jump = end_jump;
+                else
+                {
+                    if(bn::keypad::a_held()) _jump = full_jump;
+                    else if(bn::keypad::a_released()) _jump = release_jump;
+                }
             }
         }
     }
@@ -150,13 +154,15 @@ private:
             pos.set_y(pos.y() - y_speed);
             y_speed -= g;
             
+        // falling
             if(y_speed < 0)
             {
                 if(_fall == not_fall) _fall = start_fall;
                 else if(_fall == start_fall) _fall = full_fall;
             }
             
-            if(pos.y() > ground_level) // landing
+        // landing
+            if(pos.y() > ground_level)
             {
                 pos.set_y(ground_level);
                 y_speed = 0;
