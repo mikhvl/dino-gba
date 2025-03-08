@@ -79,10 +79,10 @@ private:
     bn::sprite_ptr box; // hitbox test
 
 // state functions
-    bool is_on_ground() { return _jump == not_jump && (_fall == not_fall || _fall == end_fall); }
     bool is_running() { return _run == start_run || _run == full_run; }
-    bool is_jumping() { return _jump == start_jump || _jump == full_jump; } // maybe _jump == end_jump
+    bool is_jumping() { return _jump != not_jump; }
     bool is_falling() { return _fall == start_fall || _fall == full_fall; }
+    bool is_on_ground() { return !is_jumping() && !is_falling(); }
 
 // update functions
     void set_flip(bool flip)
