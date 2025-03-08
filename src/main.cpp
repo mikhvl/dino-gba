@@ -44,7 +44,7 @@ public:
     void update()
     {
         player_input();
-        interact();
+        movement();
         animate();
         box_update();
     }
@@ -133,7 +133,7 @@ private:
         }
     }
     
-    void interact()
+    void movement()
     {
     // horizontal movement
         if(is_running())
