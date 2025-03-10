@@ -55,7 +55,7 @@ private:
     const int spr_offset = 4;
     const bn::fixed g = 0.2;
     const bn::fixed start_y_speed = 4;
-    const bn::fixed release_y_speed = 1;
+    const bn::fixed release_y_speed = 1.3;
     const bn::fixed x_speed = 2;
 
 // player variables
