@@ -47,6 +47,7 @@ public:
     void update()
     {
         input();
+        attack();
         movement();
         animation();
         box_update();
@@ -70,10 +71,12 @@ private:
     enum run_states  { start_run, full_run, end_run, not_run };
     enum jump_states { start_jump, full_jump, release_jump, end_jump, not_jump };
     enum fall_states { start_fall, full_fall, end_fall, not_fall };
+    enum atk_states  { start_atk, full_atk, end_atk, not_atk };
     
-    run_states  _run = not_run;
+    run_states  _run  = not_run;
     jump_states _jump = not_jump;
     fall_states _fall = not_fall;
+    atk_states  _atk  = not_atk;
     
     bool _face_left = false;
     
@@ -134,6 +137,10 @@ private:
                 }
             }
         }
+        
+    // attack
+        if(bn::keypad::a_pressed()) _atk = start_atk;
+        else if(_atk == end_atk) _atk = not_atk;
     }
     
     void movement()
@@ -181,6 +188,14 @@ private:
             }
             
             spr.set_y(pos.y());
+        }
+    }
+    
+    void attack()
+    {
+        if(_atk == start_atk)
+        {
+            _atk = end_atk;
         }
     }
     
