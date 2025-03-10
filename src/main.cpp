@@ -36,16 +36,19 @@ public:
                 0, 0))
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y()))
     {
-        if(is_on_ground() && pos.y() < ground_level) _fall = start_fall; // air spawn
+    // air spawn
+        if(is_on_ground() && pos.y() < ground_level) _fall = start_fall;
+    
+    // test sprite
         box.set_scale(0.5);
         box.set_visible(false);
     }
     
     void update()
     {
-        player_input();
+        input();
         movement();
-        animate();
+        animation();
         box_update();
     }
     
@@ -68,7 +71,7 @@ private:
     enum jump_states { start_jump, full_jump, release_jump, end_jump, not_jump };
     enum fall_states { start_fall, full_fall, end_fall, not_fall };
     
-    run_states  _run  = not_run;
+    run_states  _run = not_run;
     jump_states _jump = not_jump;
     fall_states _fall = not_fall;
     
@@ -92,7 +95,7 @@ private:
         spr.set_horizontal_flip(_face_left);
     }
     
-    void player_input()
+    void input()
     {
     // horizontal movement
         if(bn::keypad::left_pressed())
@@ -154,20 +157,19 @@ private:
         
         if(!is_on_ground())
         {
+        // falling/jumping
             pos.set_y(pos.y() - y_speed);
             y_speed -= g;
+            if(y_speed < 0)
+            {
+                if(_fall == not_fall) _fall = start_fall;
+                else if(_fall == start_fall) _fall = full_fall;
+            }
         
         // button release
             if(y_speed > release_y_speed && _jump == release_jump)
             {
                 y_speed = release_y_speed;
-            }
-        
-        // falling
-            if(y_speed < 0)
-            {
-                if(_fall == not_fall) _fall = start_fall;
-                else if(_fall == start_fall) _fall = full_fall;
             }
             
         // landing
@@ -182,7 +184,7 @@ private:
         }
     }
     
-    void animate()
+    void animation()
     {
         if(is_on_ground())
         {
