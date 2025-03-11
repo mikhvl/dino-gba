@@ -27,8 +27,12 @@ constexpr bn::fixed bound = 114;
 class Player
 {
 public:
-    Player(bn::fixed x = 0, bn::fixed y = ground_level)
-        : pos(x, bn::min(y, ground_level))
+    Player
+    (
+        bn::fixed x = 0,
+        bn::fixed y = ground_level
+    )
+        : pos(x < 0 ? bn::max(x, -bound) : bn::min(x, bound), bn::min(y, ground_level))
         , spr(bn::sprite_items::dino.create_sprite(
                 pos.x() + (_face_left ? -spr_offset : spr_offset), pos.y()))
         , act(bn::create_sprite_animate_action_forever(
