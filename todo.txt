@@ -1,0 +1,16 @@
+TASKS:
+entity parent class
+player attack
+scene class
+game class
+hitboxes
+
+TRACKLIST:
+libera me from hell
+voided
+let me hear
+world is mine
+pop team epic
+kill la kill
+kiss of death
+tower of heaven
