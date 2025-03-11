@@ -24,6 +24,29 @@ constexpr bn::fixed ground_level = 32;
 constexpr bn::fixed bound = 114;
 
 
+class Entity
+{
+public:
+    Entity
+    (
+        bn::fixed x = 0,
+        bn::fixed y = ground_level,
+        bn::sprite_ptr sprite
+    )
+        : pos(x < 0 ? bn::max(x, -bound) : bn::min(x, bound), bn::min(y, ground_level))
+        , spr(sprite)
+    {}
+
+private:
+// position in space
+    bn::fixed_point pos;
+
+// sprite and pixel offset for horizontal flip
+    bn::sprite_ptr spr;
+    int spr_offset;
+};
+
+
 class Player
 {
 public:
