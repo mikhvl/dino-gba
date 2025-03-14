@@ -9,6 +9,7 @@ LEVELS:
 winter, pink sunrise, village
 chain link fence, field, autumn, puddles
 night rice fields, neon, highways in the sky
+high platform in the bright blue sky, white clouds, wind
 
 ENEMIES:
 long spine dino zombie
@@ -24,3 +25,4 @@ kill la kill
 kiss of death
 tower of heaven
 антоха мс - дураки
+tatu - нас не догонят
