@@ -37,7 +37,7 @@ public:
         , spr_item(sprite_item)
         , spr(spr_item.create_sprite(
                 pos.x() + (_face_left ? -spr_offset_x : spr_offset_x), pos.y()))                       
-        , act(bn::create_sprite_animate_action_forever(
+        , act(bn::create_sprite_animate_action_once(
                 spr, anim_frames, spr_item.tiles_item(),
                 0, 0))
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // hitbox test
@@ -213,7 +213,7 @@ private:
         // idle
             if(_run == end_run || (_run == not_run && _fall == end_fall))
             {
-                act = bn::create_sprite_animate_action_forever(
+                act = bn::create_sprite_animate_action_once(
                         spr, anim_frames, spr_item.tiles_item(),
                         0, 0);
             }
@@ -230,20 +230,20 @@ private:
         // jump
             if(_jump == start_jump)
             {
-                act = bn::create_sprite_animate_action_forever(
+                act = bn::create_sprite_animate_action_once(
                         spr, anim_frames, spr_item.tiles_item(),
                         3, 3);
             }
         // fall
             else if(_fall == start_fall)
             {
-                act = bn::create_sprite_animate_action_forever(
+                act = bn::create_sprite_animate_action_once(
                         spr, anim_frames, spr_item.tiles_item(),
                         4, 4);
             }
         }
         
-        act.update();
+        if(!act.done()) act.update();
     }
     
     void box_update()
