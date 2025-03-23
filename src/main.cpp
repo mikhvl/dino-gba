@@ -147,6 +147,14 @@ private:
         else if(_atk == end_atk) _atk = not_atk;
     }
     
+    void attack()
+    {
+        if(_atk == start_atk)
+        {
+            _atk = end_atk;
+        }
+    }
+    
     void movement()
     {
     // horizontal movement
@@ -192,14 +200,6 @@ private:
             }
             
             spr.set_y(pos.y());
-        }
-    }
-    
-    void attack()
-    {
-        if(_atk == start_atk)
-        {
-            _atk = end_atk;
         }
     }
     
