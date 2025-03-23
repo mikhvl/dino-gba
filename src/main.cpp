@@ -59,19 +59,17 @@ public:
     
 private:
 // some player constants
-    const int anim_frames = 4;
-    const int spr_offset = 4;
     const bn::fixed g = 0.2;
     const bn::fixed start_y_speed = 4;
     const bn::fixed release_y_speed = 1.3;
     const bn::fixed x_speed = 2;
+    const int anim_frames = 4;
 
 // player variables
     bn::fixed_point pos;
     bn::fixed y_speed = 0;
 
 // state logic
-// note: this state mindf/ckery is KILLING ME
     enum run_states  { start_run, full_run, end_run, not_run };
     enum jump_states { start_jump, full_jump, release_jump, end_jump, not_jump };
     enum fall_states { start_fall, full_fall, end_fall, not_fall };
@@ -82,9 +80,11 @@ private:
     fall_states _fall = not_fall;
     atk_states  _atk  = not_atk;
     
+// sprite position
+    int spr_offset_x = 4;
     bool _face_left = false;
-    
-// sprites, animation
+
+// sprite/animation item
     bn::sprite_ptr spr;
     bn::sprite_animate_action<2> act;
     bn::sprite_ptr box; // hitbox test
@@ -153,13 +153,13 @@ private:
         if(is_running())
         {
             pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
-            spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
+            spr.set_x(pos.x() + (_face_left ? -spr_offset_x : spr_offset_x));
         }
         
         if(bn::abs(pos.x()) > bound) // level bounds
         {
             pos.set_x(pos.x() < 0 ? -bound : bound);
-            spr.set_x(pos.x() + (_face_left ? -spr_offset : spr_offset));
+            spr.set_x(pos.x() + (_face_left ? -spr_offset_x : spr_offset_x));
         }
         
     // vertical movement
