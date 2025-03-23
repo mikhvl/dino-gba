@@ -29,16 +29,18 @@ class Player
 public:
     Player
     (
+        bn::sprite_item sprite_item,
         bn::fixed x = 0,
         bn::fixed y = ground_level
     )
         : pos(x < 0 ? bn::max(x, -bound) : bn::min(x, bound), bn::min(y, ground_level))
-        , spr(bn::sprite_items::dino.create_sprite(
-                pos.x() + (_face_left ? -spr_offset : spr_offset), pos.y()))
+        , spr_item(sprite_item)
+        , spr(spr_item.create_sprite(
+                pos.x() + (_face_left ? -spr_offset_x : spr_offset_x), pos.y()))                       
         , act(bn::create_sprite_animate_action_forever(
-                spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                spr, anim_frames, spr_item.tiles_item(),
                 0, 0))
-        , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y()))
+        , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // hitbox test
     {
     // air spawn
         if(is_on_ground() && pos.y() < ground_level) _fall = start_fall;
@@ -85,6 +87,7 @@ private:
     bool _face_left = false;
 
 // sprite/animation item
+    bn::sprite_item spr_item;
     bn::sprite_ptr spr;
     bn::sprite_animate_action<2> act;
     bn::sprite_ptr box; // hitbox test
@@ -211,14 +214,14 @@ private:
             if(_run == end_run || (_run == not_run && _fall == end_fall))
             {
                 act = bn::create_sprite_animate_action_forever(
-                        spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                        spr, anim_frames, spr_item.tiles_item(),
                         0, 0);
             }
         // run
             else if(_run == start_run || (_run == full_run && _fall == end_fall))
             {
                 act = bn::create_sprite_animate_action_forever(
-                        spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                        spr, anim_frames, spr_item.tiles_item(),
                         1, 2);
             }
         }
@@ -228,14 +231,14 @@ private:
             if(_jump == start_jump)
             {
                 act = bn::create_sprite_animate_action_forever(
-                        spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                        spr, anim_frames, spr_item.tiles_item(),
                         3, 3);
             }
         // fall
             else if(_fall == start_fall)
             {
                 act = bn::create_sprite_animate_action_forever(
-                        spr, anim_frames, bn::sprite_items::dino.tiles_item(),
+                        spr, anim_frames, spr_item.tiles_item(),
                         4, 4);
             }
         }
@@ -254,7 +257,7 @@ int main()
 {
     bn::core::init();
     
-    Player dino;
+    Player dino(bn::sprite_items::dino);
     bn::regular_bg_ptr bg = bn::regular_bg_items::bg_temp.create_bg(0, 0);
 
     while(true)
