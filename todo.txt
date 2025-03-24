@@ -1,5 +1,4 @@
 TASKS:
-entity parent class
 player attack
 scene class
 game class
