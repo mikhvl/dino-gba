@@ -1,4 +1,5 @@
 TASKS:
+redesign gameplay
 player attack
 scene class
 game class
@@ -32,3 +33,4 @@ hybrid rainbow
 duvet - boa
 opm ending
 mob psycho 100
+love is insecurable 
