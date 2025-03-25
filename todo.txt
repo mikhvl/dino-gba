@@ -5,6 +5,11 @@ scene class
 game class
 hitboxes
 
+IDEAS:
+climax
+eating bullets
+epic
+
 LEVELS:
 winter, pink sunrise, village
 chain link fence, field, autumn, puddles
@@ -33,4 +38,5 @@ hybrid rainbow
 duvet - boa
 opm ending
 mob psycho 100
-love is insecurable 
+love is insecurable
+credits song for my death
