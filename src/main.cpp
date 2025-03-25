@@ -20,8 +20,12 @@
 #include "bn_sprite_items_gatito.h"
 
 // game constants
-constexpr bn::fixed ground_level = 32;
-constexpr bn::fixed bound = 114;
+namespace GAME
+{
+    constexpr bn::fixed Y_LIM = 32;
+    constexpr bn::fixed X_LIM = 114;
+    constexpr bn::sprite_item DINO_SPR_ITEM = bn::sprite_items::dino;
+}
 
 
 class Player
@@ -29,12 +33,11 @@ class Player
 public:
     Player
     (
-        bn::sprite_item sprite_item,
         bn::fixed x = 0,
-        bn::fixed y = ground_level
+        bn::fixed y = GAME::Y_LIM
     )
-        : pos(x < 0 ? bn::max(x, -bound) : bn::min(x, bound), bn::min(y, ground_level))
-        , spr_item(sprite_item)
+        : pos(x < 0 ? bn::max(x, -GAME::X_LIM) : bn::min(x, GAME::X_LIM), bn::min(y, GAME::Y_LIM))
+        , spr_item(GAME::DINO_SPR_ITEM)
         , spr(spr_item.create_sprite(
                 pos.x() + (_face_left ? -spr_offset_x : spr_offset_x), pos.y()))                       
         , act(bn::create_sprite_animate_action_once(
@@ -43,7 +46,7 @@ public:
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // hitbox test
     {
     // air spawn
-        if(is_on_ground() && pos.y() < ground_level) _fall = start_fall;
+        if(is_on_ground() && pos.y() < GAME::Y_LIM) _fall = start_fall;
     
     // test sprite
         box.set_scale(0.5);
@@ -167,9 +170,9 @@ private:
             spr.set_x(pos.x() + (_face_left ? -spr_offset_x : spr_offset_x));
         }
         
-        if(bn::abs(pos.x()) > bound) // level bounds
+        if(bn::abs(pos.x()) > GAME::X_LIM) // level bounds
         {
-            pos.set_x(pos.x() < 0 ? -bound : bound);
+            pos.set_x(pos.x() < 0 ? -GAME::X_LIM : GAME::X_LIM);
             spr.set_x(pos.x() + (_face_left ? -spr_offset_x : spr_offset_x));
         }
         
@@ -195,9 +198,9 @@ private:
             }
             
         // landing
-            if(pos.y() > ground_level)
+            if(pos.y() > GAME::Y_LIM)
             {
-                pos.set_y(ground_level);
+                pos.set_y(GAME::Y_LIM);
                 y_speed = 0;
                 _fall = end_fall;
             }
@@ -257,7 +260,7 @@ int main()
 {
     bn::core::init();
     
-    Player dino(bn::sprite_items::dino);
+    Player dino;
     bn::regular_bg_ptr bg = bn::regular_bg_items::bg_temp.create_bg(0, 0);
 
     while(true)
