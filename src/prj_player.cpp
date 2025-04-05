@@ -201,6 +201,7 @@ namespace prj
     
     void Player::box_update()
     {
+        if(bn::keypad::start_pressed()) box.set_visible(!box.visible());
         box.set_position(pos);
     }
 }
