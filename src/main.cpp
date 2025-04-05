@@ -7,8 +7,8 @@
 #include "bn_regular_bg_builder.h"
 #include "bn_regular_bg_attributes.h"
 
-#include "player.h"
-#include "game_const.h"
+#include "prj_player.h"
+#include "prj_const.h"
 
 class Scene
 {

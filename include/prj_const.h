@@ -1,5 +1,5 @@
-#ifndef PRJ_GAME_CONST_H
-#define PRJ_GAME_CONST_H
+#ifndef PRJ_CONST_H
+#define PRJ_CONST_H
 
 #include "bn_fixed.h"
 

@@ -8,7 +8,7 @@
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_animate_actions.h"
 
-#include "game_const.h"
+#include "prj_const.h"
 
 namespace prj
 {
