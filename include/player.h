@@ -8,15 +8,7 @@
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_animate_actions.h"
 
-#include "bn_sprite_items_dino.h"
-
-// game constants
-namespace prj
-{
-    constexpr bn::fixed Y_LIM = 32;
-    constexpr bn::fixed X_LIM = 114;
-    constexpr bn::sprite_item DINO_SPR_ITEM = bn::sprite_items::dino;
-}
+#include "game_const.h"
 
 namespace prj
 {
