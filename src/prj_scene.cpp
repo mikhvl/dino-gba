@@ -1,5 +1,7 @@
 #include "prj_scene.h"
 
+#include "prj_const.h"
+
 namespace prj
 {
     Scene::Scene()
