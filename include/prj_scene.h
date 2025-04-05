@@ -17,7 +17,7 @@ namespace prj
         void update();
         
     private:
-        bn::regular_bg_item bg_art;
+        bn::regular_bg_item bg_item;
         bn::regular_bg_ptr bg;
         
         bn::unique_ptr<prj::Player> dino_ptr;
