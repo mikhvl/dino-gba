@@ -7,7 +7,7 @@
 #include "bn_regular_bg_item.h"
 
 #include "bn_sprite_items_dino.h"
-#include "bn_regular_bg_items_bg_temp.h"
+#include "bn_regular_bg_items_bg_default.h"
 
 namespace prj
 {
@@ -16,7 +16,7 @@ namespace prj
     
     constexpr bn::sprite_item DINO_SPR_ITEM = bn::sprite_items::dino;
     
-    constexpr bn::regular_bg_item DEFAULT_BG_ITEM = bn::regular_bg_items::bg_temp;
+    constexpr bn::regular_bg_item DEFAULT_BG_ITEM = bn::regular_bg_items::bg_default;
 }
 
 #endif
