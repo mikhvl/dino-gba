@@ -25,10 +25,12 @@ namespace prj
         const bn::fixed release_y_speed = 1.3;
         const bn::fixed x_speed = 2;
         const int anim_frames = 4;
+        int spr_offset_x = 4;
 
     // player variables
         bn::fixed_point pos;
         bn::fixed y_speed = 0;
+        bool _face_left = false;
 
     // state logic
         enum run_states  { start_run, full_run, end_run, not_run };
@@ -40,10 +42,6 @@ namespace prj
         jump_states _jump = not_jump;
         fall_states _fall = not_fall;
         atk_states  _atk  = not_atk;
-        
-    // sprite position
-        int spr_offset_x = 4;
-        bool _face_left = false;
 
     // sprite/animation item
         bn::sprite_item spr_item;
