@@ -15,7 +15,7 @@ namespace prj
     class Player
     {
     public:
-        Player(bn::fixed x = 0, bn::fixed y = prj::Y_LIM);
+        Player(bn::fixed x = 0, bn::fixed y = prj::Y_LIM, bool flip = false);
         void update();
         
     private:
@@ -25,12 +25,14 @@ namespace prj
         const bn::fixed release_y_speed = 1.3;
         const bn::fixed x_speed = 2;
         const int anim_frames = 4;
+        const int turn_frames_max = 10;
         int spr_offset_x = 4; // sprite flip adjustment
 
     // player variables
         bn::fixed_point pos;
         bn::fixed y_speed = 0;
         bool _face_left = false;
+        int _turn_frames = 0;
 
     // state logic
         enum run_states  { start_run, full_run, end_run, not_run };
@@ -56,7 +58,7 @@ namespace prj
         bool is_on_ground();
 
     // update functions
-        void set_flip(bool flip);
+        void set_face_left(bool flip);
         
         void input();
         void attack();

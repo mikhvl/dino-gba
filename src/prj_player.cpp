@@ -18,10 +18,12 @@ namespace prj
     Player::Player
     (
         bn::fixed x,
-        bn::fixed y
+        bn::fixed y,
+        bool flip
     )
         : pos(x < 0 ? bn::max(x, -prj::X_LIM) : bn::min(x, prj::X_LIM),
                 bn::min(y, prj::Y_LIM))
+        , _face_left(flip)
         , spr_item(prj::DINO_SPR_ITEM)
         , spr(spr_item.create_sprite(
                 pos.x() + (_face_left ? -spr_offset_x : spr_offset_x), pos.y()))                       
@@ -52,7 +54,7 @@ namespace prj
     bool Player::is_falling() { return _fall == start_fall || _fall == full_fall; }
     bool Player::is_on_ground() { return !is_jumping() && !is_falling(); }
     
-    void Player::set_flip(bool flip)
+    void Player::set_face_left(bool flip)
     {
         _face_left = flip;
         spr.set_horizontal_flip(_face_left);
@@ -64,12 +66,15 @@ namespace prj
         if(bn::keypad::left_pressed())
         {
             _run = start_run;
-            set_flip(true);
+            if(!_face_left) _turn_frames = turn_frames_max;
+            set_face_left(true);
+            
         }
         else if(bn::keypad::right_pressed())
         {
             _run = start_run;
-            set_flip(false);
+            if(_face_left) _turn_frames = turn_frames_max;
+            set_face_left(false);
         }
         
         else if(bn::keypad::left_held())      _run = full_run;
@@ -163,22 +168,31 @@ namespace prj
     {
         if(is_on_ground())
         {
-        // idle
-            if(_run == end_run || (_run == not_run && _fall == end_fall))
+            if(_turn_frames == turn_frames_max)
             {
                 act = bn::create_sprite_animate_action_once(
                         spr, anim_frames, spr_item.tiles_item(),
-                        0, 0);
+                        5, 5);
             }
-        // run
-            else if(_run == start_run || (_run == full_run && _fall == end_fall))
+            else if(0 == _turn_frames)
             {
-                act = bn::create_sprite_animate_action_forever(
-                        spr, anim_frames, spr_item.tiles_item(),
-                        1, 2);
+            // idle
+                if(_run == end_run || (_run == not_run && _fall == end_fall))
+                {
+                    act = bn::create_sprite_animate_action_once(
+                            spr, anim_frames, spr_item.tiles_item(),
+                            0, 0);
+                }
+            // run
+                else if(_run == start_run || (_run == full_run && _fall == end_fall))
+                {
+                    act = bn::create_sprite_animate_action_forever(
+                            spr, anim_frames, spr_item.tiles_item(),
+                            1, 2);
+                }
             }
         }
-        else // if(is_on_ground())
+        else // not on ground
         {
         // jump
             if(_jump == start_jump)
@@ -195,6 +209,9 @@ namespace prj
                         4, 4);
             }
         }
+        
+        _turn_frames = 0;
+        //if(_turn_frames > 0) --_turn_frames; // counting turn frames until 0
         
         if(!act.done()) act.update();
     }
