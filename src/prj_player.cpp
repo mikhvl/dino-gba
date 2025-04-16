@@ -21,19 +21,19 @@ namespace prj
         bn::fixed y,
         bool flip
     )
-        : pos(x < 0 ? bn::max(x, -prj::X_LIM) : bn::min(x, prj::X_LIM),
-                bn::min(y, prj::Y_LIM))
+        : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM),
+                bn::min(y, lvl::Y_LIM))
         , _face_left(flip)
-        , spr_item(prj::DINO_SPR_ITEM)
-        , spr(spr_item.create_sprite(
+        , spr_item(spr::DINO_MAIN_SPR_ITEM)
+        , spr(spr_item.value().create_sprite(
                 pos.x() + (_face_left ? -spr_offset_x : spr_offset_x), pos.y()))                       
         , act(bn::create_sprite_animate_action_once(
-                spr, anim_frames, spr_item.tiles_item(),
+                spr, anim_frames, spr_item.value().tiles_item(),
                 0, 0))
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // hitbox test
     {
     // air spawn
-        if(is_on_ground() && pos.y() < prj::Y_LIM) _fall = start_fall;
+        if(is_on_ground() && pos.y() < lvl::Y_LIM) _fall = start_fall;
     
     // test sprite
         box.set_scale(0.5);
@@ -125,9 +125,9 @@ namespace prj
             spr.set_x(pos.x() + (_face_left ? -spr_offset_x : spr_offset_x));
         }
         
-        if(bn::abs(pos.x()) > prj::X_LIM) // level bounds
+        if(bn::abs(pos.x()) > lvl::X_LIM) // level bounds
         {
-            pos.set_x(pos.x() < 0 ? -prj::X_LIM : prj::X_LIM);
+            pos.set_x(pos.x() < 0 ? -lvl::X_LIM : lvl::X_LIM);
             spr.set_x(pos.x() + (_face_left ? -spr_offset_x : spr_offset_x));
         }
         
@@ -153,9 +153,9 @@ namespace prj
             }
             
         // landing
-            if(pos.y() > prj::Y_LIM)
+            if(pos.y() > lvl::Y_LIM)
             {
-                pos.set_y(prj::Y_LIM);
+                pos.set_y(lvl::Y_LIM);
                 y_speed = 0;
                 _fall = end_fall;
             }
@@ -171,7 +171,7 @@ namespace prj
             if(_turn_frames == turn_frames_max)
             {
                 act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.tiles_item(),
+                        spr, anim_frames, spr_item.value().tiles_item(),
                         5, 5);
             }
             else
@@ -180,7 +180,7 @@ namespace prj
                 if(_run == end_run || (_run == not_run && _fall == end_fall))
                 {
                     act = bn::create_sprite_animate_action_once(
-                            spr, anim_frames, spr_item.tiles_item(),
+                            spr, anim_frames, spr_item.value().tiles_item(),
                             0, 0);
                 }
             // run
@@ -188,7 +188,7 @@ namespace prj
                     (_run == full_run && (_fall == end_fall || _turn_frames == 1)))
                 {
                     act = bn::create_sprite_animate_action_forever(
-                            spr, anim_frames, spr_item.tiles_item(),
+                            spr, anim_frames, spr_item.value().tiles_item(),
                             1, 2);
                 }
             }
@@ -199,14 +199,14 @@ namespace prj
             if(_jump == start_jump)
             {
                 act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.tiles_item(),
+                        spr, anim_frames, spr_item.value().tiles_item(),
                         3, 3);
             }
         // fall
             else if(_fall == start_fall)
             {
                 act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.tiles_item(),
+                        spr, anim_frames, spr_item.value().tiles_item(),
                         4, 4);
             }
         }

@@ -5,7 +5,7 @@
 namespace prj
 {
     Scene::Scene()
-        : bg_item(prj::DEFAULT_BG_ITEM)
+        : bg_item(lvl::DEFAULT_BG_ITEM)
         , bg(bg_item.create_bg(0, 0))
         , dino_ptr(bn::make_unique<prj::Player>())
     {}

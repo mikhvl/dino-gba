@@ -3,6 +3,7 @@
 
 #include "bn_fixed.h"
 #include "bn_fixed_point.h"
+#include "bn_optional.h"
 
 #include "bn_sprite_item.h"
 #include "bn_sprite_ptr.h"
@@ -15,7 +16,7 @@ namespace prj
     class Player
     {
     public:
-        Player(bn::fixed x = 0, bn::fixed y = prj::Y_LIM, bool flip = false);
+        Player(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = false);
         void update();
         
     private:
@@ -46,7 +47,7 @@ namespace prj
         atk_states  _atk  = not_atk;
 
     // sprite/animation item
-        bn::sprite_item spr_item;
+        bn::optional<bn::sprite_item> spr_item;
         bn::sprite_ptr spr;
         bn::sprite_animate_action<2> act;
         bn::sprite_ptr box; // hitbox test
