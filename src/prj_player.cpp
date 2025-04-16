@@ -174,7 +174,7 @@ namespace prj
                         spr, anim_frames, spr_item.tiles_item(),
                         5, 5);
             }
-            else if(0 == _turn_frames)
+            else
             {
             // idle
                 if(_run == end_run || (_run == not_run && _fall == end_fall))
@@ -184,7 +184,8 @@ namespace prj
                             0, 0);
                 }
             // run
-                else if(_run == start_run || (_run == full_run && _fall == end_fall))
+                else if(_run == start_run ||
+                    (_run == full_run && (_fall == end_fall || _turn_frames == 1)))
                 {
                     act = bn::create_sprite_animate_action_forever(
                             spr, anim_frames, spr_item.tiles_item(),
@@ -210,8 +211,7 @@ namespace prj
             }
         }
         
-        _turn_frames = 0;
-        //if(_turn_frames > 0) --_turn_frames; // counting turn frames until 0
+        if(_turn_frames > 0) --_turn_frames; // counting turn frames until 0
         
         if(!act.done()) act.update();
     }

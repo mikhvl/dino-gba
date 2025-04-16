@@ -25,7 +25,7 @@ namespace prj
         const bn::fixed release_y_speed = 1.3;
         const bn::fixed x_speed = 2;
         const int anim_frames = 4;
-        const int turn_frames_max = 10;
+        const int turn_frames_max = 7;
         int spr_offset_x = 4; // sprite flip adjustment
 
     // player variables
