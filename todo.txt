@@ -1,3 +1,12 @@
 music:
 mermaid falls
-patapon 3 intro guitar 
+alex gordon intro
+
+code:
+turn mid air
+attack
+
+art:
+turn mid air animation
+attack animation
+beach bg
