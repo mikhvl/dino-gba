@@ -66,14 +66,14 @@ namespace prj
         if(bn::keypad::left_pressed())
         {
             _run = start_run;
-            if(!_face_left) _turn_frames = turn_frames_max;
+            if(!_face_left) ++_turn_frames;
             set_face_left(true);
             
         }
         else if(bn::keypad::right_pressed())
         {
             _run = start_run;
-            if(_face_left) _turn_frames = turn_frames_max;
+            if(_face_left) ++_turn_frames;
             set_face_left(false);
         }
         
@@ -168,7 +168,7 @@ namespace prj
     {
         if(is_on_ground())
         {
-            if(_turn_frames == turn_frames_max)
+            if(1 == _turn_frames)
             {
                 act = bn::create_sprite_animate_action_once(
                         spr, anim_frames, spr_item.value().tiles_item(),
@@ -185,7 +185,7 @@ namespace prj
                 }
             // run
                 else if(_run == start_run ||
-                    (_run == full_run && (_fall == end_fall || _turn_frames == 1)))
+                    (_run == full_run && (_fall == end_fall || _turn_frames == turn_frames_stop)))
                 {
                     act = bn::create_sprite_animate_action_forever(
                             spr, anim_frames, spr_item.value().tiles_item(),
@@ -211,7 +211,8 @@ namespace prj
             }
         }
         
-        if(_turn_frames > 0) --_turn_frames; // counting turn frames until 0
+        if(0 < _turn_frames && _turn_frames < turn_frames_stop) ++_turn_frames;
+        else _turn_frames = 0;
         
         if(!act.done()) act.update();
     }
