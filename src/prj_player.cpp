@@ -88,7 +88,7 @@ namespace prj
     // vertical movement
     // note: AAAAAAAAAAAAAAAAAAAAAAAAAAA 
     // note: hmm ok at the second glance it's not so bad
-        if(bn::keypad::a_pressed() && is_on_ground()) _jump = start_jump;
+        if((bn::keypad::a_pressed() || bn::keypad::a_held()) && is_on_ground()) _jump = start_jump;
         else
         {
             if(is_falling() || is_on_ground()) _jump = not_jump;
@@ -104,7 +104,7 @@ namespace prj
         }
         
     // attack
-        if(bn::keypad::a_pressed()) _atk = start_atk;
+        if(bn::keypad::b_pressed()) _atk = start_atk;
         else if(_atk == end_atk) _atk = not_atk;
     }
     
