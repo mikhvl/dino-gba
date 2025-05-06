@@ -48,7 +48,7 @@ namespace prj
         atk_states  _atk  = not_atk;
 
     // sprite/animation item
-        bn::optional<bn::sprite_item> spr_item;
+        bn::sprite_item spr_item;
         bn::sprite_ptr spr;
         bn::sprite_animate_action<2> act;
         bn::sprite_ptr box; // hitbox test

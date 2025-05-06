@@ -25,10 +25,10 @@ namespace prj
                 bn::min(y, lvl::Y_LIM))
         , _face_left(flip)
         , spr_item(spr::DINO_MAIN_SPR_ITEM)
-        , spr(spr_item.value().create_sprite(
+        , spr(spr_item.create_sprite(
                 pos.x() + (_face_left ? -spr_offset_x : spr_offset_x), pos.y()))                       
         , act(bn::create_sprite_animate_action_once(
-                spr, anim_frames, spr_item.value().tiles_item(),
+                spr, anim_frames, spr_item.tiles_item(),
                 0, 0))
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // hitbox test
     {
@@ -168,10 +168,11 @@ namespace prj
     {
         if(is_on_ground())
         {
+        // turn
             if(1 == _turn_frames)
             {
                 act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.value().tiles_item(),
+                        spr, anim_frames, spr_item.tiles_item(),
                         5, 5);
             }
             else
@@ -180,7 +181,7 @@ namespace prj
                 if(_run == end_run || (_run == not_run && _fall == end_fall))
                 {
                     act = bn::create_sprite_animate_action_once(
-                            spr, anim_frames, spr_item.value().tiles_item(),
+                            spr, anim_frames, spr_item.tiles_item(),
                             0, 0);
                 }
             // run
@@ -188,7 +189,7 @@ namespace prj
                     (_run == full_run && (_fall == end_fall || _turn_frames == turn_frames_stop)))
                 {
                     act = bn::create_sprite_animate_action_forever(
-                            spr, anim_frames, spr_item.value().tiles_item(),
+                            spr, anim_frames, spr_item.tiles_item(),
                             1, 2);
                 }
             }
@@ -199,14 +200,14 @@ namespace prj
             if(_jump == start_jump)
             {
                 act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.value().tiles_item(),
+                        spr, anim_frames, spr_item.tiles_item(),
                         3, 3);
             }
         // fall
             else if(_fall == start_fall)
             {
                 act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.value().tiles_item(),
+                        spr, anim_frames, spr_item.tiles_item(),
                         4, 4);
             }
         }
