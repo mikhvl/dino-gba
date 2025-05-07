@@ -5,8 +5,10 @@ alex gordon intro
 code:
 turn mid air
 attack
+attack hitbox
 
 art:
 turn mid air animation
 attack animation
+attack hitbox debug
 beach bg

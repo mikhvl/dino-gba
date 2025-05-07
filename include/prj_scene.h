@@ -7,6 +7,7 @@
 #include "bn_regular_bg_item.h"
 
 #include "prj_player.h"
+#include "prj_entity.h"
 
 namespace prj
 {
@@ -21,6 +22,7 @@ namespace prj
         bn::regular_bg_ptr bg;
         
         bn::unique_ptr<prj::Player> dino_ptr;
+        bn::unique_ptr<prj::Bag> bag_ptr;
     };
 }
 
