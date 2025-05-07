@@ -27,9 +27,9 @@ namespace prj
         , spr_item(spr::DINO_MAIN_SPR_ITEM)
         , spr(spr_item.create_sprite(
                 pos.x() + (_face_left ? -spr_offset_x : spr_offset_x), pos.y()))                       
-        , act(bn::create_sprite_animate_action_once(
-                spr, anim_frames, spr_item.tiles_item(),
-                0, 0))
+        , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
+                spr, anim_wait, spr_item.tiles_item(),
+                player::anim_data::IDLE))
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // hitbox test
     {
     // air spawn
@@ -171,26 +171,32 @@ namespace prj
         // turn
             if(1 == _turn_frames)
             {
-                act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.tiles_item(),
-                        5, 5);
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::TURN
+                    );
             }
             else
             {
             // idle
                 if(_run == end_run || (_run == not_run && _fall == end_fall))
                 {
-                    act = bn::create_sprite_animate_action_once(
-                            spr, anim_frames, spr_item.tiles_item(),
-                            0, 0);
+                    act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                        (
+                            spr, anim_wait, spr_item.tiles_item(),
+                            player::anim_data::IDLE
+                        );
                 }
             // run
                 else if(_run == start_run ||
                     (_run == full_run && (_fall == end_fall || _turn_frames == turn_frames_stop)))
                 {
-                    act = bn::create_sprite_animate_action_forever(
-                            spr, anim_frames, spr_item.tiles_item(),
-                            1, 2);
+                    act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
+                        (
+                            spr, anim_wait, spr_item.tiles_item(),
+                            player::anim_data::RUN
+                        );
                 }
             }
         }
@@ -199,16 +205,20 @@ namespace prj
         // jump
             if(_jump == start_jump)
             {
-                act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.tiles_item(),
-                        3, 3);
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::JUMP
+                    );
             }
         // fall
             else if(_fall == start_fall)
             {
-                act = bn::create_sprite_animate_action_once(
-                        spr, anim_frames, spr_item.tiles_item(),
-                        4, 4);
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::FALL
+                    );
             }
         }
         

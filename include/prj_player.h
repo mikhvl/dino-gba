@@ -20,21 +20,23 @@ namespace prj
         void update();
         
     private:
-    // some player constants
+    // physics
         const bn::fixed g = 0.2;
         const bn::fixed start_y_speed = 4;
         const bn::fixed release_y_speed = 1.3;
         const bn::fixed x_speed = 2;
-        const int anim_frames = 4;
-        const int turn_frames_stop = 5;
-        const int spr_offset_x = 4; // sprite flip adjustment
-
-    // player variables
+        
         bn::fixed_point pos;
         bn::fixed y_speed = 0;
-        bool _face_left = false;
+    
+    // animation
+        const int turn_frames_stop = 5;
+        const int spr_offset_x = 4; // sprite flip adjustment
+        
+        int anim_wait = 4;
         int _turn_frames = 0;
         int _atk_frames = 0;
+        bool _face_left = false;
 
     // state logic
         enum run_states  { start_run, full_run, end_run, not_run };
@@ -50,7 +52,7 @@ namespace prj
     // sprite/animation item
         bn::sprite_item spr_item;
         bn::sprite_ptr spr;
-        bn::sprite_animate_action<2> act;
+        bn::sprite_animate_action<player::MAX_ANIM_FRAMES> act;
         bn::sprite_ptr box; // hitbox test
 
     // state functions

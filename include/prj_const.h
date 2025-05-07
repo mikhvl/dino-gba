@@ -11,6 +11,20 @@
 
 namespace prj
 {
+    namespace player
+    {
+        constexpr int MAX_ANIM_FRAMES = 8;
+        
+        namespace anim_data
+        {
+            constexpr uint16_t IDLE[] = {0, 0};
+            constexpr uint16_t RUN[]  = {1, 2};
+            constexpr uint16_t JUMP[] = {3, 3};
+            constexpr uint16_t FALL[] = {4, 4};
+            constexpr uint16_t TURN[] = {5, 5};
+        }
+    }
+    
     namespace lvl
     {
         constexpr bn::fixed Y_LIM = 32;
