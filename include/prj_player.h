@@ -21,33 +21,26 @@ namespace prj
         
     private:
     // physics
-        const bn::fixed g = 0.2;
-        const bn::fixed start_y_speed = 4;
-        const bn::fixed release_y_speed = 1.3;
-        const bn::fixed x_speed = 2;
-        
         bn::fixed_point pos;
+        bn::fixed x_speed = 2;
         bn::fixed y_speed = 0;
     
     // animation
-        const int turn_frames_stop = 5;
-        const int spr_offset_x = 4; // sprite flip adjustment
-        
         int anim_wait = 4;
         int _turn_frames = 0;
         int _atk_frames = 0;
         bool _face_left = false;
 
     // state logic
-        enum run_states  { start_run, full_run, end_run, not_run };
-        enum jump_states { start_jump, full_jump, release_jump, end_jump, not_jump };
-        enum fall_states { start_fall, full_fall, end_fall, not_fall };
-        enum atk_states  { start_atk, full_atk, end_atk, not_atk };
+        enum RUN_STATE  { start_run, full_run, end_run, not_run };
+        enum JUMP_STATE { start_jump, full_jump, release_jump, end_jump, not_jump };
+        enum FALL_STATE { start_fall, full_fall, end_fall, not_fall };
+        enum ATK_STATE  { start_atk, full_atk, end_atk, not_atk };
         
-        run_states  _run  = not_run;
-        jump_states _jump = not_jump;
-        fall_states _fall = not_fall;
-        atk_states  _atk  = not_atk;
+        RUN_STATE  _run  = not_run;
+        JUMP_STATE _jump = not_jump;
+        FALL_STATE _fall = not_fall;
+        ATK_STATE  _atk  = not_atk;
 
     // sprite/animation item
         bn::sprite_item spr_item;

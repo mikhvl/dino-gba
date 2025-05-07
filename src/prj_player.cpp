@@ -26,7 +26,8 @@ namespace prj
         , _face_left(flip)
         , spr_item(spr::DINO_MAIN_SPR_ITEM)
         , spr(spr_item.create_sprite(
-                pos.x() + (_face_left ? -spr_offset_x : spr_offset_x), pos.y()))                       
+                pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X),
+                pos.y()))                       
         , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
                 spr, anim_wait, spr_item.tiles_item(),
                 player::anim_data::IDLE))
@@ -122,24 +123,24 @@ namespace prj
         if(is_running())
         {
             pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
-            spr.set_x(pos.x() + (_face_left ? -spr_offset_x : spr_offset_x));
+            spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
         }
         
         if(bn::abs(pos.x()) > lvl::X_LIM) // level bounds
         {
             pos.set_x(pos.x() < 0 ? -lvl::X_LIM : lvl::X_LIM);
-            spr.set_x(pos.x() + (_face_left ? -spr_offset_x : spr_offset_x));
+            spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
         }
         
     // vertical movement
-        if(_jump == start_jump) y_speed = start_y_speed; // initial jump momentum
+        if(_jump == start_jump) y_speed = player::START_JMP_SPEED; // initial jump momentum
         if(_fall == end_fall || _jump == start_jump) _fall = not_fall; // resets fall state
         
         if(!is_on_ground())
         {
         // falling/jumping
             pos.set_y(pos.y() - y_speed);
-            y_speed -= g;
+            y_speed -= player::GRAVITY;
             if(y_speed < 0)
             {
                 if(_fall == not_fall) _fall = start_fall;
@@ -147,9 +148,9 @@ namespace prj
             }
         
         // button release
-            if(y_speed > release_y_speed && _jump == release_jump)
+            if(_jump == release_jump && y_speed > player::RELEASE_JMP_SPEED)
             {
-                y_speed = release_y_speed;
+                y_speed = player::RELEASE_JMP_SPEED;
             }
             
         // landing
@@ -189,8 +190,8 @@ namespace prj
                         );
                 }
             // run
-                else if(_run == start_run ||
-                    (_run == full_run && (_fall == end_fall || _turn_frames == turn_frames_stop)))
+                else if(_run == start_run || (_run == full_run &&
+                    (_fall == end_fall || _turn_frames == player::TURN_FRAMES_STOP)))
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
                         (
@@ -222,7 +223,7 @@ namespace prj
             }
         }
         
-        if(0 < _turn_frames && _turn_frames < turn_frames_stop) ++_turn_frames;
+        if(0 < _turn_frames && _turn_frames < player::TURN_FRAMES_STOP) ++_turn_frames;
         else _turn_frames = 0;
         
         if(!act.done()) act.update();
