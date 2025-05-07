@@ -7,6 +7,9 @@
 #include "bn_regular_bg_item.h"
 
 #include "bn_sprite_items_dino_main.h"
+#include "bn_sprite_items_bag.h"
+#include "bn_sprite_items_gatito.h"
+
 #include "bn_regular_bg_items_bg_default.h"
 
 namespace prj
@@ -20,6 +23,7 @@ namespace prj
         constexpr int SPR_OFFSET_X = 4;
         constexpr int MAX_ANIM_FRAMES = 8;
         constexpr int TURN_FRAMES_STOP = 5;
+        constexpr int ATK_FRAMES_STOP = 20;
         
         namespace anim_data
         {
@@ -35,13 +39,6 @@ namespace prj
     {
         constexpr bn::fixed Y_LIM = 32;
         constexpr bn::fixed X_LIM = 114;
-        
-        constexpr bn::regular_bg_item DEFAULT_BG_ITEM = bn::regular_bg_items::bg_default;
-    }
-    
-    namespace spr
-    {
-        constexpr bn::sprite_item DINO_MAIN_SPR_ITEM = bn::sprite_items::dino_main;
     }
 }
 

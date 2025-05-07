@@ -11,8 +11,6 @@
 #include "bn_sprites_actions.h"
 #include "bn_sprite_animate_actions.h"
 
-#include "bn_sprite_items_gatito.h"
-
 namespace prj
 {
     Player::Player
@@ -24,17 +22,17 @@ namespace prj
         : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM),
                 bn::min(y, lvl::Y_LIM))
         , _face_left(flip)
-        , spr_item(spr::DINO_MAIN_SPR_ITEM)
+        , spr_item(bn::sprite_items::dino_main)
         , spr(spr_item.create_sprite(
                 pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X),
-                pos.y()))                       
+                pos.y()))
         , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
                 spr, anim_wait, spr_item.tiles_item(),
                 player::anim_data::IDLE))
         , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // hitbox test
     {
-    // air spawn
-        if(is_on_ground() && pos.y() < lvl::Y_LIM) _fall = start_fall;
+        set_face_left(flip);
+        if(pos.y() < lvl::Y_LIM) _fall = start_fall;
     
     // test sprite
         box.set_scale(0.5);
@@ -67,14 +65,14 @@ namespace prj
         if(bn::keypad::left_pressed())
         {
             _run = start_run;
-            if(!_face_left) ++_turn_frames;
+            if(!_face_left) _turn_frames = 1;
             set_face_left(true);
             
         }
         else if(bn::keypad::right_pressed())
         {
             _run = start_run;
-            if(_face_left) ++_turn_frames;
+            if(_face_left) _turn_frames = 1;
             set_face_left(false);
         }
         
