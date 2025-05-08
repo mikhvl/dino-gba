@@ -19,9 +19,26 @@ namespace prj
         bn::fixed y,
         bool flip
     )
+    // main parameters
         : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM),
                 bn::min(y, lvl::Y_LIM))
         , _face_left(flip)
+        
+    // hitboxes
+        , body_hitbox(bn::rect(
+                pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
+                pos.y().round_integer(),
+                body_size.width(), body_size.height()))
+        , atk_hitbox(bn::rect(
+                pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
+                pos.y().round_integer(),
+                atk_size.width(), atk_size.height()))
+                
+    // debug sprites
+        , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // sprite offset test
+        , hitbox_corner_builder(bn::sprite_builder(bn::sprite_items::x_corner))
+        
+    // main sprite
         , spr_item(bn::sprite_items::dino)
         , spr(spr_item.create_sprite(
                 pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X),
@@ -29,14 +46,20 @@ namespace prj
         , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
                 spr, anim_wait, spr_item.tiles_item(),
                 player::anim_data::IDLE))
-        , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // hitbox test
     {
         set_face_left(flip);
         if(pos.y() < lvl::Y_LIM) _fall = start_fall;
     
-    // test sprite
+    // debug
         box.set_scale(0.5);
         box.set_visible(false);
+        
+        //hitbox_corner_builder.set_scale(0.5);
+        hitbox_corner_builder.set_visible(false);
+        for(int i = 0; i < hitbox_corners.max_size(); ++i)
+        {
+            hitbox_corners.emplace_back(hitbox_corner_builder.build());
+        }
     }
     
     void Player::update()
@@ -110,6 +133,13 @@ namespace prj
     // attack
         if(bn::keypad::b_pressed()) _atk = start_atk;
         else if(_atk == end_atk) _atk = not_atk;
+        else
+        {
+            if(_atk == start_atk)
+            {
+                _atk = end_atk;
+            }
+        }
     }
     
     void Player::movement()
@@ -162,12 +192,33 @@ namespace prj
     
     void Player::hitbox()
     {
-        box_update();
+    // rect hitboxes
+        body_hitbox.set_position(
+                pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
+                pos.y().round_integer());
+        atk_hitbox.set_position(
+                pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
+                pos.y().round_integer());
         
-        if(_atk == start_atk)
+    // box sprite
+        if(bn::keypad::start_pressed()) box.set_visible(!box.visible());
+        box.set_position(pos);
+        
+    // hitbox corners sprites
+        if(bn::keypad::select_pressed())
         {
-            _atk = end_atk;
+            for(auto& x : hitbox_corners) x.set_visible(!x.visible());
         }
+        
+        hitbox_corners[0].set_position(body_hitbox.bottom_right());
+        hitbox_corners[1].set_position(body_hitbox.bottom_left());
+        hitbox_corners[2].set_position(body_hitbox.top_right());
+        hitbox_corners[3].set_position(body_hitbox.top_left());
+        
+        hitbox_corners[4].set_position(atk_hitbox.bottom_right());
+        hitbox_corners[5].set_position(atk_hitbox.bottom_left());
+        hitbox_corners[6].set_position(atk_hitbox.top_right());
+        hitbox_corners[7].set_position(atk_hitbox.top_left());
     }
     
     void Player::animation()
@@ -232,11 +283,5 @@ namespace prj
         else _turn_frames = 0;
         
         if(!act.done()) act.update();
-    }
-    
-    void Player::box_update()
-    {
-        if(bn::keypad::start_pressed()) box.set_visible(!box.visible());
-        box.set_position(pos);
     }
 }

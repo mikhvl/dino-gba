@@ -4,10 +4,14 @@
 #include "bn_fixed.h"
 #include "bn_fixed_point.h"
 #include "bn_rect.h"
+#include "bn_size.h"
 
 #include "bn_sprite_item.h"
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_animate_actions.h"
+
+#include "bn_vector.h"
+#include "bn_sprite_builder.h"
 
 #include "prj_const.h"
 
@@ -30,6 +34,9 @@ namespace prj
         bn::fixed x_speed = 2;
         bn::fixed y_speed = 0;
         
+        bn::size body_size = player::BODY_SIZE;
+        bn::size atk_size  = player::ATK_SIZE;
+        
         bn::rect body_hitbox;
         bn::rect atk_hitbox;
     
@@ -37,7 +44,7 @@ namespace prj
         int anim_wait = 4;
         int _turn_frames = 0;
         int _atk_frames = 0;
-        bool _face_left = false;
+        bool _face_left;
 
     // state logic
         enum RUN_STATE  { start_run, full_run, end_run, not_run };
@@ -54,7 +61,11 @@ namespace prj
         bn::sprite_item spr_item;
         bn::sprite_ptr spr;
         bn::sprite_animate_action<player::MAX_ANIM_FRAMES> act;
-        bn::sprite_ptr box; // hitbox test
+        
+        bn::sprite_ptr box; // sprite offset test
+        
+        bn::sprite_builder hitbox_corner_builder;
+        bn::vector<bn::sprite_ptr, 8> hitbox_corners;
 
     // state functions
         bool is_running();
@@ -69,8 +80,6 @@ namespace prj
         void hitbox();
         void movement();
         void animation();
-        
-        void box_update();
     };
 }
 
