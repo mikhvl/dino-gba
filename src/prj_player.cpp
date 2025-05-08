@@ -42,8 +42,8 @@ namespace prj
     void Player::update()
     {
         input();
-        hitbox();
         movement();
+        hitbox();
         animation();
     }
     
@@ -112,16 +112,6 @@ namespace prj
         else if(_atk == end_atk) _atk = not_atk;
     }
     
-    void Player::hitbox()
-    {
-        box_update();
-        
-        if(_atk == start_atk)
-        {
-            _atk = end_atk;
-        }
-    }
-    
     void Player::movement()
     {
     // horizontal movement
@@ -167,6 +157,16 @@ namespace prj
             }
             
             spr.set_y(pos.y());
+        }
+    }
+    
+    void Player::hitbox()
+    {
+        box_update();
+        
+        if(_atk == start_atk)
+        {
+            _atk = end_atk;
         }
     }
     
