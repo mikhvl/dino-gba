@@ -7,7 +7,7 @@
 #include "bn_regular_bg_item.h"
 
 #include "prj_player.h"
-#include "prj_entity.h"
+#include "prj_enemy.h"
 
 namespace prj
 {

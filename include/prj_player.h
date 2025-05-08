@@ -14,36 +14,25 @@
 #include "bn_sprite_builder.h"
 
 #include "prj_const.h"
+#include "prj_entity.h"
 
 namespace prj
 {
-    class Player
+    class Player : public Entity
     {
     public:
         Player(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = false);
         void update();
         
-        bn::fixed_point& get_pos();
-        bn::rect& get_body_hitbox();
-        bn::rect& get_atk_hitbox();
         bool is_attacking();
-        
         void hurt();
         
     private:
     // interaction
-        bn::fixed_point pos;
         bn::fixed x_speed = player::X_SPEED;
         bn::fixed y_speed = 0;
         bool _face_left;
         
-        bn::size body_size = player::BODY_SIZE;
-        bn::size atk_size  = player::ATK_SIZE;
-        
-        bn::rect body_hitbox;
-        bn::rect atk_hitbox;
-    
-    // animation
         int anim_wait = 4;
         int _turn_frames = 0;
         int _atk_frames = 0;

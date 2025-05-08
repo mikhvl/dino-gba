@@ -20,23 +20,8 @@ namespace prj
         bool flip
     )
     // main parameters
-        : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM),
-                bn::min(y, lvl::Y_LIM))
+        : Entity(x, y)
         , _face_left(flip)
-        
-    // hitboxes
-        , body_hitbox(bn::rect(
-                pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
-                pos.y().round_integer(),
-                body_size.width(), body_size.height()))
-        , atk_hitbox(bn::rect(
-                pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
-                pos.y().round_integer(),
-                atk_size.width(), atk_size.height()))
-                
-    // debug sprites
-        , box(bn::sprite_items::gatito.create_sprite(pos.x(), pos.y())) // sprite offset test
-        , hitbox_corner_builder(bn::sprite_builder(bn::sprite_items::x_corner))
         
     // main sprite
         , spr_item(bn::sprite_items::dino)
@@ -46,7 +31,22 @@ namespace prj
         , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
                 spr, anim_wait, spr_item.tiles_item(),
                 player::anim_data::IDLE))
+        
+    // debug sprites
+        , box(bn::sprite_items::gatito.create_sprite(pos)) // sprite offset test
+        , hitbox_corner_builder(bn::sprite_builder(bn::sprite_items::x_corner))
     {
+    // hitboxes
+        body_hitbox = bn::rect(
+            pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
+            pos.y().round_integer(),
+            player::BODY_SIZE.width(), player::BODY_SIZE.height());
+        atk_hitbox = bn::rect(
+            pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
+            pos.y().round_integer(),
+            player::ATK_SIZE.width(), player::ATK_SIZE.height());
+    
+    // initial logic
         set_face_left(flip);
         if(pos.y() < lvl::Y_LIM) _fall = start_fall;
     
@@ -70,10 +70,6 @@ namespace prj
         animation();
         count_frames();
     }
-    
-    bn::fixed_point& Player::get_pos() { return pos; }
-    bn::rect& Player::get_body_hitbox() { return body_hitbox; }
-    bn::rect& Player::get_atk_hitbox() { return atk_hitbox; }
     
     bool Player::is_attacking()
     {
@@ -220,15 +216,14 @@ namespace prj
         body_hitbox.set_position(
             pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
             pos.y().round_integer());
-        atk_hitbox.set_position(
+        atk_hitbox.value().set_position(
             pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
             pos.y().round_integer());
         
-    // box sprite
+    // debug
         if(bn::keypad::start_pressed()) box.set_visible(!box.visible());
         box.set_position(pos);
         
-    // hitbox corners sprites
         if(bn::keypad::select_pressed())
         {
             for(auto& x : hitbox_corners) x.set_visible(!x.visible());
@@ -239,10 +234,10 @@ namespace prj
         hitbox_corners[2].set_position(body_hitbox.top_right());
         hitbox_corners[3].set_position(body_hitbox.top_left());
         
-        hitbox_corners[4].set_position(atk_hitbox.bottom_right());
-        hitbox_corners[5].set_position(atk_hitbox.bottom_left());
-        hitbox_corners[6].set_position(atk_hitbox.top_right());
-        hitbox_corners[7].set_position(atk_hitbox.top_left());
+        hitbox_corners[4].set_position(atk_hitbox.value().bottom_right());
+        hitbox_corners[5].set_position(atk_hitbox.value().bottom_left());
+        hitbox_corners[6].set_position(atk_hitbox.value().top_right());
+        hitbox_corners[7].set_position(atk_hitbox.value().top_left());
     }
     
     void Player::animation()

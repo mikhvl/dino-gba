@@ -2,17 +2,15 @@
 
 namespace prj
 {
-    Bag::Bag
+    Entity::Entity
     (
         bn::fixed x,
-        bn::fixed y,
-        bool flip
+        bn::fixed y
     )
-        : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM),
-                bn::min(y, lvl::Y_LIM))
-        , spr_item(bn::sprite_items::bag)
-        , spr(spr_item.create_sprite(pos)) 
-    {
-        spr.set_horizontal_flip(flip);
-    }
+        : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM), bn::min(y, lvl::Y_LIM))
+    {}
+    
+    bn::fixed_point& Entity::get_pos() { return pos; }
+    bn::rect& Entity::get_body_hitbox() { return body_hitbox; }
+    bn::optional<bn::rect>& Entity::get_atk_hitbox() { return atk_hitbox; }
 }

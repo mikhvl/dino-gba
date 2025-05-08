@@ -3,7 +3,6 @@ music:
     alex gordon intro
 
 code:
-    entity base class for Player and enemies
     turn mid air
     entities interaction manager
     attack directed boost when jumping (celeste-like)
