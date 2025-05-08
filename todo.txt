@@ -1,14 +1,22 @@
 music:
-mermaid falls
-alex gordon intro
+    mermaid falls
+    alex gordon intro
 
 code:
-turn mid air
-attack
-attack hitbox
+    entity base class for Player and enemies
+    turn mid air
+    entities interaction manager
+    attack directed boost when jumping (celeste-like)
+        can't jump while holding opposite direction
+    spin attack
+        hitboxes change
+    damage
 
 art:
-turn mid air animation
-attack animation
-attack hitbox debug
-beach bg
+    turn mid air animation
+    attack animation
+        basic
+        in air + fall after attack
+        spin
+    damage animation
+    beach bg
