@@ -33,7 +33,6 @@ namespace prj
         bn::fixed y_speed = 0;
         bool _face_left;
         
-        int anim_wait = 4;
         int _turn_frames = 0;
         int _atk_frames = 0;
 

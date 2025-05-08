@@ -35,6 +35,8 @@ namespace prj
         
         namespace wait_data
         {
+            constexpr int ANIM_WAIT = 4;
+            
             constexpr int TURN_STOP = 5;
         
             constexpr int ATK_FULL  = 10;
