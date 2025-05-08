@@ -68,13 +68,19 @@ namespace prj
         movement();
         hitbox();
         animation();
+        count_frames();
     }
     
-    void Player::get_hurt(bool from_left) {}
-    
-    bool Player::is_attacking() { return _atk != not_atk || _atk != end_atk; }
+    bn::fixed_point& Player::get_pos() { return pos; }
     bn::rect& Player::get_body_hitbox() { return body_hitbox; }
     bn::rect& Player::get_atk_hitbox() { return atk_hitbox; }
+    
+    bool Player::is_attacking()
+    {
+        return _atk_frames >= player::wait_data::ATK_FULL && _atk_frames < player::wait_data::ATK_SLIDE;
+    }
+    
+    void Player::hurt() {}
     
     bool Player::is_running() { return _run == start_run || _run == full_run; }
     bool Player::is_jumping() { return _jump != not_jump; }
@@ -89,33 +95,21 @@ namespace prj
     
     void Player::input()
     {
-    // horizontal movement
-        if(bn::keypad::left_pressed())
+    // attack
+        if(bn::keypad::b_pressed() && _atk_frames == 0) 
         {
-            _run = start_run;
-            if(!_face_left) _turn_frames = 1;
-            set_face_left(true);
-            
+            if(is_on_ground()) _atk_frames = 1;
+            else _atk_frames = player::wait_data::ATK_FULL;
         }
-        else if(bn::keypad::right_pressed())
-        {
-            _run = start_run;
-            if(_face_left) _turn_frames = 1;
-            set_face_left(false);
-        }
-        
-        else if(bn::keypad::left_held())      _run = full_run;
-        else if(bn::keypad::left_released())  _run = end_run;
-        
-        else if(bn::keypad::right_held())     _run = full_run;
-        else if(bn::keypad::right_released()) _run = end_run;
-        
-        else _run = not_run;
         
     // vertical movement
     // note: AAAAAAAAAAAAAAAAAAAAAAAAAAA 
     // note: hmm ok at the second glance it's not so bad
-        if((bn::keypad::a_pressed() || bn::keypad::a_held()) && is_on_ground()) _jump = start_jump;
+        if((_atk_frames == 0 || _atk_frames >= player::wait_data::ATK_SLIDE) &&
+            is_on_ground() && (bn::keypad::a_pressed() || bn::keypad::a_held()))
+        {
+            _jump = start_jump;
+        }
         else
         {
             if(is_falling() || is_on_ground()) _jump = not_jump;
@@ -130,22 +124,46 @@ namespace prj
             }
         }
         
-    // attack
-        if(bn::keypad::b_pressed()) _atk = start_atk;
-        else if(_atk == end_atk) _atk = not_atk;
-        else
+    // horizontal movement
+        if((bn::keypad::left_pressed() && _atk_frames == 0) ||
+            (bn::keypad::left_held() &&
+            (_atk_frames == player::wait_data::ATK_STOP || _jump == full_jump ||
+            (_atk_frames > player::wait_data::ATK_SLIDE && _jump == start_jump))))
         {
-            if(_atk == start_atk)
-            {
-                _atk = end_atk;
-            }
+            _run = start_run;
+            if(!_face_left) _turn_frames = 1;
+            set_face_left(true);
+            
         }
+        else if((bn::keypad::right_pressed() && _atk_frames == 0) ||
+            (bn::keypad::right_held() && 
+            (_atk_frames == player::wait_data::ATK_STOP || _jump == full_jump ||
+            (_atk_frames > player::wait_data::ATK_SLIDE && _jump == start_jump))))
+        {
+            _run = start_run;
+            if(_face_left) _turn_frames = 1;
+            set_face_left(false);
+        }
+        
+        else if(bn::keypad::left_held())      _run = full_run;
+        else if(bn::keypad::left_released())  _run = end_run;
+        
+        else if(bn::keypad::right_held())     _run = full_run;
+        else if(bn::keypad::right_released()) _run = end_run;
+        
+        else _run = not_run;
     }
     
     void Player::movement()
     {
     // horizontal movement
-        if(is_running())
+        if(_atk_frames == player::wait_data::ATK_FULL) x_speed = player::ATK_SPEED; // attack boost
+        else if(_atk_frames >= player::wait_data::ATK_SLOW &&
+            _atk_frames < player::wait_data::ATK_STOP && x_speed > player::FRICTION) x_speed -= player::FRICTION;
+        else if(_atk_frames == player::wait_data::ATK_STOP) x_speed = player::X_SPEED;
+        
+        if((is_running() && _atk_frames == 0) ||
+            _atk_frames >= player::wait_data::ATK_FULL)
         {
             pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
             spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
@@ -163,14 +181,20 @@ namespace prj
         
         if(!is_on_ground())
         {
-        // falling/jumping
             pos.set_y(pos.y() - y_speed);
-            y_speed -= player::GRAVITY;
+            
+            if(_atk_frames < player::wait_data::ATK_FULL ||
+                _atk_frames >= player::wait_data::ATK_SLIDE) y_speed -= player::GRAVITY;
+            
+        // fall
             if(y_speed < 0)
             {
                 if(_fall == not_fall) _fall = start_fall;
                 else if(_fall == start_fall) _fall = full_fall;
             }
+            
+        // attack
+            if(y_speed > 0 && _atk_frames == player::wait_data::ATK_FULL) y_speed = 0;
         
         // button release
             if(_jump == release_jump && y_speed > player::RELEASE_JMP_SPEED)
@@ -194,11 +218,11 @@ namespace prj
     {
     // rect hitboxes
         body_hitbox.set_position(
-                pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
-                pos.y().round_integer());
+            pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
+            pos.y().round_integer());
         atk_hitbox.set_position(
-                pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
-                pos.y().round_integer());
+            pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
+            pos.y().round_integer());
         
     // box sprite
         if(bn::keypad::start_pressed()) box.set_visible(!box.visible());
@@ -225,19 +249,54 @@ namespace prj
     {
         if(is_on_ground())
         {
-        // turn
-            if(1 == _turn_frames)
+        // attack
+            if(_atk_frames == 1)
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
                         spr, anim_wait, spr_item.tiles_item(),
-                        player::anim_data::TURN
+                        player::anim_data::ATK_START
+                    );
+            }
+            else if(_atk_frames == player::wait_data::ATK_FULL)
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::ATK_FULL
+                    );
+            }
+            else if(_atk_frames == player::wait_data::ATK_SLOW)
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::ATK_SLOW
+                    );
+            }
+            else if(_atk_frames == player::wait_data::ATK_SLIDE)
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::ATK_SLIDE
+                    );
+            }
+            
+        // turn
+            else if(_turn_frames == 1)
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::TURN_GROUND
                     );
             }
             else
             {
             // idle
-                if(_run == end_run || (_run == not_run && _fall == end_fall))
+                if(_run == end_run || (_run == not_run &&
+                    (_fall == end_fall || _atk_frames == player::wait_data::ATK_STOP)))
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                         (
@@ -247,7 +306,9 @@ namespace prj
                 }
             // run
                 else if(_run == start_run || (_run == full_run &&
-                    (_fall == end_fall || _turn_frames == player::TURN_FRAMES_STOP)))
+                    (_fall == end_fall ||
+                    _turn_frames == player::wait_data::TURN_STOP ||
+                    _atk_frames == player::wait_data::ATK_STOP)))
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
                         (
@@ -259,8 +320,34 @@ namespace prj
         }
         else // not on ground
         {
+        // attack
+            if(_atk_frames == player::wait_data::ATK_FULL)
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::ATK_FULL
+                    );
+            }
+            else if(_atk_frames == player::wait_data::ATK_SLOW)
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::ATK_SLOW
+                    );
+            }
+            /*else if(_atk_frames == player::wait_data::ATK_SLIDE)
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, anim_wait, spr_item.tiles_item(),
+                        player::anim_data::ATK_SLIDE
+                    );
+            }*/
+            
         // jump
-            if(_jump == start_jump)
+            else if(_jump == start_jump)
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
@@ -269,7 +356,7 @@ namespace prj
                     );
             }
         // fall
-            else if(_fall == start_fall)
+            else if(_fall == start_fall || _atk_frames == player::wait_data::ATK_SLIDE)
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
@@ -279,9 +366,17 @@ namespace prj
             }
         }
         
-        if(0 < _turn_frames && _turn_frames < player::TURN_FRAMES_STOP) ++_turn_frames;
-        else _turn_frames = 0;
-        
         if(!act.done()) act.update();
+    }
+    
+    void Player::count_frames()
+    {
+    // turn
+        if(0 < _turn_frames && _turn_frames < player::wait_data::TURN_STOP) ++_turn_frames;
+        else _turn_frames = 0;
+    
+    // attack
+        if(0 < _atk_frames && _atk_frames < player::wait_data::ATK_STOP) ++_atk_frames;
+        else _atk_frames = 0;
     }
 }

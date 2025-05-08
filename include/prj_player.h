@@ -23,16 +23,19 @@ namespace prj
         Player(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = false);
         void update();
         
-        void get_hurt(bool from_left);
-        bool is_attacking();
+        bn::fixed_point& get_pos();
         bn::rect& get_body_hitbox();
         bn::rect& get_atk_hitbox();
+        bool is_attacking();
+        
+        void hurt();
         
     private:
     // interaction
         bn::fixed_point pos;
-        bn::fixed x_speed = 2;
+        bn::fixed x_speed = player::X_SPEED;
         bn::fixed y_speed = 0;
+        bool _face_left;
         
         bn::size body_size = player::BODY_SIZE;
         bn::size atk_size  = player::ATK_SIZE;
@@ -44,18 +47,15 @@ namespace prj
         int anim_wait = 4;
         int _turn_frames = 0;
         int _atk_frames = 0;
-        bool _face_left;
 
     // state logic
         enum RUN_STATE  { start_run, full_run, end_run, not_run };
         enum JUMP_STATE { start_jump, full_jump, release_jump, end_jump, not_jump };
         enum FALL_STATE { start_fall, full_fall, end_fall, not_fall };
-        enum ATK_STATE  { start_atk, full_atk, end_atk, not_atk };
         
         RUN_STATE  _run  = not_run;
         JUMP_STATE _jump = not_jump;
         FALL_STATE _fall = not_fall;
-        ATK_STATE  _atk  = not_atk;
 
     // sprite/animation item
         bn::sprite_item spr_item;
@@ -77,9 +77,10 @@ namespace prj
         void set_face_left(bool flip);
         
         void input();
-        void hitbox();
         void movement();
+        void hitbox();
         void animation();
+        void count_frames();
     };
 }
 
