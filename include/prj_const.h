@@ -3,10 +3,7 @@
 
 #include "bn_fixed.h"
 
-#include "bn_sprite_item.h"
-#include "bn_regular_bg_item.h"
-
-#include "bn_sprite_items_dino_main.h"
+#include "bn_sprite_items_dino.h"
 #include "bn_sprite_items_bag.h"
 
 #include "bn_sprite_items_gatito.h"

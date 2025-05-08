@@ -22,7 +22,7 @@ namespace prj
         : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM),
                 bn::min(y, lvl::Y_LIM))
         , _face_left(flip)
-        , spr_item(bn::sprite_items::dino_main)
+        , spr_item(bn::sprite_items::dino)
         , spr(spr_item.create_sprite(
                 pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X),
                 pos.y()))
