@@ -42,11 +42,16 @@ namespace prj
     void Player::update()
     {
         input();
-        attack();
+        hitbox();
         movement();
         animation();
-        box_update();
     }
+    
+    void Player::get_hurt(bool from_left) {}
+    
+    bool Player::is_attacking() { return _atk != not_atk || _atk != end_atk; }
+    bn::rect& Player::get_body_hitbox() { return body_hitbox; }
+    bn::rect& Player::get_atk_hitbox() { return atk_hitbox; }
     
     bool Player::is_running() { return _run == start_run || _run == full_run; }
     bool Player::is_jumping() { return _jump != not_jump; }
@@ -107,8 +112,10 @@ namespace prj
         else if(_atk == end_atk) _atk = not_atk;
     }
     
-    void Player::attack()
+    void Player::hitbox()
     {
+        box_update();
+        
         if(_atk == start_atk)
         {
             _atk = end_atk;

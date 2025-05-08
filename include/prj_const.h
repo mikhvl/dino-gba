@@ -8,7 +8,9 @@
 
 #include "bn_sprite_items_dino_main.h"
 #include "bn_sprite_items_bag.h"
+
 #include "bn_sprite_items_gatito.h"
+#include "bn_sprite_items_x_corner.h"
 
 #include "bn_regular_bg_items_bg_default.h"
 

@@ -3,6 +3,7 @@
 
 #include "bn_fixed.h"
 #include "bn_fixed_point.h"
+#include "bn_rect.h"
 
 #include "bn_sprite_item.h"
 #include "bn_sprite_ptr.h"
@@ -18,11 +19,19 @@ namespace prj
         Player(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = false);
         void update();
         
+        void get_hurt(bool from_left);
+        bool is_attacking();
+        bn::rect& get_body_hitbox();
+        bn::rect& get_atk_hitbox();
+        
     private:
-    // physics
+    // interaction
         bn::fixed_point pos;
         bn::fixed x_speed = 2;
         bn::fixed y_speed = 0;
+        
+        bn::rect body_hitbox;
+        bn::rect atk_hitbox;
     
     // animation
         int anim_wait = 4;
@@ -57,9 +66,10 @@ namespace prj
         void set_face_left(bool flip);
         
         void input();
-        void attack();
+        void hitbox();
         void movement();
         void animation();
+        
         void box_update();
     };
 }
