@@ -71,12 +71,12 @@ namespace prj
         count_frames();
     }
     
+    void Player::take_damage() {}
+    
     bool Player::is_attacking()
     {
         return _atk_frames >= player::wait_data::ATK_FULL && _atk_frames < player::wait_data::ATK_SLIDE;
     }
-    
-    void Player::hurt() {}
     
     bool Player::is_running() { return _run == start_run || _run == full_run; }
     bool Player::is_jumping() { return _jump != not_jump; }

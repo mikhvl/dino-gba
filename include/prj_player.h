@@ -21,18 +21,17 @@ namespace prj
     class Player : public Entity
     {
     public:
-        Player(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = false);
-        void update();
+        explicit Player(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = false);
         
-        bool is_attacking();
-        void hurt();
+        void update() override;
+        void take_damage() override;
+        bool is_attacking() override;
         
     private:
     // interaction
         bn::fixed x_speed = player::X_SPEED;
         bn::fixed y_speed = 0;
         bool _face_left;
-        
         int _turn_frames = 0;
         int _atk_frames = 0;
 
@@ -51,7 +50,6 @@ namespace prj
         bn::sprite_animate_action<player::MAX_ANIM_FRAMES> act;
         
         bn::sprite_ptr box; // sprite offset test
-        
         bn::sprite_builder hitbox_corner_builder;
         bn::vector<bn::sprite_ptr, 8> hitbox_corners;
 
@@ -63,7 +61,6 @@ namespace prj
 
     // update functions
         void set_face_left(bool flip);
-        
         void input();
         void movement();
         void hitbox();

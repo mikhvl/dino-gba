@@ -61,6 +61,16 @@ namespace prj
         }
     }
     
+    namespace bag
+    {
+        constexpr bn::size BODY_SIZE = {18, 18};
+        
+        namespace wait_data
+        {
+            constexpr int DAMAGE_STOP = 10;
+        }
+    }
+    
     namespace lvl
     {
         constexpr bn::fixed Y_LIM = 32;

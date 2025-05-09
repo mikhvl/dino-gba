@@ -12,11 +12,17 @@ namespace prj
     class Bag : public Entity
     {
     public:
-        Bag(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = true);
+        explicit Bag(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = true);
+        
+        void update() override;
+        void take_damage() override;
         
     private:
         bn::sprite_item spr_item;
         bn::sprite_ptr spr;
+        
+        int _damage_frames = 0;
+        void count_frames();
     };
 }
 
