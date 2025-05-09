@@ -4,6 +4,7 @@ music:
 
 code:
     turn mid air
+    stomp attack
     attack directed boost when jumping (celeste-like)
         can't jump while holding opposite direction
     spin attack
@@ -14,6 +15,7 @@ art:
     turn mid air animation
     attack animation
         basic
+        stomp
         in air + fall after attack
         spin
     damage animation
