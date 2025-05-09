@@ -11,17 +11,38 @@ namespace prj
         : Entity(x, y)
         , spr_item(bn::sprite_items::bag)
         , spr(spr_item.create_sprite(pos))
+        , act(bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once(
+                spr, bag::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                bag::anim_data::IDLE))
     {
         body_hitbox = bn::rect(
             pos.x().round_integer(), pos.y().round_integer(),
             bag::BODY_SIZE.width(), bag::BODY_SIZE.height());
+        spr.put_below();
         spr.set_horizontal_flip(flip);
     }
     
     void Bag::update()
     {
-        if(_damage_frames == 1) spr.set_tiles(spr_item.tiles_item(), 1);
-        else if(_damage_frames == bag::wait_data::DAMAGE_STOP) spr.set_tiles(spr_item.tiles_item(), 0);
+        if(_damage_frames == 1)
+        {
+            act = bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once
+            (
+                spr, bag::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                bag::anim_data::DAMAGE
+            );
+        }
+        else if(_damage_frames == bag::wait_data::DAMAGE_STOP)
+        {
+            act = bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once
+            (
+                spr, bag::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                bag::anim_data::IDLE
+            );
+        }
+        
+        if(!act.done()) act.update();
+        count_frames();
     }
     
     void Bag::take_damage()

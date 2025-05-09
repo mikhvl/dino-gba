@@ -3,6 +3,7 @@
 
 #include "bn_sprite_item.h"
 #include "bn_sprite_ptr.h"
+#include "bn_sprite_animate_actions.h"
 
 #include "prj_const.h"
 #include "prj_entity.h"
@@ -20,6 +21,7 @@ namespace prj
     private:
         bn::sprite_item spr_item;
         bn::sprite_ptr spr;
+        bn::sprite_animate_action<bag::MAX_ANIM_FRAMES> act;
         
         int _damage_frames = 0;
         void count_frames();

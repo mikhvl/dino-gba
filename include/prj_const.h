@@ -65,9 +65,18 @@ namespace prj
     {
         constexpr bn::size BODY_SIZE = {18, 18};
         
+        constexpr int MAX_ANIM_FRAMES = 2;
+        
         namespace wait_data
         {
+            constexpr int ANIM_WAIT = 4;
             constexpr int DAMAGE_STOP = 10;
+        }
+        
+        namespace anim_data
+        {
+            constexpr uint16_t IDLE[]   = {0, 0};
+            constexpr uint16_t DAMAGE[] = {1, 1};
         }
     }
     
