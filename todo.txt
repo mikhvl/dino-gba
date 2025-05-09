@@ -4,7 +4,6 @@ music:
 
 code:
     turn mid air
-    entities interaction manager
     attack directed boost when jumping (celeste-like)
         can't jump while holding opposite direction
     spin attack
