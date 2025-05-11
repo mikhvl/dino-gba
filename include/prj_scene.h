@@ -30,6 +30,7 @@ namespace prj
         
         void position_cam();
         void manage_entity();
+        void set_camera_for_all();
     };
 }
 

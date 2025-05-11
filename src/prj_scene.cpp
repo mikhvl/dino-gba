@@ -10,10 +10,18 @@ namespace prj
     {
     // player
         dino = bn::make_unique<Player>(lvl::PLAYER_START_X);
+    
+    // debug
+        all_entity.emplace_back(bn::make_unique<Bag>(40));
         
-    // camera
+        set_camera_for_all();
+    }
+    
+    void Scene::set_camera_for_all()
+    {
         dino->set_camera(cam);
         bg.set_camera(cam);
+        for(bn::unique_ptr<Entity>& entity : all_entity) entity->set_camera(cam);
     }
     
     void Scene::update()
