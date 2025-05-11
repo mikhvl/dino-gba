@@ -25,7 +25,7 @@ namespace prj
         constexpr bn::fixed X_SPEED = 2;
         constexpr bn::fixed START_JMP_SPEED = 4;
         constexpr bn::fixed RELEASE_JMP_SPEED = 1.3;
-        constexpr bn::fixed ATK_SPEED = 4.6;
+        constexpr bn::fixed DASH_SPEED = 4.6;
         
         constexpr int SPR_OFFSET_X = 4;
         constexpr int BODY_HITBOX_OFFSET_X = 3;

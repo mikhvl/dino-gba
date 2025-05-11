@@ -39,10 +39,12 @@ namespace prj
         enum RUN_STATE  { start_run, full_run, end_run, not_run };
         enum JUMP_STATE { start_jump, full_jump, release_jump, end_jump, not_jump };
         enum FALL_STATE { start_fall, full_fall, end_fall, not_fall };
+        enum DASH_STATE { start_dash, full_dash, end_dash, not_dash };
         
         RUN_STATE  _run  = not_run;
         JUMP_STATE _jump = not_jump;
         FALL_STATE _fall = not_fall;
+        DASH_STATE _dash = not_dash;
 
     // sprite/animation
         bn::sprite_animate_action<player::MAX_ANIM_FRAMES> act;
