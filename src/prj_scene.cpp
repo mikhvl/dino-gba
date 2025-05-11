@@ -23,7 +23,10 @@ namespace prj
     
     void Scene::position_cam()
     {
-        cam.set_position(dino->get_pos());
+        bn::fixed x = dino->get_pos().x();
+        bool is_negative = x < 0;
+        x = x.multiplication(x).division(1000);
+        cam.set_position(is_negative ? -x : x, 0);
     }
     
     void Scene::manage_entity()
