@@ -82,6 +82,8 @@ namespace prj
     
     namespace lvl
     {
+        constexpr bn::fixed PLAYER_START_X = 0;
+        
         constexpr bn::fixed Y_LIM = 32;
         constexpr bn::fixed X_LIM = 114;
         

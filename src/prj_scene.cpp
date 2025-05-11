@@ -7,17 +7,23 @@ namespace prj
     Scene::Scene()
         : bg_item(bn::regular_bg_items::bg_default)
         , bg(bg_item.create_bg(0, 0))
+        , cam(bn::camera_ptr::create())
     {
-    // create player
-        dino = bn::make_unique<Player>();
-        
-    // debug
-        all_entity.emplace_back(bn::make_unique<Bag>(44));
+    // player
+        dino = bn::make_unique<Player>(lvl::PLAYER_START_X);
+        dino->attach_cam(cam);
+        bg.set_camera(cam);
     }
     
     void Scene::update()
     {
+        position_cam();
         manage_entity();
+    }
+    
+    void Scene::position_cam()
+    {
+        cam.set_position(dino->get_pos());
     }
     
     void Scene::manage_entity()

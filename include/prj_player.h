@@ -9,6 +9,7 @@
 #include "bn_sprite_item.h"
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_animate_actions.h"
+#include "bn_camera_ptr.h"
 
 #include "bn_vector.h"
 #include "bn_sprite_builder.h"
@@ -26,6 +27,8 @@ namespace prj
         void update() override;
         void take_damage() override;
         bool is_attacking() override;
+        
+        void attach_cam(const bn::camera_ptr& cam);
         
     private:
     // interaction

@@ -78,6 +78,11 @@ namespace prj
         return _atk_frames >= player::wait_data::ATK_FULL && _atk_frames < player::wait_data::ATK_SLIDE;
     }
     
+    void Player::attach_cam(const bn::camera_ptr& cam)
+    {
+        spr.set_camera(cam);
+    }
+    
     bool Player::is_running() { return _run == start_run || _run == full_run; }
     bool Player::is_jumping() { return _jump != not_jump; }
     bool Player::is_falling() { return _fall == start_fall || _fall == full_fall; }
