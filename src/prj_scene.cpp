@@ -34,7 +34,7 @@ namespace prj
     {
         bn::fixed x = dino->get_pos().x();
         bool is_negative = x < 0;
-        x = x.multiplication(x).division(1000);
+        x = x.multiplication(x).division(800);
         cam.set_position(is_negative ? -x : x, 0);
     }
     
