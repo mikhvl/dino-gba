@@ -38,7 +38,7 @@ namespace prj
         virtual bool is_dead();
         
     // for scene
-        void set_camera(const bn::camera_ptr& cam);
+        virtual void set_camera(const bn::camera_ptr& cam);
         
     protected:
         bn::fixed_point pos;

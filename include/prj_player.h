@@ -25,6 +25,8 @@ namespace prj
         void take_damage() override;
         bool is_attacking() override;
         
+        void set_camera(const bn::camera_ptr& cam) override;
+        
     private:
     // interaction
         bn::fixed x_speed = player::X_SPEED;

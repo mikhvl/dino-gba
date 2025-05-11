@@ -75,6 +75,17 @@ namespace prj
         return _atk_frames >= player::wait_data::ATK_FULL && _atk_frames < player::wait_data::ATK_SLIDE;
     }
     
+    void Player::set_camera(const bn::camera_ptr& cam)
+    {
+        Entity::set_camera(cam);
+        
+        box.set_camera(cam);
+        for(int i = 0; i < hitbox_corners.max_size(); ++i)
+        {
+            hitbox_corners[i].set_camera(cam);
+        }
+    }
+    
     bool Player::is_running() { return _run == start_run || _run == full_run; }
     bool Player::is_jumping() { return _jump != not_jump; }
     bool Player::is_falling() { return _fall == start_fall || _fall == full_fall; }
