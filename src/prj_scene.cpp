@@ -34,16 +34,16 @@ namespace prj
     {
         dino->update();
         
-        for(int i = 0; i < all_entity.size(); ++i)
+        for(bn::unique_ptr<Entity>& entity : all_entity)
         {
             if(dino->is_attacking())
             {
-                if(dino->get_atk_hitbox()->intersects(all_entity[i]->get_body_hitbox()))
+                if(dino->get_atk_hitbox()->intersects(entity->get_body_hitbox()))
                 {
-                    all_entity[i]->take_damage();
+                    entity->take_damage();
                 }
             }
-            all_entity[i]->update();
+            entity->update();
         }
     }
 }

@@ -80,10 +80,7 @@ namespace prj
         Entity::set_camera(cam);
         
         box.set_camera(cam);
-        for(int i = 0; i < hitbox_corners.max_size(); ++i)
-        {
-            hitbox_corners[i].set_camera(cam);
-        }
+        for(auto& x : hitbox_corners) x.set_camera(cam);
     }
     
     bool Player::is_running() { return _run == start_run || _run == full_run; }
