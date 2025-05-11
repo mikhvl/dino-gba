@@ -5,13 +5,14 @@
 namespace prj
 {
     Scene::Scene()
-        : bg_item(bn::regular_bg_items::bg_default)
-        , bg(bg_item.create_bg(0, 0))
+        : bg(bn::regular_bg_items::bg_default.create_bg(0, 0))
         , cam(bn::camera_ptr::create())
     {
     // player
         dino = bn::make_unique<Player>(lvl::PLAYER_START_X);
-        dino->attach_cam(cam);
+        
+    // camera
+        dino->set_camera(cam);
         bg.set_camera(cam);
     }
     
@@ -37,7 +38,7 @@ namespace prj
         {
             if(dino->is_attacking())
             {
-                if(dino->get_atk_hitbox().value().intersects(all_entity[i]->get_body_hitbox()))
+                if(dino->get_atk_hitbox()->intersects(all_entity[i]->get_body_hitbox()))
                 {
                     all_entity[i]->take_damage();
                 }

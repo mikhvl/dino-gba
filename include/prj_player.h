@@ -6,10 +6,7 @@
 #include "bn_rect.h"
 #include "bn_size.h"
 
-#include "bn_sprite_item.h"
-#include "bn_sprite_ptr.h"
 #include "bn_sprite_animate_actions.h"
-#include "bn_camera_ptr.h"
 
 #include "bn_vector.h"
 #include "bn_sprite_builder.h"
@@ -28,8 +25,6 @@ namespace prj
         void take_damage() override;
         bool is_attacking() override;
         
-        void attach_cam(const bn::camera_ptr& cam);
-        
     private:
     // interaction
         bn::fixed x_speed = player::X_SPEED;
@@ -47,11 +42,10 @@ namespace prj
         JUMP_STATE _jump = not_jump;
         FALL_STATE _fall = not_fall;
 
-    // sprite/animation item
-        bn::sprite_item spr_item;
-        bn::sprite_ptr spr;
+    // sprite/animation
         bn::sprite_animate_action<player::MAX_ANIM_FRAMES> act;
         
+        // debug
         bn::sprite_ptr box; // sprite offset test
         bn::sprite_builder hitbox_corner_builder;
         bn::vector<bn::sprite_ptr, 8> hitbox_corners;

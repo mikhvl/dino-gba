@@ -20,14 +20,10 @@ namespace prj
         bool flip
     )
     // main parameters
-        : Entity(x, y)
+        : Entity(x, y, bn::sprite_items::dino)
         , _face_left(flip)
         
-    // main sprite
-        , spr_item(bn::sprite_items::dino)
-        , spr(spr_item.create_sprite(
-                pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X),
-                pos.y()))
+    // animation
         , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
                 spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
                 player::anim_data::IDLE))
@@ -45,8 +41,9 @@ namespace prj
             pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
             pos.y().round_integer(),
             player::ATK_SIZE.width(), player::ATK_SIZE.height());
-    
+        
     // initial logic
+        spr.set_position(pos.x() + (flip ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X), pos.y());
         set_face_left(flip);
         if(pos.y() < lvl::Y_LIM) _fall = start_fall;
     
@@ -76,11 +73,6 @@ namespace prj
     bool Player::is_attacking()
     {
         return _atk_frames >= player::wait_data::ATK_FULL && _atk_frames < player::wait_data::ATK_SLIDE;
-    }
-    
-    void Player::attach_cam(const bn::camera_ptr& cam)
-    {
-        spr.set_camera(cam);
     }
     
     bool Player::is_running() { return _run == start_run || _run == full_run; }
@@ -221,7 +213,7 @@ namespace prj
         body_hitbox.set_position(
             pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
             pos.y().round_integer());
-        atk_hitbox.value().set_position(
+        atk_hitbox->set_position(
             pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
             pos.y().round_integer());
         
@@ -239,10 +231,10 @@ namespace prj
         hitbox_corners[2].set_position(body_hitbox.top_right());
         hitbox_corners[3].set_position(body_hitbox.top_left());
         
-        hitbox_corners[4].set_position(atk_hitbox.value().bottom_right());
-        hitbox_corners[5].set_position(atk_hitbox.value().bottom_left());
-        hitbox_corners[6].set_position(atk_hitbox.value().top_right());
-        hitbox_corners[7].set_position(atk_hitbox.value().top_left());
+        hitbox_corners[4].set_position(atk_hitbox->bottom_right());
+        hitbox_corners[5].set_position(atk_hitbox->bottom_left());
+        hitbox_corners[6].set_position(atk_hitbox->top_right());
+        hitbox_corners[7].set_position(atk_hitbox->top_left());
     }
     
     void Player::animation()

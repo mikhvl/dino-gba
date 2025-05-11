@@ -8,16 +8,17 @@ namespace prj
         bn::fixed y,
         bool flip
     )
-        : Entity(x, y)
-        , spr_item(bn::sprite_items::bag)
-        , spr(spr_item.create_sprite(pos))
+        : Entity(x, y, bn::sprite_items::bag)
         , act(bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once(
                 spr, bag::wait_data::ANIM_WAIT, spr_item.tiles_item(),
                 bag::anim_data::IDLE))
     {
+    // hitboxes
         body_hitbox = bn::rect(
             pos.x().round_integer(), pos.y().round_integer(),
             bag::BODY_SIZE.width(), bag::BODY_SIZE.height());
+    
+    // initial logic
         spr.put_below();
         spr.set_horizontal_flip(flip);
     }

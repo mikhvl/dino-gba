@@ -19,8 +19,6 @@ namespace prj
         void take_damage() override;
         
     private:
-        bn::sprite_item spr_item;
-        bn::sprite_ptr spr;
         bn::sprite_animate_action<bag::MAX_ANIM_FRAMES> act;
         
         int _damage_frames = 0;
