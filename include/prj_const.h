@@ -42,7 +42,7 @@ namespace prj
             constexpr int ATK_FULL  = 10;
             constexpr int ATK_SLOW  = 14;
             constexpr int ATK_SLIDE = 16;
-            constexpr int ATK_STOP  = 30;
+            constexpr int ATK_STOP  = 35;
         }
         
         namespace anim_data
