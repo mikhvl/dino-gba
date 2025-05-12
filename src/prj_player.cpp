@@ -106,8 +106,15 @@ namespace prj
         }
         
     // vertical movement
+        if(is_falling())
+        {
+            if(bn::keypad::a_pressed()) _queue_jump = true;
+            else if(bn::keypad::a_released()) _queue_jump = false;
+        }
+        
         if(is_on_ground() && 
             (
+                (_queue_jump && bn::keypad::a_held()) ||
                 (bn::keypad::a_pressed() && _atk_frames == 0) ||
                 ((bn::keypad::a_pressed() || bn::keypad::a_held()) && 
                     _atk_frames >= player::wait_data::ATK_SLIDE)
@@ -115,6 +122,7 @@ namespace prj
         {
             if(_atk_frames >= player::wait_data::ATK_SLIDE &&
                 bn::keypad::a_pressed()) _dash = start_dash;
+            if(_queue_jump) _queue_jump = false;
             _jump = start_jump;
         }
         else
