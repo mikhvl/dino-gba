@@ -108,8 +108,9 @@ namespace prj
     // vertical movement
         if(is_on_ground() && 
             (
-                (bn::keypad::a_pressed() || bn::keypad::a_held()) &&
-                (_atk_frames == 0 || _atk_frames >= player::wait_data::ATK_SLIDE)
+                (bn::keypad::a_pressed() && _atk_frames == 0) ||
+                ((bn::keypad::a_pressed() || bn::keypad::a_held()) && 
+                    _atk_frames >= player::wait_data::ATK_SLIDE)
             ))
         {
             if(_atk_frames >= player::wait_data::ATK_SLIDE &&
@@ -197,7 +198,11 @@ namespace prj
         }
         
     // vertical movement
-        if(_jump == start_jump) y_speed = player::START_JMP_SPEED; // initial jump momentum
+        if(_jump == start_jump)
+        {
+            if(is_dashing()) y_speed = player::START_JMP_DASH_SPEED;
+            else y_speed = player::START_JMP_SPEED;
+        }
         if(_fall == end_fall || _jump == start_jump) _fall = not_fall; // resets fall state
         
         if(!is_on_ground())
@@ -213,7 +218,7 @@ namespace prj
             };
         
         // button release
-            if(_jump == release_jump && y_speed > player::RELEASE_JMP_SPEED)
+            if(_jump == release_jump && !is_dashing() && y_speed > player::RELEASE_JMP_SPEED)
             {
                 y_speed = player::RELEASE_JMP_SPEED;
             }
