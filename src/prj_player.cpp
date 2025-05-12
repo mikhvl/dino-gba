@@ -100,7 +100,7 @@ namespace prj
     void Player::input()
     {
     // attack
-        if(bn::keypad::b_pressed() && is_on_ground() && _atk_frames == 0) 
+        if((bn::keypad::b_pressed() || bn::keypad::b_held()) && is_on_ground() && _atk_frames == 0) 
         {
             _atk_frames = 1;
         }
