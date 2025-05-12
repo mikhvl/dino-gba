@@ -34,11 +34,13 @@ namespace prj
     {
     // hitboxes
         body_hitbox = bn::rect(
-            pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
+            pos.x().round_integer() +
+                (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
             pos.y().round_integer(),
             player::BODY_SIZE.width(), player::BODY_SIZE.height());
         atk_hitbox = bn::rect(
-            pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
+            pos.x().round_integer() +
+                (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
             pos.y().round_integer(),
             player::ATK_SIZE.width(), player::ATK_SIZE.height());
         
@@ -110,7 +112,8 @@ namespace prj
                 (_atk_frames == 0 || _atk_frames >= player::wait_data::ATK_SLIDE)
             ))
         {
-            if(_atk_frames >= player::wait_data::ATK_SLIDE && bn::keypad::a_pressed()) _dash = start_dash;
+            if(_atk_frames >= player::wait_data::ATK_SLIDE &&
+                bn::keypad::a_pressed()) _dash = start_dash;
             _jump = start_jump;
         }
         else
@@ -169,7 +172,8 @@ namespace prj
     // dash states
         if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
         else if(_dash == start_dash) _dash = full_dash;
-        else if(_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall) _dash = end_dash;
+        else if(_fall == end_fall ||
+            (_atk_frames == player::wait_data::ATK_STOP && is_on_ground())) _dash = end_dash;
         else if(_dash == end_dash) _dash = not_dash;
         
     // horizontal movement
@@ -178,8 +182,10 @@ namespace prj
         else if(_dash == start_dash) x_speed = player::DASH_SPEED;
         else if(_run == start_run) x_speed = player::X_SPEED;
         
-        if(is_on_ground() && _dash == full_dash && x_speed > player::FRICTION) x_speed -= player::FRICTION;
-        else if(!is_on_ground() && !is_running() && x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
+        if(is_on_ground() && _dash == full_dash &&
+            x_speed > player::FRICTION) x_speed -= player::FRICTION;
+        else if(!is_on_ground() && !is_running() &&
+            x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
         
         pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
         spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
@@ -228,10 +234,12 @@ namespace prj
     {
     // rect hitboxes
         body_hitbox.set_position(
-            pos.x().round_integer() + (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
+            pos.x().round_integer() +
+                (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
             pos.y().round_integer());
         atk_hitbox->set_position(
-            pos.x().round_integer() + (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
+            pos.x().round_integer() +
+                (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
             pos.y().round_integer());
         
     // debug
