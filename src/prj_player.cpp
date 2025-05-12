@@ -180,7 +180,7 @@ namespace prj
     // horizontal movement
         if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0) || 
             (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
-        else if(_dash == start_dash) x_speed = player::DASH_SPEED;
+        else if(_dash == start_dash) x_speed = player::DASH_X_SPEED;
         else if(_run == start_run) x_speed = player::X_SPEED;
         
         if(is_on_ground() && _dash == full_dash &&
@@ -200,8 +200,8 @@ namespace prj
     // vertical movement
         if(_jump == start_jump)
         {
-            if(is_dashing()) y_speed = player::START_JMP_DASH_SPEED;
-            else y_speed = player::START_JMP_SPEED;
+            if(is_dashing()) y_speed = player::START_DASH_Y_SPEED;
+            else y_speed = player::START_Y_SPEED;
         }
         if(_fall == end_fall || _jump == start_jump) _fall = not_fall; // resets fall state
         
@@ -218,9 +218,9 @@ namespace prj
             };
         
         // button release
-            if(_jump == release_jump && !is_dashing() && y_speed > player::RELEASE_JMP_SPEED)
+            if(_jump == release_jump && !is_dashing() && y_speed > player::RELEASE_Y_SPEED)
             {
-                y_speed = player::RELEASE_JMP_SPEED;
+                y_speed = player::RELEASE_Y_SPEED;
             }
             
         // landing
