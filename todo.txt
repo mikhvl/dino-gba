@@ -5,8 +5,6 @@ music:
 code:
     turn mid air
     stomp attack
-    attack directed boost when jumping (celeste-like)
-        can't jump while holding opposite direction
     spin attack
         hitboxes change
     damage
@@ -16,7 +14,7 @@ art:
     attack animation
         basic
         stomp
-        in air + fall after attack
+        fall after attack
         spin
     damage animation
     beach bg
