@@ -21,7 +21,7 @@ namespace prj
         
         constexpr bn::fixed GRAVITY = 0.2;
         constexpr bn::fixed FRICTION = 0.16;
-        constexpr bn::fixed AIR_FRICTION = 0.08;
+        constexpr bn::fixed AIR_FRICTION = 0.1;
         
         constexpr bn::fixed X_SPEED = 2;
         constexpr bn::fixed START_JMP_SPEED = 4;

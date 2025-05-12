@@ -106,8 +106,8 @@ namespace prj
     // vertical movement
         if(is_on_ground() && 
             (
-                (_atk_frames == 0 && (bn::keypad::a_pressed() || bn::keypad::a_held())) ||
-                (_atk_frames >= player::wait_data::ATK_SLIDE && bn::keypad::a_pressed())
+                (bn::keypad::a_pressed() || bn::keypad::a_held()) &&
+                (_atk_frames == 0 || _atk_frames >= player::wait_data::ATK_SLIDE)
             ))
         {
             if(_atk_frames >= player::wait_data::ATK_SLIDE && bn::keypad::a_pressed()) _dash = start_dash;
@@ -176,7 +176,7 @@ namespace prj
         if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0) || 
             (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
         else if(_dash == start_dash) x_speed = player::DASH_SPEED;
-        else if(_dash == end_dash || _run == start_run) x_speed = player::X_SPEED;
+        else if(_run == start_run) x_speed = player::X_SPEED;
         
         if(is_on_ground() && _dash == full_dash && x_speed > player::FRICTION) x_speed -= player::FRICTION;
         else if(!is_on_ground() && !is_running() && x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
@@ -304,7 +304,7 @@ namespace prj
             else
             {
             // idle
-                if(_run == end_run || (_run == not_run &&
+                if((_run == end_run && _atk_frames == 0) || (_run == not_run &&
                     (_fall == end_fall || _atk_frames == player::wait_data::ATK_STOP)))
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
@@ -315,8 +315,7 @@ namespace prj
                 }
             // run
                 else if(_run == start_run || (_run == full_run &&
-                    (_fall == end_fall ||
-                    _turn_frames == player::wait_data::TURN_STOP ||
+                    (_fall == end_fall || _turn_frames == player::wait_data::TURN_STOP ||
                     _atk_frames == player::wait_data::ATK_STOP)))
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
