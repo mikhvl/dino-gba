@@ -58,6 +58,7 @@ namespace prj
         bool is_running();
         bool is_jumping();
         bool is_falling();
+        bool is_dashing();
         bool is_on_ground();
 
     // update functions

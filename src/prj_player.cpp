@@ -86,6 +86,7 @@ namespace prj
     bool Player::is_running() { return _run == start_run || _run == full_run; }
     bool Player::is_jumping() { return _jump != not_jump; }
     bool Player::is_falling() { return _fall == start_fall || _fall == full_fall; }
+    bool Player::is_dashing() { return _dash == start_dash || _dash == full_dash; }
     bool Player::is_on_ground() { return !is_jumping() && !is_falling(); }
     
     void Player::set_face_left(bool flip)
@@ -172,15 +173,17 @@ namespace prj
         else if(_dash == end_dash) _dash = not_dash;
         
     // horizontal movement
-        if(_dash == start_dash) x_speed = player::DASH_SPEED;
-        else if(is_on_ground() && _dash == full_dash && x_speed > player::FRICTION) x_speed -= player::FRICTION;
-        else if(_dash == end_dash) x_speed = player::X_SPEED;
+        if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0) || 
+            (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
+        else if(_dash == start_dash) x_speed = player::DASH_SPEED;
+        else if(_dash == end_dash || _run == start_run) x_speed = player::X_SPEED;
         
-        if((is_running() && _atk_frames == 0) || _dash == full_dash || _dash == start_dash)
-        {
-            pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
-            spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
-        }
+        if(is_on_ground() && _dash == full_dash && x_speed > player::FRICTION) x_speed -= player::FRICTION;
+        else if(!is_on_ground() && !is_running() && x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
+        
+        pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
+        spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
+        
         if(bn::abs(pos.x()) > lvl::X_LIM) // level bounds
         {
             pos.set_x(pos.x() < 0 ? -lvl::X_LIM : lvl::X_LIM);

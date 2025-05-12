@@ -20,7 +20,8 @@ namespace prj
         constexpr bn::size ATK_SIZE = {32, 30};
         
         constexpr bn::fixed GRAVITY = 0.2;
-        constexpr bn::fixed FRICTION = 0.2;
+        constexpr bn::fixed FRICTION = 0.16;
+        constexpr bn::fixed AIR_FRICTION = 0.08;
         
         constexpr bn::fixed X_SPEED = 2;
         constexpr bn::fixed START_JMP_SPEED = 4;
