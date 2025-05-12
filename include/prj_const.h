@@ -17,7 +17,7 @@ namespace prj
     namespace player
     {
         constexpr bn::size BODY_SIZE = {16, 16};
-        constexpr bn::size ATK_SIZE = {32, 30};
+        constexpr bn::size ATK_SIZE = {24, 30};
         
         constexpr bn::fixed GRAVITY = 0.2;
         constexpr bn::fixed FRICTION = 0.16;
@@ -32,7 +32,7 @@ namespace prj
         
         constexpr int SPR_OFFSET_X = 4;
         constexpr int BODY_HITBOX_OFFSET_X = 3;
-        constexpr int ATK_HITBOX_OFFSET_X = 16;
+        constexpr int ATK_HITBOX_OFFSET_X = 13;
         
         constexpr int MAX_ANIM_FRAMES = 2;
         
