@@ -52,15 +52,18 @@ namespace prj
         {
             constexpr uint16_t IDLE[] = {0, 0};
             constexpr uint16_t RUN[]  = {1, 2};
-            constexpr uint16_t JUMP[] = {3, 3};
-            constexpr uint16_t FALL[] = {4, 4};
             
-            constexpr uint16_t TURN_GROUND[] = {5, 5};
+            constexpr uint16_t JUMP[] = {4, 4};
+            constexpr uint16_t FALL[] = {5, 5};
+            constexpr uint16_t JUMP_DASH[] = {6, 6};
             
-            constexpr uint16_t ATK_START[] = {6, 6};
-            constexpr uint16_t ATK_FULL[]  = {7, 7};
-            constexpr uint16_t ATK_SLOW[]  = {8, 8};
-            constexpr uint16_t ATK_SLIDE[] = {9, 9};
+            constexpr uint16_t TURN_GROUND[] = {3, 3};
+            constexpr uint16_t TURN_AIR[] = {7, 7};
+            
+            constexpr uint16_t ATK_START[] = {8, 8};
+            constexpr uint16_t ATK_FULL[]  = {9, 9};
+            constexpr uint16_t ATK_SLOW[]  = {10, 10};
+            constexpr uint16_t ATK_SLIDE[] = {11, 11};
         }
     }
     

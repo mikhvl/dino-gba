@@ -349,23 +349,49 @@ namespace prj
         }
         else // not on ground
         {
-        // jump
-            if(_jump == start_jump)
+        // turn
+            if(_turn_frames == 1)
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
                         spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::JUMP
+                        player::anim_data::TURN_AIR
                     );
             }
-        // fall
-            else if(_fall == start_fall || _atk_frames == player::wait_data::ATK_SLIDE)
+            else
             {
-                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
-                    (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::FALL
-                    );
+            // jump
+                if(_jump == start_jump ||
+                    (is_jumping() && _turn_frames == player::wait_data::TURN_STOP))
+                {
+                    if(is_dashing())
+                    {
+                        act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                            (
+                                spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                                player::anim_data::JUMP_DASH
+                            );
+                    }
+                    else
+                    {
+                        act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                            (
+                                spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                                player::anim_data::JUMP
+                            );
+                    }
+                }
+            // fall
+                else if(_fall == start_fall ||
+                    _atk_frames == player::wait_data::ATK_SLIDE ||
+                    (is_falling() && _turn_frames == player::wait_data::TURN_STOP))
+                {
+                    act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                        (
+                            spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                            player::anim_data::FALL
+                        );
+                }
             }
         }
         
