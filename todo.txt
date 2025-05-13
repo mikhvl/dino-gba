@@ -3,18 +3,15 @@ music:
     alex gordon intro
 
 code:
-    turn mid air
     stomp attack
     spin attack
         hitboxes change
-    damage
+    stun
 
 art:
-    turn mid air animation
     attack animation
-        basic
         stomp
-        fall after attack
         spin
-    damage animation
+        fall after spin
+    stun animation
     beach bg
