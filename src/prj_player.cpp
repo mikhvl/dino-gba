@@ -189,17 +189,17 @@ namespace prj
         else if(bn::keypad::right_released()) _run = end_run;
         
         else _run = not_run;
-    }
-    
-    void Player::movement()
-    {
+        
     // dash states
         if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
         else if(_dash == start_dash) _dash = full_dash;
         else if(_fall == end_fall ||
             (_atk_frames == player::wait_data::ATK_STOP && is_on_ground())) _dash = end_dash;
         else if(_dash == end_dash) _dash = not_dash;
-        
+    }
+    
+    void Player::movement()
+    {
     // horizontal movement
         if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0) || 
             (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
