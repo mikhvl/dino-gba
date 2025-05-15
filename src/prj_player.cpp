@@ -341,7 +341,8 @@ namespace prj
             {
             // idle
                 if((_run == end_run && _atk_frames == 0) || (_run == not_run &&
-                    (_fall == end_fall || _atk_frames == player::wait_data::ATK_STOP)))
+                    (_fall == end_fall || _turn_frames == player::wait_data::TURN_STOP ||
+                    _atk_frames == player::wait_data::ATK_STOP)))
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                         (
@@ -398,7 +399,6 @@ namespace prj
                 }
             // fall
                 else if(_fall == start_fall ||
-                    _atk_frames == player::wait_data::ATK_SLIDE ||
                     (is_falling() && _turn_frames == player::wait_data::TURN_STOP))
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
