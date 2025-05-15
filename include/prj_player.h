@@ -64,6 +64,8 @@ namespace prj
 
     // update functions
         void set_face_left(bool flip);
+        void set_hitbox_size(bool is_spin);
+        
         void input();
         void movement();
         void hitbox();

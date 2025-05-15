@@ -32,19 +32,8 @@ namespace prj
         , box(bn::sprite_items::gatito.create_sprite(pos)) // sprite offset test
         , hitbox_corner_builder(bn::sprite_builder(bn::sprite_items::x_corner))
     {
-    // hitboxes
-        body_hitbox = bn::rect(
-            pos.x().round_integer() +
-                (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
-            pos.y().round_integer(),
-            player::BODY_SIZE.width(), player::BODY_SIZE.height());
-        atk_hitbox = bn::rect(
-            pos.x().round_integer() +
-                (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
-            pos.y().round_integer(),
-            player::ATK_SIZE.width(), player::ATK_SIZE.height());
-        
     // initial logic
+        set_hitbox_size(false);
         spr.set_position(pos.x() + (flip ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X), pos.y());
         set_face_left(flip);
         if(pos.y() < lvl::Y_LIM) _fall = start_fall;
@@ -95,6 +84,32 @@ namespace prj
     {
         _face_left = flip;
         spr.set_horizontal_flip(_face_left);
+    }
+    
+    void Player::set_hitbox_size(bool is_spin)
+    {
+        if(is_spin)
+        {
+            //
+        }
+        else
+        {
+            body_hitbox = bn::rect
+            (
+                pos.x().round_integer() +
+                    (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
+                pos.y().round_integer(),
+                player::BODY_SIZE.width(), player::BODY_SIZE.height()
+            );
+            
+            atk_hitbox = bn::rect
+            (
+                pos.x().round_integer() +
+                    (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
+                pos.y().round_integer(),
+                player::ATK_SIZE.width(), player::ATK_SIZE.height()
+            );
+        }
     }
     
     void Player::input()
