@@ -22,7 +22,7 @@ namespace prj
         (
             bn::fixed x = 0,
             bn::fixed y = lvl::Y_LIM,
-            bn::sprite_item sprite_item = bn::sprite_items::bag
+            bn::sprite_item sprite_item = bn::sprite_items::gatito
         );
         virtual ~Entity() = default;
         
