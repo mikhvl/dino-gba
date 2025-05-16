@@ -48,7 +48,7 @@ namespace prj
             {
                 if(dino->get_atk_hitbox()->intersects(entity->get_body_hitbox()))
                 {
-                    entity->take_damage();
+                    entity->take_damage(dino->get_pos().x() < entity->get_pos().x());
                 }
             }
             entity->update();

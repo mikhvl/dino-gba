@@ -46,7 +46,7 @@ namespace prj
         count_frames();
     }
     
-    void Bag::take_damage()
+    void Bag::take_damage(bool from_left)
     {
         if(_damage_frames == 0) _damage_frames = 1;
     }

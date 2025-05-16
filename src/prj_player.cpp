@@ -59,7 +59,10 @@ namespace prj
         count_frames();
     }
     
-    void Player::take_damage() {}
+    void Player::take_damage(bool from_left)
+    {
+        stun(from_left);
+    }
     
     bool Player::is_attacking()
     {
@@ -109,6 +112,12 @@ namespace prj
                 player::ATK_SIZE.width(), player::ATK_SIZE.height()
             );
         }
+    }
+    
+    void Player::stun(bool from_left)
+    {
+        if(!_stun) _stun = true;
+        set_face_left(from_left);
     }
     
     void Player::input()

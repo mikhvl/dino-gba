@@ -33,7 +33,7 @@ namespace prj
         
     // for entity manager
         virtual void update();
-        virtual void take_damage();
+        virtual void take_damage(bool from_left);
         virtual bool is_attacking();
         virtual bool is_dead();
         

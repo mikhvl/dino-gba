@@ -16,7 +16,7 @@ namespace prj
         explicit Bag(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = true);
         
         void update() override;
-        void take_damage() override;
+        void take_damage(bool from_left = false) override;
         
     private:
         bn::sprite_animate_action<bag::MAX_ANIM_FRAMES> act;

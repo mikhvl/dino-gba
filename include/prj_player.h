@@ -22,7 +22,7 @@ namespace prj
         explicit Player(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM, bool flip = false);
         
         void update() override;
-        void take_damage() override;
+        void take_damage(bool from_left) override;
         bool is_attacking() override;
         
         void set_camera(const bn::camera_ptr& cam) override;
@@ -35,8 +35,10 @@ namespace prj
     // state logic
         bool _face_left;
         bool _queue_jump = false;
+        bool _stun = false;
         int _turn_frames = 0;
         int _atk_frames  = 0;
+        int _inv_frames  = 0;
         
         enum RUN_STATE  { start_run, full_run, end_run, not_run };
         enum JUMP_STATE { start_jump, full_jump, release_jump, end_jump, not_jump };
@@ -66,6 +68,7 @@ namespace prj
     // update functions
         void set_face_left(bool flip);
         void set_hitbox_size(bool is_spin);
+        void stun(bool from_left);
         
         void input();
         void movement();
