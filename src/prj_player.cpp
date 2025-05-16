@@ -297,7 +297,7 @@ namespace prj
             pos.x().round_integer() +
                 (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
             pos.y().round_integer());
-        atk_hitbox->set_position(
+        atk_hitbox.set_position(
             pos.x().round_integer() +
                 (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
             pos.y().round_integer());
@@ -316,10 +316,10 @@ namespace prj
         hitbox_corners[2].set_position(body_hitbox.top_right());
         hitbox_corners[3].set_position(body_hitbox.top_left());
         
-        hitbox_corners[4].set_position(atk_hitbox->bottom_right());
-        hitbox_corners[5].set_position(atk_hitbox->bottom_left());
-        hitbox_corners[6].set_position(atk_hitbox->top_right());
-        hitbox_corners[7].set_position(atk_hitbox->top_left());
+        hitbox_corners[4].set_position(atk_hitbox.bottom_right());
+        hitbox_corners[5].set_position(atk_hitbox.bottom_left());
+        hitbox_corners[6].set_position(atk_hitbox.top_right());
+        hitbox_corners[7].set_position(atk_hitbox.top_left());
     }
     
     void Player::animation()

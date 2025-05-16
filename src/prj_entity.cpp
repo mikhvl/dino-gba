@@ -15,7 +15,7 @@ namespace prj
     
     bn::fixed_point& Entity::get_pos() { return pos; }
     bn::rect& Entity::get_body_hitbox() { return body_hitbox; }
-    bn::optional<bn::rect>& Entity::get_atk_hitbox() { return atk_hitbox; }
+    bn::rect& Entity::get_atk_hitbox() { return atk_hitbox; }
     
     void Entity::update() {}
     void Entity::take_damage(bool from_left) { if(from_left) {} }

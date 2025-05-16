@@ -44,7 +44,7 @@ namespace prj
         {
             if(dino->is_attacking())
             {
-                if(dino->get_atk_hitbox()->intersects(entity->get_body_hitbox()))
+                if(dino->get_atk_hitbox().intersects(entity->get_body_hitbox()))
                 {
                     entity->take_damage(dino->get_pos().x() < entity->get_pos().x());
                 }
@@ -52,7 +52,7 @@ namespace prj
             
             if(entity->is_attacking())
             {
-                if(entity->get_atk_hitbox()->intersects(dino->get_body_hitbox()))
+                if(entity->get_atk_hitbox().intersects(dino->get_body_hitbox()))
                 {
                     dino->take_damage(entity->get_pos().x() < dino->get_pos().x());
                 }
