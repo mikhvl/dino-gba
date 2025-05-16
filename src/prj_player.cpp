@@ -42,7 +42,6 @@ namespace prj
         box.set_scale(0.5);
         box.set_visible(false);
         
-        //hitbox_corner_builder.set_scale(0.5);
         hitbox_corner_builder.set_visible(false);
         for(int i = 0; i < hitbox_corners.max_size(); ++i)
         {
@@ -128,18 +127,19 @@ namespace prj
     
     void Player::input()
     {
-    // attack
+    // ATTACK
         if((bn::keypad::b_pressed() || bn::keypad::b_held()) &&
             is_on_ground() && _atk_frames == 0 && _inv_frames == 0) _atk_frames = 1;
         if(_atk_frames == player::wait_data::ATK_FULL) _inv_frames = 1;
         
-    // vertical movement
+    // QUEUE JUMP
         if(is_falling())
         {
             if(bn::keypad::a_pressed()) _queue_jump = true;
             else if(bn::keypad::a_released()) _queue_jump = false;
         }
         
+    // VERTICAL MOVEMENT
     // start stun jump
         if(_stun && _inv_frames == 1) _jump = start_jump;
     // start normal jump
@@ -156,6 +156,7 @@ namespace prj
             if(_queue_jump) _queue_jump = false;
             _jump = start_jump;
         }
+    // manage jump states
         else
         {
             if(is_falling() || is_on_ground()) _jump = not_jump;
@@ -170,17 +171,19 @@ namespace prj
             }
         }
         
-    // horizontal movement
+    // HORIZONTAL MOVEMENT
     // start run left
         if((bn::keypad::left_pressed() && !_stun &&
             (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && !_face_left))) ||
             (bn::keypad::left_held() && (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall)))
         {
+        // cancel attack
             if(bn::keypad::left_pressed() && (_atk_frames < player::wait_data::ATK_FULL && !_face_left))
             {
-                _atk_frames = player::wait_data::ATK_STOP; // cancel attack
+                _atk_frames = player::wait_data::ATK_STOP;
             }
             
+        // start run
             _run = start_run;
             if(!_face_left) _turn_frames = 1;
             set_face_left(true);
@@ -190,16 +193,19 @@ namespace prj
             (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && _face_left))) ||
             (bn::keypad::right_held() && (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall)))
         {
+        // cancel attack
             if(bn::keypad::right_pressed() && (_atk_frames < player::wait_data::ATK_FULL && _face_left))
             {
-                _atk_frames = player::wait_data::ATK_STOP; // cancel attack
+                _atk_frames = player::wait_data::ATK_STOP;
             }
             
+        // start run
             _run = start_run;
             if(_face_left) _turn_frames = 1;
             set_face_left(false);
         }
         
+    // manage run states
         else if(bn::keypad::left_held())      _run = full_run;
         else if(bn::keypad::left_released())  _run = end_run;
         
@@ -208,7 +214,7 @@ namespace prj
         
         else _run = not_run;
         
-    // dash states
+    // DASH STATES
         if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
         else if(_dash == start_dash) _dash = full_dash;
         else if(_fall == end_fall ||
@@ -218,30 +224,33 @@ namespace prj
     
     void Player::movement()
     {
-    // horizontal movement
-        if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0) || 
+    // HORIZONTAL MOVEMENT
+    // sets x speed
         if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0 && !_stun) || 
             (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
         else if(_stun && _inv_frames == 1) x_speed = -player::STUN_X_SPEED;
         else if(_dash == start_dash) x_speed = player::DASH_X_SPEED;
         else if(_run == start_run) x_speed = player::X_SPEED;
         
+    // apply friction
         if(is_on_ground() && _dash == full_dash &&
             x_speed > player::FRICTION) x_speed -= player::FRICTION;
         else if(!is_on_ground() && (!is_running() || _stun) &&
             x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
         
+    // set position
         pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
         spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
         
-        if(bn::abs(pos.x()) > lvl::X_LIM) // level bounds
+    // level bounds
+        if(bn::abs(pos.x()) > lvl::X_LIM)
         {
             pos.set_x(pos.x() < 0 ? -lvl::X_LIM : lvl::X_LIM);
             spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
         }
         
-    // vertical movement
-        if(_jump == start_jump)
+    // VERTICAL MOVEMENT
+        if(_jump == start_jump) // sets y speed
         {
             if(_stun) y_speed = player::STUN_Y_SPEED;
             else if(is_dashing()) y_speed = player::START_DASH_Y_SPEED;
@@ -251,6 +260,7 @@ namespace prj
         
         if(!is_on_ground())
         {
+        // apply speed
             pos.set_y(pos.y() - y_speed);
             y_speed -= player::GRAVITY;
             
@@ -314,6 +324,7 @@ namespace prj
     
     void Player::animation()
     {
+    // STUNNED
         if(_stun && _inv_frames == 1)
         {
             act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
@@ -323,6 +334,7 @@ namespace prj
                 );
         }
         
+    // ON GROUND
         else if(is_on_ground() && !_stun)
         {
         // attack
@@ -391,6 +403,7 @@ namespace prj
                     );
             }
         }
+    // IN AIR
         else if(!_stun)
         {
         // turn
@@ -435,10 +448,12 @@ namespace prj
             }
         }
         
+    // INVINCIBILITY FLASH
         if(_inv_frames > 0 && _inv_frames % player::wait_data::INV_WAIT == 0 &&
             _atk_frames == 0) spr.set_visible(!spr.visible());
         if(_inv_frames == 0 && !spr.visible()) spr.set_visible(true);
         
+    // ANIMATION UPDATE
         if(!act.done()) act.update();
     }
     
