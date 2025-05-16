@@ -129,7 +129,8 @@ namespace prj
     {
     // ATTACK
         if((bn::keypad::b_pressed() || bn::keypad::b_held()) &&
-            is_on_ground() && _atk_frames == 0 && _inv_frames == 0) _atk_frames = 1;
+            is_on_ground() && _atk_frames == 0 &&
+            _inv_frames == 0 && !_queue_jump) _atk_frames = 1;
         if(_atk_frames == player::wait_data::ATK_FULL) _inv_frames = 1;
         
     // QUEUE JUMP
