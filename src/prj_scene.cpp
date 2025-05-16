@@ -40,8 +40,6 @@ namespace prj
     
     void Scene::manage_entity()
     {
-        dino->update();
-        
         for(bn::unique_ptr<Entity>& entity : all_entity)
         {
             if(dino->is_attacking())
@@ -51,7 +49,18 @@ namespace prj
                     entity->take_damage(dino->get_pos().x() < entity->get_pos().x());
                 }
             }
+            
+            if(entity->is_attacking())
+            {
+                if(entity->get_atk_hitbox()->intersects(dino->get_body_hitbox()))
+                {
+                    dino->take_damage(entity->get_pos().x() < dino->get_pos().x());
+                }
+            }
+            
             entity->update();
         }
+        
+        dino->update();
     }
 }
