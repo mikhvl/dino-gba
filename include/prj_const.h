@@ -79,7 +79,7 @@ namespace prj
     
     namespace bag
     {
-        constexpr bn::size BODY_SIZE = {18, 18};
+        constexpr bn::size BODY_SIZE = {16, 16};
         
         constexpr int MAX_ANIM_FRAMES = 2;
         
