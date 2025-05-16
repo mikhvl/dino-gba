@@ -36,6 +36,7 @@ namespace prj
         bool _face_left;
         bool _queue_jump = false;
         bool _stun = false;
+        
         int _turn_frames = 0;
         int _atk_frames  = 0;
         int _inv_frames  = 0;
