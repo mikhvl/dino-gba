@@ -314,7 +314,16 @@ namespace prj
     
     void Player::animation()
     {
-        if(is_on_ground())
+        if(_stun && _inv_frames == 1)
+        {
+            act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                (
+                    spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                    player::anim_data::STUN
+                );
+        }
+        
+        else if(is_on_ground() && !_stun)
         {
         // attack
             if(_atk_frames == 1)
@@ -359,33 +368,30 @@ namespace prj
                         player::anim_data::TURN_GROUND
                     );
             }
-            else
+        // idle
+            else if((_run == end_run && _atk_frames == 0) || (_run == not_run &&
+                (_fall == end_fall || _turn_frames == player::wait_data::TURN_STOP ||
+                _atk_frames == player::wait_data::ATK_STOP)))
             {
-            // idle
-                if((_run == end_run && _atk_frames == 0) || (_run == not_run &&
-                    (_fall == end_fall || _turn_frames == player::wait_data::TURN_STOP ||
-                    _atk_frames == player::wait_data::ATK_STOP)))
-                {
-                    act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
-                        (
-                            spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                            player::anim_data::IDLE
-                        );
-                }
-            // run
-                else if(_run == start_run || (_run == full_run &&
-                    (_fall == end_fall || _turn_frames == player::wait_data::TURN_STOP ||
-                    _atk_frames == player::wait_data::ATK_STOP)))
-                {
-                    act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
-                        (
-                            spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                            player::anim_data::RUN
-                        );
-                }
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim_data::IDLE
+                    );
+            }
+        // run
+            else if(_run == start_run || (_run == full_run &&
+                (_fall == end_fall || _turn_frames == player::wait_data::TURN_STOP ||
+                _atk_frames == player::wait_data::ATK_STOP)))
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
+                    (
+                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim_data::RUN
+                    );
             }
         }
-        else // not on ground
+        else if(!_stun)
         {
         // turn
             if(_turn_frames == 1)
@@ -396,39 +402,36 @@ namespace prj
                         player::anim_data::TURN_AIR
                     );
             }
-            else
+        // jump
+            else if(_jump == start_jump ||
+                (is_jumping() && _turn_frames == player::wait_data::TURN_STOP))
             {
-            // jump
-                if(_jump == start_jump ||
-                    (is_jumping() && _turn_frames == player::wait_data::TURN_STOP))
-                {
-                    if(is_dashing())
-                    {
-                        act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
-                            (
-                                spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                                player::anim_data::JUMP_DASH
-                            );
-                    }
-                    else
-                    {
-                        act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
-                            (
-                                spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                                player::anim_data::JUMP
-                            );
-                    }
-                }
-            // fall
-                else if(_fall == start_fall ||
-                    (is_falling() && _turn_frames == player::wait_data::TURN_STOP))
+                if(is_dashing())
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                         (
                             spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                            player::anim_data::FALL
+                            player::anim_data::JUMP_DASH
                         );
                 }
+                else
+                {
+                    act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                        (
+                            spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                            player::anim_data::JUMP
+                        );
+                }
+            }
+        // fall
+            else if(_fall == start_fall ||
+                (is_falling() && _turn_frames == player::wait_data::TURN_STOP))
+            {
+                act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
+                    (
+                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim_data::FALL
+                    );
             }
         }
         
