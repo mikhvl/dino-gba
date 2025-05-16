@@ -17,6 +17,7 @@ namespace prj
         body_hitbox = bn::rect(
             pos.x().round_integer(), pos.y().round_integer(),
             bag::BODY_SIZE.width(), bag::BODY_SIZE.height());
+        atk_hitbox = body_hitbox;
     
     // initial logic
         spr.put_below();
@@ -51,6 +52,8 @@ namespace prj
         if(from_left) {}
         if(_damage_frames == 0) _damage_frames = 1;
     }
+    
+    bool Bag::is_attacking() { return true; }
     
     void Bag::count_frames()
     {

@@ -17,6 +17,7 @@ namespace prj
         
         void update() override;
         void take_damage(bool from_left = false) override;
+        bool is_attacking() override;
         
     private:
         bn::sprite_animate_action<bag::MAX_ANIM_FRAMES> act;
