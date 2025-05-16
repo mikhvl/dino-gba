@@ -140,7 +140,10 @@ namespace prj
             else if(bn::keypad::a_released()) _queue_jump = false;
         }
         
-        if(is_on_ground() && 
+    // start stun jump
+        if(_stun && _inv_frames == 1) _jump = start_jump;
+    // start normal jump
+        else if(is_on_ground() &&
             (
                 (_queue_jump && bn::keypad::a_held()) ||
                 (bn::keypad::a_pressed() && _atk_frames == 0) ||
@@ -161,16 +164,17 @@ namespace prj
                 if(_jump == release_jump) _jump = end_jump;
                 else if(_jump != end_jump)
                 {
-                    if(bn::keypad::a_held()) _jump = full_jump;
+                    if(bn::keypad::a_held() || _stun) _jump = full_jump;
                     else if(bn::keypad::a_released()) _jump = release_jump;
                 }
             }
         }
         
     // horizontal movement
-        if((bn::keypad::left_pressed() &&
+    // start run left
+        if((bn::keypad::left_pressed() && !_stun &&
             (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && !_face_left))) ||
-            (bn::keypad::left_held() && _atk_frames == player::wait_data::ATK_STOP))
+            (bn::keypad::left_held() && (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall)))
         {
             if(bn::keypad::left_pressed() && (_atk_frames < player::wait_data::ATK_FULL && !_face_left))
             {
@@ -181,9 +185,10 @@ namespace prj
             if(!_face_left) _turn_frames = 1;
             set_face_left(true);
         }
-        else if((bn::keypad::right_pressed() && 
+    //start run right
+        else if((bn::keypad::right_pressed() && !_stun &&
             (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && _face_left))) ||
-            (bn::keypad::right_held() && _atk_frames == player::wait_data::ATK_STOP))
+            (bn::keypad::right_held() && (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall)))
         {
             if(bn::keypad::right_pressed() && (_atk_frames < player::wait_data::ATK_FULL && _face_left))
             {
@@ -215,13 +220,15 @@ namespace prj
     {
     // horizontal movement
         if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0) || 
+        if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0 && !_stun) || 
             (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
+        else if(_stun && _inv_frames == 1) x_speed = -player::STUN_X_SPEED;
         else if(_dash == start_dash) x_speed = player::DASH_X_SPEED;
         else if(_run == start_run) x_speed = player::X_SPEED;
         
         if(is_on_ground() && _dash == full_dash &&
             x_speed > player::FRICTION) x_speed -= player::FRICTION;
-        else if(!is_on_ground() && !is_running() &&
+        else if(!is_on_ground() && (!is_running() || _stun) &&
             x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
         
         pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
@@ -236,7 +243,8 @@ namespace prj
     // vertical movement
         if(_jump == start_jump)
         {
-            if(is_dashing()) y_speed = player::START_DASH_Y_SPEED;
+            if(_stun) y_speed = player::STUN_Y_SPEED;
+            else if(is_dashing()) y_speed = player::START_DASH_Y_SPEED;
             else y_speed = player::START_Y_SPEED;
         }
         if(_fall == end_fall || _jump == start_jump) _fall = not_fall; // resets fall state
@@ -265,6 +273,7 @@ namespace prj
                 pos.set_y(lvl::Y_LIM);
                 y_speed = 0;
                 _fall = end_fall;
+                _stun = false;
             }
             
             spr.set_y(pos.y());

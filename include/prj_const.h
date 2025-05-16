@@ -29,8 +29,8 @@ namespace prj
         constexpr bn::fixed DASH_X_SPEED = 4.6;
         constexpr bn::fixed START_DASH_Y_SPEED = 3;
         //constexpr bn::fixed RELEASE_DASH_Y_SPEED = 1.2;
-        constexpr bn::fixed STUN_X_SPEED = 2.5;
-        constexpr bn::fixed STUN_Y_SPEED = 2;
+        constexpr bn::fixed STUN_X_SPEED = 1.6;
+        constexpr bn::fixed STUN_Y_SPEED = 3;
         
         constexpr int SPR_OFFSET_X = 4;
         constexpr int BODY_HITBOX_OFFSET_X = 3;
@@ -47,9 +47,11 @@ namespace prj
             constexpr int ATK_FULL  = 10;
             constexpr int ATK_SLOW  = 14;
             constexpr int ATK_SLIDE = 16;
+            constexpr int ATK_STUN  = 22;
             constexpr int ATK_STOP  = 35;
             
-            constexpr int INV_STOP = 60;
+            constexpr int INV_WAIT = 5;
+            constexpr int INV_STOP = 80;
         }
         
         namespace anim_data
