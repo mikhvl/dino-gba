@@ -48,6 +48,7 @@ namespace prj
     
     void Bag::take_damage(bool from_left)
     {
+        if(from_left) {}
         if(_damage_frames == 0) _damage_frames = 1;
     }
     

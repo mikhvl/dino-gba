@@ -18,7 +18,7 @@ namespace prj
     bn::optional<bn::rect>& Entity::get_atk_hitbox() { return atk_hitbox; }
     
     void Entity::update() {}
-    void Entity::take_damage(bool from_left) {}
+    void Entity::take_damage(bool from_left) { if(from_left) {} }
     bool Entity::is_attacking() { return false; }
     bool Entity::is_dead() { return false; }
     
