@@ -129,10 +129,9 @@ namespace prj
     void Player::input()
     {
     // attack
-        if((bn::keypad::b_pressed() || bn::keypad::b_held()) && is_on_ground() && _atk_frames == 0) 
-        {
-            _atk_frames = 1;
-        }
+        if((bn::keypad::b_pressed() || bn::keypad::b_held()) &&
+            is_on_ground() && _atk_frames == 0 && _inv_frames == 0) _atk_frames = 1;
+        if(_atk_frames == player::wait_data::ATK_FULL) _inv_frames = 1;
         
     // vertical movement
         if(is_falling())
@@ -424,11 +423,20 @@ namespace prj
             }
         }
         
+        if(_inv_frames > 0 && _inv_frames % player::wait_data::INV_WAIT == 0 &&
+            _atk_frames == 0) spr.set_visible(!spr.visible());
+        if(_inv_frames == 0 && !spr.visible()) spr.set_visible(true);
+        
         if(!act.done()) act.update();
     }
     
     void Player::count_frames()
     {
+    // invincibility
+        if(0 < _inv_frames && _inv_frames < player::wait_data::INV_STOP) ++_inv_frames;
+        else _inv_frames = 0;
+        if(_atk_frames == player::wait_data::ATK_STUN) _inv_frames = 0;
+        
     // turn
         if(0 < _turn_frames && _turn_frames < player::wait_data::TURN_STOP) ++_turn_frames;
         else _turn_frames = 0;
