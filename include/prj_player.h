@@ -28,15 +28,16 @@ namespace prj
         void set_camera(const bn::camera_ptr& cam) override;
         
     private:
-    // interaction
+    // movement
         bn::fixed x_speed = player::X_SPEED;
         bn::fixed y_speed = 0;
+        
+    // state logic
         bool _face_left;
         bool _queue_jump = false;
         int _turn_frames = 0;
-        int _atk_frames = 0;
-
-    // state logic
+        int _atk_frames  = 0;
+        
         enum RUN_STATE  { start_run, full_run, end_run, not_run };
         enum JUMP_STATE { start_jump, full_jump, release_jump, end_jump, not_jump };
         enum FALL_STATE { start_fall, full_fall, end_fall, not_fall };

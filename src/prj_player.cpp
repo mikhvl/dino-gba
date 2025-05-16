@@ -69,7 +69,6 @@ namespace prj
     void Player::set_camera(const bn::camera_ptr& cam)
     {
         Entity::set_camera(cam);
-        
         box.set_camera(cam);
         for(auto& x : hitbox_corners) x.set_camera(cam);
     }
