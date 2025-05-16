@@ -116,8 +116,14 @@ namespace prj
     
     void Player::stun(bool from_left)
     {
-        if(!_stun) _stun = true;
-        set_face_left(from_left);
+        if(_inv_frames == 0 && !_stun)
+        {
+            _stun = true;
+            _inv_frames = 1;
+            _turn_frames = 0;
+            _atk_frames = 0;
+            set_face_left(from_left);
+        }
     }
     
     void Player::input()
