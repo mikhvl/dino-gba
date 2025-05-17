@@ -33,6 +33,7 @@ namespace prj
     {
     // initial logic
         set_hitbox_size(false);
+        spr.set_z_order(entity::PLAYER_Z_ORDER);
         set_face_left(flip);
         spr.set_position(pos.x() + (flip ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X), pos.y());
         if(pos.y() < lvl::Y_LIM) _fall = start_fall;
@@ -52,6 +53,7 @@ namespace prj
         movement();
         hitbox();
         animation();
+        Entity::position_shadow();
         count_frames();
     }
     
@@ -443,9 +445,16 @@ namespace prj
         }
         
     // INVINCIBILITY FLASH
-        if(_inv_frames > 0 && _inv_frames % player::wait_data::INV_WAIT == 0 &&
-            _atk_frames == 0) spr.set_visible(!spr.visible());
-        if(_inv_frames == 0 && !spr.visible()) spr.set_visible(true);
+        if(_inv_frames > 0 && _inv_frames % player::wait_data::INV_WAIT == 0 && _atk_frames == 0)
+        {
+            spr.set_visible(!spr.visible());
+            shadow.set_visible(!shadow.visible());
+        }
+        if(_inv_frames == 0 && !spr.visible())
+        {
+            spr.set_visible(true);
+            shadow.set_visible(true);
+        }
         
     // ANIMATION UPDATE
         if(!act.done()) act.update();

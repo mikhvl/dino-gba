@@ -20,7 +20,6 @@ namespace prj
         atk_hitbox = body_hitbox;
     
     // initial logic
-        spr.put_below();
         spr.set_horizontal_flip(flip);
     }
     

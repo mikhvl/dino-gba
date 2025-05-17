@@ -47,6 +47,9 @@ namespace prj
         
         bn::sprite_item spr_item;
         bn::sprite_ptr spr;
+        bn::sprite_ptr shadow;
+        
+        void position_shadow();
     };
 }
 

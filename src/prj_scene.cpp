@@ -11,9 +11,9 @@ namespace prj
         , cam(bn::camera_ptr::create())
     {
     // bg
-        bg_back.set_priority(3);
-        bg_main.set_priority(2);
-        bg_fore.set_priority(0);
+        bg_back.set_priority(lvl::BG_BACK_PRIORITY);
+        bg_main.set_priority(lvl::BG_MAIN_PRIORITY);
+        bg_fore.set_priority(lvl::BG_FORE_PRIORITY);
         
     // player
         dino = bn::make_unique<Player>(lvl::PLAYER_START_X);
@@ -43,8 +43,8 @@ namespace prj
         bn::fixed x = dino->get_pos().x();
         bool is_negative = x < 0;
         
-        bn::fixed camera_x  = x.multiplication(x).division(800);
-        bn::fixed bg_fore_x = x.multiplication(x).division(500);
+        bn::fixed camera_x  = x.multiplication(x).division(lvl::CAMERA_PARALLAX_COEF);
+        bn::fixed bg_fore_x = x.multiplication(x).division(lvl::BG_FORE_PARALLAX_COEF);
         
         cam.set_position    (is_negative ? -camera_x : camera_x, 0);
         bg_fore.set_position(is_negative ? bg_fore_x : -bg_fore_x, 0);
