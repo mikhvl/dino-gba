@@ -1,3 +1,3 @@
 # dino-gba
 
-You need to use Butano Engine to build this
+You need Butano Engine to build this: https://github.com/GValiente/butano
