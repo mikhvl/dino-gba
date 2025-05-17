@@ -32,7 +32,7 @@ namespace prj
         , hitbox_corner_builder(bn::sprite_builder(bn::sprite_items::x_corner))
     {
     // initial logic
-        set_hitbox_size(false);
+        set_hitbox_size();
         spr.set_z_order(entity::PLAYER_Z_ORDER);
         set_face_left(flip);
         spr.set_position(pos.x() + (flip ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X), pos.y());
