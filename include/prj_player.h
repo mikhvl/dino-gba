@@ -54,8 +54,7 @@ namespace prj
     // sprite/animation
         bn::sprite_animate_action<player::MAX_ANIM_FRAMES> act;
         
-        // debug
-        bn::sprite_ptr box; // sprite offset test
+    // hitbox debug
         bn::sprite_builder hitbox_corner_builder;
         bn::vector<bn::sprite_ptr, 8> hitbox_corners;
 

@@ -29,20 +29,17 @@ namespace prj
                 player::anim_data::IDLE))
         
     // debug sprites
-        , box(bn::sprite_items::gatito.create_sprite(pos)) // sprite offset test
         , hitbox_corner_builder(bn::sprite_builder(bn::sprite_items::x_corner))
     {
     // initial logic
         set_hitbox_size(false);
-        spr.set_position(pos.x() + (flip ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X), pos.y());
         set_face_left(flip);
+        spr.set_position(pos.x() + (flip ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X), pos.y());
         if(pos.y() < lvl::Y_LIM) _fall = start_fall;
     
     // debug
-        box.set_scale(0.5);
-        box.set_visible(false);
-        
         hitbox_corner_builder.set_visible(false);
+        hitbox_corner_builder.set_bg_priority(1);
         for(int i = 0; i < hitbox_corners.max_size(); ++i)
         {
             hitbox_corners.emplace_back(hitbox_corner_builder.build());
@@ -71,7 +68,6 @@ namespace prj
     void Player::set_camera(const bn::camera_ptr& cam)
     {
         Entity::set_camera(cam);
-        box.set_camera(cam);
         for(auto& x : hitbox_corners) x.set_camera(cam);
     }
     
@@ -304,9 +300,6 @@ namespace prj
             pos.y().round_integer());
         
     // debug
-        if(bn::keypad::start_pressed()) box.set_visible(!box.visible());
-        box.set_position(pos);
-        
         if(bn::keypad::select_pressed())
         {
             for(auto& x : hitbox_corners) x.set_visible(!x.visible());
