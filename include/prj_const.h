@@ -11,6 +11,9 @@
 #include "bn_sprite_items_x_corner.h"
 
 #include "bn_regular_bg_items_bg_default.h"
+#include "bn_regular_bg_items_bg_beach_main.h"
+#include "bn_regular_bg_items_bg_beach_back.h"
+#include "bn_regular_bg_items_bg_beach_fore.h"
 
 namespace prj
 {

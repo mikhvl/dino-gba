@@ -11,7 +11,9 @@ namespace prj
         : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM), bn::min(y, lvl::Y_LIM))
         , spr_item(sprite_item)
         , spr(spr_item.create_sprite(pos))
-    {}
+    {
+        spr.set_bg_priority(1);
+    }
     
     bn::fixed_point& Entity::get_pos() { return pos; }
     bn::rect& Entity::get_body_hitbox() { return body_hitbox; }

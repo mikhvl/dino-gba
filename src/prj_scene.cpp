@@ -5,9 +5,16 @@
 namespace prj
 {
     Scene::Scene()
-        : bg(bn::regular_bg_items::bg_default.create_bg(0, 0))
+        : bg_back(bn::regular_bg_items::bg_beach_back.create_bg(0, 0))
+        , bg_main(bn::regular_bg_items::bg_beach_main.create_bg(0, 0))
+        , bg_fore(bn::regular_bg_items::bg_beach_fore.create_bg(0, 0))
         , cam(bn::camera_ptr::create())
     {
+    // bg
+        bg_back.set_priority(3);
+        bg_main.set_priority(2);
+        bg_fore.set_priority(0);
+        
     // player
         dino = bn::make_unique<Player>(lvl::PLAYER_START_X);
     
@@ -20,7 +27,8 @@ namespace prj
     void Scene::set_camera_for_all()
     {
         dino->set_camera(cam);
-        bg.set_camera(cam);
+        bg_main.set_camera(cam);
+        bg_fore.set_camera(cam);
         for(bn::unique_ptr<Entity>& entity : all_entity) entity->set_camera(cam);
     }
     
@@ -34,8 +42,12 @@ namespace prj
     {
         bn::fixed x = dino->get_pos().x();
         bool is_negative = x < 0;
-        x = x.multiplication(x).division(800);
-        cam.set_position(is_negative ? -x : x, 0);
+        
+        bn::fixed camera_x  = x.multiplication(x).division(800);
+        bn::fixed bg_fore_x = x.multiplication(x).division(500);
+        
+        cam.set_position    (is_negative ? -camera_x : camera_x, 0);
+        bg_fore.set_position(is_negative ? bg_fore_x : -bg_fore_x, 0);
     }
     
     void Scene::manage_entity()

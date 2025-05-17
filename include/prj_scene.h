@@ -21,7 +21,9 @@ namespace prj
         void update();
         
     private:
-        bn::regular_bg_ptr bg;
+        bn::regular_bg_ptr bg_back;
+        bn::regular_bg_ptr bg_main;
+        bn::regular_bg_ptr bg_fore;
         
         bn::camera_ptr cam;
         
