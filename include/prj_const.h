@@ -87,8 +87,18 @@ namespace prj
         constexpr int ENTITY_Z_ORDER = 1;
         constexpr int SHADOW_Z_ORDER = 2;
         
+        constexpr bn::fixed SHADOW_Y_SMALL  = 38;
+        constexpr bn::fixed SHADOW_Y_MEDIUM = 20;
+        
         constexpr bn::fixed SHADOW_X_COEF = 2.5;
         constexpr bn::fixed SHADOW_Y_COEF = 12;
+        
+        namespace shadow_data
+        {
+            constexpr int SHADOW_SMALL = 2;
+            constexpr int SHADOW_MEDIUM = 1;
+            constexpr int SHADOW_BIG = 0;
+        }
     }
     
     namespace bag

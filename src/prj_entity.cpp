@@ -41,6 +41,19 @@ namespace prj
     {
         bn::fixed height = lvl::Y_LIM - pos.y();
         
+        if(height > entity::SHADOW_Y_SMALL)
+        {
+            shadow.set_tiles(bn::sprite_items::shadow.tiles_item(), entity::shadow_data::SHADOW_SMALL);
+        }
+        else if(height > entity::SHADOW_Y_MEDIUM)
+        {
+            shadow.set_tiles(bn::sprite_items::shadow.tiles_item(), entity::shadow_data::SHADOW_MEDIUM);
+        }
+        else
+        {
+            shadow.set_tiles(bn::sprite_items::shadow.tiles_item(), entity::shadow_data::SHADOW_BIG);
+        }
+        
         shadow.set_position
         (
             pos.x() + height.division(entity::SHADOW_X_COEF),
