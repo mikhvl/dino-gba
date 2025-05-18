@@ -40,14 +40,23 @@ namespace prj
     
     void Scene::position_cam()
     {
+    // player x
         bn::fixed x = dino->get_pos().x();
-        bool is_negative = x < 0;
+        bool player_x_is_negative  = x < 0;
         
-        bn::fixed camera_x  = x.multiplication(x).division(lvl::CAMERA_PARALLAX_COEF);
-        bn::fixed bg_fore_x = x.multiplication(x).division(lvl::BG_FORE_PARALLAX_COEF);
+    // position target
+        bn::fixed camera_x_target  = x.multiplication(x).division(lvl::CAMERA_PARALLAX_COEF);
+        bn::fixed bg_fore_x_target = x.multiplication(x).division(lvl::BG_FORE_PARALLAX_COEF);
+        camera_x_target  = player_x_is_negative ? -camera_x_target : camera_x_target;
+        bg_fore_x_target = player_x_is_negative ? bg_fore_x_target : -bg_fore_x_target;
         
-        cam.set_position    (is_negative ? -camera_x : camera_x, 0);
-        bg_fore.set_position(is_negative ? bg_fore_x : -bg_fore_x, 0);
+    // target easing
+        bn::fixed camera_ease  = (camera_x_target - cam.x()).division(lvl::PARALLAX_EASE_COEF);
+        bn::fixed bg_fore_ease = (bg_fore_x_target - bg_fore.x()).division(lvl::PARALLAX_EASE_COEF);
+        
+    // set position
+        cam.set_position(cam.x() + camera_ease, 0);
+        bg_fore.set_position(bg_fore.x() + bg_fore_ease, 0);
     }
     
     void Scene::manage_entity()

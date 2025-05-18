@@ -136,6 +136,8 @@ namespace prj
         
         constexpr int CAMERA_PARALLAX_COEF = 800;
         constexpr int BG_FORE_PARALLAX_COEF = 500;
+        
+        constexpr int PARALLAX_EASE_COEF = 10;
     }
 }
 
