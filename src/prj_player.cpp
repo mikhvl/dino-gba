@@ -125,6 +125,12 @@ namespace prj
     
     void Player::input()
     {
+    // DASH STATES
+        if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
+        else if(_dash == start_dash) _dash = full_dash;
+        else if(_fall == end_fall ||
+            (_atk_frames == player::wait_data::ATK_STOP && is_on_ground())) _dash = not_dash;
+        
     // ATTACK
         if((bn::keypad::b_pressed() || bn::keypad::b_held()) &&
             is_on_ground() && _atk_frames == 0 &&
@@ -212,13 +218,6 @@ namespace prj
         else if(bn::keypad::right_released()) _run = end_run;
         
         else _run = not_run;
-        
-    // DASH STATES
-        if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
-        else if(_dash == start_dash) _dash = full_dash;
-        else if(_fall == end_fall ||
-            (_atk_frames == player::wait_data::ATK_STOP && is_on_ground())) _dash = end_dash;
-        else if(_dash == end_dash) _dash = not_dash;
     }
     
     void Player::movement()
@@ -228,11 +227,11 @@ namespace prj
         if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0 && !_stun) || 
             (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
         else if(_stun && _inv_frames == 1) x_speed = -player::STUN_X_SPEED;
-        else if(_dash == start_dash) x_speed = player::DASH_X_SPEED;
+        else if(_dash == start_dash && _jump != start_jump) x_speed = player::DASH_X_SPEED;
         else if(_run == start_run) x_speed = player::X_SPEED;
         
     // apply friction
-        if(is_on_ground() && _dash == full_dash &&
+        if(is_on_ground() && is_dashing() &&
             x_speed > player::FRICTION) x_speed -= player::FRICTION;
         else if(!is_on_ground() && (!is_running() || _stun) &&
             x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
