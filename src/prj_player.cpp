@@ -77,6 +77,7 @@ namespace prj
     bool Player::is_jumping() { return _jump != not_jump; }
     bool Player::is_falling() { return _fall == start_fall || _fall == full_fall; }
     bool Player::is_dashing() { return _dash == start_dash || _dash == full_dash; }
+    bool Player::is_spinning() { return _spin != not_spin; }
     bool Player::is_on_ground() { return !is_jumping() && !is_falling(); }
     
     void Player::set_face_left(bool flip)
@@ -89,7 +90,13 @@ namespace prj
     {
         if(is_spin)
         {
-            //
+            body_hitbox = bn::rect
+            (
+                pos.x().round_integer(), pos.y().round_integer(),
+                player::SPIN_SIZE.width(), player::SPIN_SIZE.height()
+            );
+            
+            atk_hitbox = body_hitbox;
         }
         else
         {
@@ -119,12 +126,20 @@ namespace prj
             _inv_frames = 1;
             _turn_frames = 0;
             _atk_frames = 0;
+            if(is_spinning())
+            {
+                _spin = not_spin;
+                set_hitbox_size(false);
+            }
             set_face_left(from_left);
         }
     }
     
     void Player::process_input()
     {
+    // SPIN STATES
+        if(_spin == start_spin) _spin = full_spin;
+        
     // DASH STATES
         if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
         else if(_dash == start_dash) _dash = full_dash;
@@ -132,10 +147,16 @@ namespace prj
             (_atk_frames == player::wait_data::ATK_STOP && is_on_ground())) _dash = not_dash;
         
     // ATTACK
-        if((bn::keypad::b_pressed() || bn::keypad::b_held()) &&
-            is_on_ground() && _atk_frames == 0 &&
-            _inv_frames == 0 && !_queue_jump) _atk_frames = 1;
-        if(_atk_frames == player::wait_data::ATK_FULL) _inv_frames = 1;
+        if((bn::keypad::b_pressed() || bn::keypad::b_held()) && _inv_frames == 0)
+        {
+            if(is_on_ground() && _atk_frames == 0 && !_queue_jump) _atk_frames = 1;
+            else if(!is_on_ground() && !is_spinning())
+            {
+                _spin = start_spin;
+                set_hitbox_size(true);
+            }
+        }
+        if(_atk_frames == player::wait_data::ATK_FULL /*|| _spin == start_spin*/) _inv_frames = 1;
         
     // QUEUE JUMP
         if(is_falling())
@@ -282,6 +303,11 @@ namespace prj
                 y_speed = 0;
                 _fall = end_fall;
                 _stun = false;
+                if(is_spinning())
+                {
+                    _spin = not_spin;
+                    set_hitbox_size(false);
+                }
             }
             
             spr.set_y(pos.y());
@@ -291,14 +317,22 @@ namespace prj
     void Player::set_hitbox_position()
     {
     // rect hitboxes
-        body_hitbox.set_position(
-            pos.x().round_integer() +
-                (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
-            pos.y().round_integer());
-        atk_hitbox.set_position(
-            pos.x().round_integer() +
-                (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
-            pos.y().round_integer());
+        if(is_spinning())
+        {
+            body_hitbox.set_position(pos.x().round_integer(), pos.y().round_integer());
+            atk_hitbox.set_position(pos.x().round_integer(), pos.y().round_integer());
+        }
+        else
+        {
+            body_hitbox.set_position(
+                pos.x().round_integer() +
+                    (_face_left ? -player::BODY_HITBOX_OFFSET_X : player::BODY_HITBOX_OFFSET_X),
+                pos.y().round_integer());
+            atk_hitbox.set_position(
+                pos.x().round_integer() +
+                    (_face_left ? -player::ATK_HITBOX_OFFSET_X : player::ATK_HITBOX_OFFSET_X),
+                pos.y().round_integer());
+        }
         
     // debug
         if(bn::keypad::select_pressed())
@@ -329,8 +363,18 @@ namespace prj
                 );
         }
         
+    // SPIN ATTACK
+        else if(_spin == start_spin)
+        {
+            act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
+                (
+                    spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                    player::anim_data::ATK_SPIN
+                );
+        }
+        
     // ON GROUND
-        else if(is_on_ground() && !_stun)
+        else if(is_on_ground() && !_stun && !is_spinning())
         {
         // attack
             if(_atk_frames == 1)
@@ -399,7 +443,7 @@ namespace prj
             }
         }
     // IN AIR
-        else if(!_stun)
+        else if(!_stun && !is_spinning())
         {
         // turn
             if(_turn_frames == 1)
@@ -444,7 +488,8 @@ namespace prj
         }
         
     // INVINCIBILITY FLASH
-        if(_inv_frames > 0 && _inv_frames % player::wait_data::INV_WAIT == 0 && _atk_frames == 0)
+        if(_inv_frames > 0 && _inv_frames % player::wait_data::INV_WAIT == 0 &&
+            _atk_frames == 0 && !is_spinning())
         {
             spr.set_visible(!spr.visible());
             shadow.set_visible(!shadow.visible());
@@ -462,8 +507,12 @@ namespace prj
     void Player::count_frames()
     {
     // invincibility
-        if(0 < _inv_frames && _inv_frames < player::wait_data::INV_STOP) ++_inv_frames;
-        else _inv_frames = 0;
+        if(!is_spinning())
+        {
+            if(0 < _inv_frames && _inv_frames < player::wait_data::INV_STOP) ++_inv_frames;
+            else _inv_frames = 0;
+        }
+        
         if(_atk_frames == player::wait_data::ATK_STUN) _inv_frames = 0;
         
     // turn
