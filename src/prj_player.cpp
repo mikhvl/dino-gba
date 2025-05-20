@@ -49,10 +49,10 @@ namespace prj
     
     void Player::update()
     {
-        input();
-        movement();
-        hitbox();
-        animation();
+        process_input();
+        apply_movement();
+        set_hitbox_position();
+        run_animation();
         Entity::position_shadow();
         count_frames();
     }
@@ -123,7 +123,7 @@ namespace prj
         }
     }
     
-    void Player::input()
+    void Player::process_input()
     {
     // DASH STATES
         if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
@@ -220,7 +220,7 @@ namespace prj
         else _run = not_run;
     }
     
-    void Player::movement()
+    void Player::apply_movement()
     {
     // HORIZONTAL MOVEMENT
     // sets x speed
@@ -288,7 +288,7 @@ namespace prj
         }
     }
     
-    void Player::hitbox()
+    void Player::set_hitbox_position()
     {
     // rect hitboxes
         body_hitbox.set_position(
@@ -317,7 +317,7 @@ namespace prj
         hitbox_corners[7].set_position(atk_hitbox.top_left());
     }
     
-    void Player::animation()
+    void Player::run_animation()
     {
     // STUNNED
         if(_stun && _inv_frames == 1)

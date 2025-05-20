@@ -70,10 +70,10 @@ namespace prj
         void set_hitbox_size(bool is_spin = false);
         void stun(bool from_left);
         
-        void input();
-        void movement();
-        void hitbox();
-        void animation();
+        void process_input();
+        void apply_movement();
+        void set_hitbox_position();
+        void run_animation();
         void count_frames();
     };
 }
