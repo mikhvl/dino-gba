@@ -67,7 +67,8 @@ namespace prj
     
     bool Player::is_attacking()
     {
-        return _atk_frames >= player::wait_data::ATK_FULL && _atk_frames < player::wait_data::ATK_SLIDE;
+        return (_atk_frames >= player::wait_data::ATK_FULL && _atk_frames < player::wait_data::ATK_SLIDE) ||
+            (is_spinning() && x_speed > player::speed::SPIN_STOP_X);
     }
     
     void Player::set_camera(const bn::camera_ptr& cam)
