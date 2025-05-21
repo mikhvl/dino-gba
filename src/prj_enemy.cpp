@@ -10,8 +10,8 @@ namespace prj
     )
         : Entity(x, y, bn::sprite_items::bag)
         , act(bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once(
-                spr, bag::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                bag::anim_data::IDLE))
+                spr, bag::ANIM_WAIT, spr_item.tiles_item(),
+                bag::anim::IDLE))
     {
     // hitboxes
         body_hitbox = bn::rect(
@@ -29,16 +29,16 @@ namespace prj
         {
             act = bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once
             (
-                spr, bag::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                bag::anim_data::DAMAGE
+                spr, bag::ANIM_WAIT, spr_item.tiles_item(),
+                bag::anim::DAMAGE
             );
         }
-        else if(_damage_frames == bag::wait_data::DAMAGE_STOP)
+        else if(_damage_frames == bag::wait::DAMAGE_STOP)
         {
             act = bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once
             (
-                spr, bag::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                bag::anim_data::IDLE
+                spr, bag::ANIM_WAIT, spr_item.tiles_item(),
+                bag::anim::IDLE
             );
         }
         
@@ -57,7 +57,7 @@ namespace prj
     
     void Bag::update_states()
     {
-        if(_damage_frames > 0 && _damage_frames < bag::wait_data::DAMAGE_STOP) ++_damage_frames;
+        if(_damage_frames > 0 && _damage_frames < bag::wait::DAMAGE_STOP) ++_damage_frames;
         else _damage_frames = 0;
     }
 }

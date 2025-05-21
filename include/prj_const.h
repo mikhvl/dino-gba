@@ -35,6 +35,8 @@ namespace prj
         constexpr int ATK_HITBOX_OFFSET_X = 13;
         
         constexpr int MAX_ANIM_FRAMES = 3;
+        constexpr int ANIM_WAIT = 4;
+        constexpr int SPIN_ANIM_WAIT = 3;
         
         namespace speed
         {
@@ -54,43 +56,40 @@ namespace prj
             constexpr bn::fixed SPIN_STOP_X = 2;
         }
         
-        namespace wait_data
+        namespace wait
         {
-            constexpr int ANIM_WAIT = 4;
-            constexpr int SPIN_ANIM_WAIT = 3;
-            
             constexpr int TURN_STOP = 5;
         
-            constexpr int ATK_FULL  = 10;
-            constexpr int ATK_SLOW  = 14;
-            constexpr int ATK_SLIDE = 16;
-            constexpr int ATK_STOP  = 35;
+            constexpr int ATK_FULL     = 10;
+            constexpr int ATK_SLOW     = 14;
+            constexpr int ATK_SLIDE    = 16;
+            constexpr int ATK_INV_STOP = 22;
+            constexpr int ATK_STOP     = 35;
             
             constexpr int INV_WAIT = 5;
             constexpr int INV_STOP = 80;
-            constexpr int INV_ATK_STOP = 22;
         }
         
-        namespace anim_data
+        namespace anim
         {
-            constexpr uint16_t IDLE[] = {0, 0};
-            constexpr uint16_t RUN[]  = {1, 2};
+            constexpr uint16_t IDLE[]        = {0, 0};
+            constexpr uint16_t RUN[]         = {1, 2};
             
-            constexpr uint16_t JUMP[] = {4, 4};
-            constexpr uint16_t FALL[] = {5, 5};
-            constexpr uint16_t JUMP_DASH[] = {6, 6};
+            constexpr uint16_t JUMP[]        = {4, 4};
+            constexpr uint16_t FALL[]        = {5, 5};
+            constexpr uint16_t JUMP_DASH[]   = {6, 6};
             
             constexpr uint16_t TURN_GROUND[] = {3, 3};
-            constexpr uint16_t TURN_AIR[] = {7, 7};
+            constexpr uint16_t TURN_AIR[]    = {7, 7};
             
-            constexpr uint16_t ATK_START[] = {8, 8};
-            constexpr uint16_t ATK_FULL[]  = {9, 9};
-            constexpr uint16_t ATK_SLOW[]  = {10, 10};
-            constexpr uint16_t ATK_SLIDE[] = {11, 11};
+            constexpr uint16_t ATK_START[]   = {8, 8};
+            constexpr uint16_t ATK_FULL[]    = {9, 9};
+            constexpr uint16_t ATK_SLOW[]    = {10, 10};
+            constexpr uint16_t ATK_SLIDE[]   = {11, 11};
             
-            constexpr uint16_t ATK_SPIN[] = {12, 13, 14};
+            constexpr uint16_t ATK_SPIN[]    = {12, 13, 14};
             
-            constexpr uint16_t STUN[] = {15, 15};
+            constexpr uint16_t STUN[]        = {15, 15};
         }
     }
     
@@ -100,17 +99,17 @@ namespace prj
         constexpr int ENTITY_Z_ORDER = 1;
         constexpr int SHADOW_Z_ORDER = 2;
         
-        constexpr bn::fixed SHADOW_Y_SMALL  = 38;
-        constexpr bn::fixed SHADOW_Y_MEDIUM = 20;
+        constexpr bn::fixed SHADOW_HEIGHT_SMALL  = 38;
+        constexpr bn::fixed SHADOW_HEIGHT_MEDIUM = 20;
         
         constexpr bn::fixed SHADOW_X_COEF = 2.5;
         constexpr bn::fixed SHADOW_Y_COEF = 12;
         
-        namespace shadow_data
+        namespace shadow_tile
         {
-            constexpr int SHADOW_SMALL = 2;
-            constexpr int SHADOW_MEDIUM = 1;
-            constexpr int SHADOW_BIG = 0;
+            constexpr int SMALL = 2;
+            constexpr int MEDIUM = 1;
+            constexpr int BIG = 0;
         }
     }
     
@@ -119,14 +118,14 @@ namespace prj
         constexpr bn::size BODY_SIZE = {16, 16};
         
         constexpr int MAX_ANIM_FRAMES = 2;
+        constexpr int ANIM_WAIT = 4;
         
-        namespace wait_data
+        namespace wait
         {
-            constexpr int ANIM_WAIT = 4;
             constexpr int DAMAGE_STOP = 10;
         }
         
-        namespace anim_data
+        namespace anim
         {
             constexpr uint16_t IDLE[]   = {0, 0};
             constexpr uint16_t DAMAGE[] = {1, 1};

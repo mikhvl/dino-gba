@@ -25,8 +25,8 @@ namespace prj
         
     // animation
         , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
-                spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                player::anim_data::IDLE))
+                spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                player::anim::IDLE))
         
     // debug sprites
         , hitbox_corner_builder(bn::sprite_builder(bn::sprite_items::x_corner))
@@ -81,7 +81,7 @@ namespace prj
     
     bool Player::is_attacking()
     {
-        return (_atk_frames >= player::wait_data::ATK_FULL && _atk_frames < player::wait_data::ATK_SLIDE) ||
+        return (_atk_frames >= player::wait::ATK_FULL && _atk_frames < player::wait::ATK_SLIDE) ||
             (is_spinning() && x_speed > player::speed::SPIN_STOP_X);
     }
     
@@ -176,10 +176,10 @@ namespace prj
                 (_queue_jump && bn::keypad::a_held()) ||
                 (bn::keypad::a_pressed() && _atk_frames == 0) ||
                 ((bn::keypad::a_pressed() || bn::keypad::a_held()) && 
-                    _atk_frames >= player::wait_data::ATK_SLIDE)
+                    _atk_frames >= player::wait::ATK_SLIDE)
             ))
         {
-            if(_atk_frames >= player::wait_data::ATK_SLIDE && bn::keypad::a_pressed()) _dash = start_dash;
+            if(_atk_frames >= player::wait::ATK_SLIDE && bn::keypad::a_pressed()) _dash = start_dash;
             if(_queue_jump) _queue_jump = false;
             _jump = start_jump;
         }
@@ -206,19 +206,19 @@ namespace prj
                 (is_spinning() && _level_bound_right) ||
             // if left pressed
                 (bn::keypad::left_pressed() && !_stun && !is_spinning() &&
-                    (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && !_face_left))) ||
+                    (_atk_frames == 0 || (_atk_frames < player::wait::ATK_FULL && !_face_left))) ||
             // if left held
                 (bn::keypad::left_held() && !is_spinning() &&
-                    (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall))
+                    (_atk_frames == player::wait::ATK_STOP || _fall == end_fall))
         )
         {
         // change spin direction
             if(is_spinning() && _level_bound_right) _level_bound_right = false;
             
         // cancel attack
-            if(bn::keypad::left_pressed() && (_atk_frames < player::wait_data::ATK_FULL && !_face_left))
+            if(bn::keypad::left_pressed() && (_atk_frames < player::wait::ATK_FULL && !_face_left))
             {
-                _atk_frames = player::wait_data::ATK_STOP;
+                _atk_frames = player::wait::ATK_STOP;
             }
             
         // start run
@@ -233,19 +233,19 @@ namespace prj
                 (is_spinning() && _level_bound_left) ||
             // if right pressed
                 (bn::keypad::right_pressed() && !_stun && !is_spinning() &&
-                    (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && _face_left))) ||
+                    (_atk_frames == 0 || (_atk_frames < player::wait::ATK_FULL && _face_left))) ||
             // if right held
                 (bn::keypad::right_held() && !is_spinning() &&
-                    (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall))
+                    (_atk_frames == player::wait::ATK_STOP || _fall == end_fall))
         )
         {
         // change spin direction
             if(is_spinning() && _level_bound_left) _level_bound_left = false;
             
         // cancel attack
-            if(bn::keypad::right_pressed() && (_atk_frames < player::wait_data::ATK_FULL && _face_left))
+            if(bn::keypad::right_pressed() && (_atk_frames < player::wait::ATK_FULL && _face_left))
             {
-                _atk_frames = player::wait_data::ATK_STOP;
+                _atk_frames = player::wait::ATK_STOP;
             }
             
         // start run
@@ -332,7 +332,7 @@ namespace prj
                 (is_on_ground() && !is_running() && !is_dashing() &&
                     _atk_frames == 0 && !_stun && !is_spinning()) ||
             // or if attack is charging
-                (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)
+                (_atk_frames > 0 && _atk_frames < player::wait::ATK_FULL)
         )
         {
             x_speed = 0;
@@ -424,8 +424,8 @@ namespace prj
         {
             act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                 (
-                    spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                    player::anim_data::STUN
+                    spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                    player::anim::STUN
                 );
         }
         
@@ -434,8 +434,8 @@ namespace prj
         {
             act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
                 (
-                    spr, player::wait_data::SPIN_ANIM_WAIT, spr_item.tiles_item(),
-                    player::anim_data::ATK_SPIN
+                    spr, player::SPIN_ANIM_WAIT, spr_item.tiles_item(),
+                    player::anim::ATK_SPIN
                 );
         }
         
@@ -447,32 +447,32 @@ namespace prj
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::ATK_START
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::ATK_START
                     );
             }
-            else if(_atk_frames == player::wait_data::ATK_FULL)
+            else if(_atk_frames == player::wait::ATK_FULL)
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::ATK_FULL
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::ATK_FULL
                     );
             }
-            else if(_atk_frames == player::wait_data::ATK_SLOW)
+            else if(_atk_frames == player::wait::ATK_SLOW)
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::ATK_SLOW
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::ATK_SLOW
                     );
             }
-            else if(_atk_frames == player::wait_data::ATK_SLIDE)
+            else if(_atk_frames == player::wait::ATK_SLIDE)
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::ATK_SLIDE
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::ATK_SLIDE
                     );
             }
             
@@ -481,30 +481,30 @@ namespace prj
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::TURN_GROUND
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::TURN_GROUND
                     );
             }
         // idle
             else if((_run == end_run && _atk_frames == 0) || (_run == not_run &&
-                (_fall == end_fall || _turn_frames == player::wait_data::TURN_STOP ||
-                _atk_frames == player::wait_data::ATK_STOP)))
+                (_fall == end_fall || _turn_frames == player::wait::TURN_STOP ||
+                _atk_frames == player::wait::ATK_STOP)))
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::IDLE
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::IDLE
                     );
             }
         // run
             else if(_run == start_run || (_run == full_run &&
-                (_fall == end_fall || _turn_frames == player::wait_data::TURN_STOP ||
-                _atk_frames == player::wait_data::ATK_STOP)))
+                (_fall == end_fall || _turn_frames == player::wait::TURN_STOP ||
+                _atk_frames == player::wait::ATK_STOP)))
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::RUN
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::RUN
                     );
             }
         }
@@ -516,45 +516,45 @@ namespace prj
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::TURN_AIR
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::TURN_AIR
                     );
             }
         // jump
             else if(_jump == start_jump ||
-                (is_jumping() && _turn_frames == player::wait_data::TURN_STOP))
+                (is_jumping() && _turn_frames == player::wait::TURN_STOP))
             {
                 if(is_dashing())
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                         (
-                            spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                            player::anim_data::JUMP_DASH
+                            spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                            player::anim::JUMP_DASH
                         );
                 }
                 else
                 {
                     act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                         (
-                            spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                            player::anim_data::JUMP
+                            spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                            player::anim::JUMP
                         );
                 }
             }
         // fall
             else if(_fall == start_fall ||
-                (is_falling() && _turn_frames == player::wait_data::TURN_STOP))
+                (is_falling() && _turn_frames == player::wait::TURN_STOP))
             {
                 act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once
                     (
-                        spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
-                        player::anim_data::FALL
+                        spr, player::ANIM_WAIT, spr_item.tiles_item(),
+                        player::anim::FALL
                     );
             }
         }
         
     // INVINCIBILITY FLASH
-        if(_inv_frames > 0 && _inv_frames % player::wait_data::INV_WAIT == 0 &&
+        if(_inv_frames > 0 && _inv_frames % player::wait::INV_WAIT == 0 &&
             _atk_frames == 0 && !is_spinning())
         {
             spr.set_visible(!spr.visible());
@@ -577,24 +577,24 @@ namespace prj
         else if(_spin == end_spin) _spin = not_spin;
         
     // DASH STATES
-        if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
+        if(_dash == not_dash && _atk_frames == player::wait::ATK_FULL) _dash = start_dash;
         else if(_dash == start_dash) _dash = full_dash;
         else if(_fall == end_fall ||
-            (_atk_frames == player::wait_data::ATK_STOP && is_on_ground())) _dash = not_dash;
+            (_atk_frames == player::wait::ATK_STOP && is_on_ground())) _dash = not_dash;
         
     // INVINCIBILITY
-        if(0 < _inv_frames && _inv_frames < player::wait_data::INV_STOP) ++_inv_frames;
+        if(0 < _inv_frames && _inv_frames < player::wait::INV_STOP) ++_inv_frames;
         else _inv_frames = 0;
         
-        if(_atk_frames == player::wait_data::ATK_FULL) _inv_frames = 1;
-        if(_atk_frames == player::wait_data::INV_ATK_STOP) _inv_frames = 0;
+        if(_atk_frames == player::wait::ATK_FULL) _inv_frames = 1;
+        if(_atk_frames == player::wait::ATK_INV_STOP) _inv_frames = 0;
         
     // TURN
-        if(0 < _turn_frames && _turn_frames < player::wait_data::TURN_STOP) ++_turn_frames;
+        if(0 < _turn_frames && _turn_frames < player::wait::TURN_STOP) ++_turn_frames;
         else _turn_frames = 0;
     
     // ATTACK
-        if(0 < _atk_frames && _atk_frames < player::wait_data::ATK_STOP) ++_atk_frames;
+        if(0 < _atk_frames && _atk_frames < player::wait::ATK_STOP) ++_atk_frames;
         else _atk_frames = 0;
     }
 }
