@@ -301,37 +301,23 @@ namespace prj
     
     void Player::apply_movement()
     {
-    // HORIZONTAL MOVEMENT
-    // sets x speed
-        if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0 && !_stun) || 
-            (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
-        else if(_stun && _inv_frames == 1) x_speed = -player::speed::STUN_X;
-        else if(_dash == start_dash && _jump != start_jump) x_speed = player::speed::DASH_X;
-        else if(_run == start_run) x_speed = player::speed::RUN_X;
-        
-    // apply friction
-        if(is_on_ground() && is_dashing() &&
-            x_speed > player::FRICTION) x_speed -= player::FRICTION;
-        else if(!is_on_ground() && (!is_running() || _stun) &&
-            x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
-        
-    // set position
-        pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
-        
-    // level bounds
-        if(bn::abs(pos.x()) > lvl::X_LIM)
-        {
-            pos.set_x(pos.x() < 0 ? -lvl::X_LIM : lvl::X_LIM);
-        }
-        
     // VERTICAL MOVEMENT
-        if(_jump == start_jump) // sets y speed
+    // set y speed
+        if(_jump == start_jump)
         {
             if(_stun) y_speed = player::speed::STUN_Y;
+            else if(is_spinning())
+            {
+                if(_fall == end_fall) 
+                    y_speed = player::speed::JUMP_START_Y * x_speed.division(player::speed::SPIN_X);
+                else y_speed = player::speed::SPIN_Y;
+            }
             else if(is_dashing()) y_speed = player::speed::DASH_Y;
             else y_speed = player::speed::JUMP_START_Y;
         }
-        if(_fall == end_fall || _jump == start_jump) _fall = not_fall; // resets fall state
+        
+     // reset fall state
+        if(_fall == end_fall || _jump == start_jump) _fall = not_fall;
         
         if(!is_on_ground())
         {
@@ -359,12 +345,65 @@ namespace prj
                 y_speed = 0;
                 _fall = end_fall;
                 _stun = false;
-                if(is_spinning())
-                {
-                    _spin = not_spin;
-                    set_hitbox_size(false);
-                }
             }
+        }
+        
+    // HORIZONTAL MOVEMENT
+    // spin momentum
+        if(is_spinning() && _fall == end_fall)
+        {
+            if(x_speed < player::speed::SPIN_STOP_X)
+            {
+                _spin = end_spin;
+                set_hitbox_size(false);
+            }
+            else x_speed -= player::SPIN_FRICTION;
+        }
+        
+    // set x speed
+        if
+        (
+            // if player literally does nothing
+                (is_on_ground() && !is_running() && !is_dashing() &&
+                    _atk_frames == 0 && !_stun && !is_spinning()) ||
+            // or if attack is charging
+                (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)
+        )
+        {
+            x_speed = 0;
+        }
+        else if(_stun && _inv_frames == 1) x_speed = -player::speed::STUN_X;
+        else if(_spin == start_spin) x_speed = player::speed::SPIN_X;
+        else if(_dash == start_dash && _jump != start_jump) x_speed = player::speed::DASH_X;
+        else if(_run == start_run) x_speed = player::speed::RUN_X;
+        
+    // apply friction
+        if(!is_spinning())
+        {
+            if(is_on_ground() && is_dashing() &&
+                x_speed > player::FRICTION) x_speed -= player::FRICTION;
+            else if(!is_on_ground() && (!is_running() || _stun) &&
+                x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
+        }
+        
+    // apply speed
+        pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
+        
+    // check level bounds
+        if(pos.x() > lvl::X_LIM)
+        {
+            pos.set_x(lvl::X_LIM);
+            _level_bound_right = true;
+        }
+        else if(pos.x() < -lvl::X_LIM)
+        {
+            pos.set_x(-lvl::X_LIM);
+            _level_bound_left = true;
+        }
+        else 
+        {
+            _level_bound_right = false;
+            _level_bound_left = false;
         }
     }
     
