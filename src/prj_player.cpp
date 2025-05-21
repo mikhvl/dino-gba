@@ -93,10 +93,14 @@ namespace prj
             body_hitbox = bn::rect
             (
                 pos.x().round_integer(), pos.y().round_integer(),
-                player::SPIN_SIZE.width(), player::SPIN_SIZE.height()
+                player::SPIN_BODY_SIZE.width(), player::SPIN_BODY_SIZE.height()
             );
             
-            atk_hitbox = body_hitbox;
+            atk_hitbox = bn::rect
+            (
+                pos.x().round_integer(), pos.y().round_integer(),
+                player::SPIN_ATK_SIZE.width(), player::SPIN_ATK_SIZE.height()
+            );
         }
         else
         {

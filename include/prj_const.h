@@ -22,7 +22,8 @@ namespace prj
     {
         constexpr bn::size BODY_SIZE = {16, 16};
         constexpr bn::size ATK_SIZE = {24, 30};
-        constexpr bn::size SPIN_SIZE = {20, 20};
+        constexpr bn::size SPIN_BODY_SIZE = {20, 20};
+        constexpr bn::size SPIN_ATK_SIZE = {22, 22};
         
         constexpr bn::fixed GRAVITY = 0.2;
         constexpr bn::fixed FRICTION = 0.16;
