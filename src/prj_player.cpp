@@ -33,9 +33,11 @@ namespace prj
     {
     // initial logic
         set_hitbox_size();
+        
         spr.set_z_order(entity::PLAYER_Z_ORDER);
         set_face_left(flip);
         spr.set_position(pos.x() + (flip ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X), pos.y());
+        
         if(pos.y() < lvl::Y_LIM) _fall = start_fall;
     
     // debug
