@@ -26,9 +26,10 @@ namespace prj
     
     void Scene::set_camera_entity()
     {
-        dino->set_camera(cam);
         bg_main.set_camera(cam);
         bg_fore.set_camera(cam);
+        
+        dino->set_camera(cam);
         for(bn::unique_ptr<Entity>& entity : all_entity) entity->set_camera(cam);
     }
     
