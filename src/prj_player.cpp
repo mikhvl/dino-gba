@@ -470,7 +470,7 @@ namespace prj
         {
             act = bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::forever
                 (
-                    spr, player::wait_data::ANIM_WAIT, spr_item.tiles_item(),
+                    spr, player::wait_data::SPIN_ANIM_WAIT, spr_item.tiles_item(),
                     player::anim_data::ATK_SPIN
                 );
         }
