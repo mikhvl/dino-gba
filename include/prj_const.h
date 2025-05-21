@@ -7,6 +7,7 @@
 #include "bn_sprite_items_shadow.h"
 #include "bn_sprite_items_dino.h"
 #include "bn_sprite_items_bag.h"
+#include "bn_sprite_items_crab.h"
 
 #include "bn_sprite_items_gatito.h"
 #include "bn_sprite_items_x_corner.h"
@@ -18,6 +19,46 @@
 
 namespace prj
 {
+    namespace lvl
+    {
+        constexpr bn::fixed PLAYER_START_X = 0;
+        
+        constexpr bn::fixed Y_LIM = 16;
+        constexpr bn::fixed X_LIM = 114;
+        
+        constexpr int MAX_ENTITY = 10;
+        
+        constexpr int BG_FORE_PRIORITY = 0;
+        constexpr int ENTITY_PRIORITY  = 1;
+        constexpr int BG_MAIN_PRIORITY = 2;
+        constexpr int BG_BACK_PRIORITY = 3;
+        
+        constexpr int CAMERA_PARALLAX_COEF = 800;
+        constexpr int BG_FORE_PARALLAX_COEF = 500;
+        
+        constexpr int PARALLAX_EASE_COEF = 10;
+    }
+    
+    namespace entity
+    {
+        constexpr int PLAYER_Z_ORDER = 0;
+        constexpr int ENTITY_Z_ORDER = 1;
+        constexpr int SHADOW_Z_ORDER = 2;
+        
+        constexpr bn::fixed SHADOW_HEIGHT_SMALL  = 38;
+        constexpr bn::fixed SHADOW_HEIGHT_MEDIUM = 20;
+        
+        constexpr bn::fixed SHADOW_X_COEF = 2.5;
+        constexpr bn::fixed SHADOW_Y_COEF = 12;
+        
+        namespace shadow_tile
+        {
+            constexpr int SMALL = 2;
+            constexpr int MEDIUM = 1;
+            constexpr int BIG = 0;
+        }
+    }
+    
     namespace player
     {
         constexpr bn::size BODY_SIZE = {16, 16};
@@ -92,26 +133,6 @@ namespace prj
         }
     }
     
-    namespace entity
-    {
-        constexpr int PLAYER_Z_ORDER = 0;
-        constexpr int ENTITY_Z_ORDER = 1;
-        constexpr int SHADOW_Z_ORDER = 2;
-        
-        constexpr bn::fixed SHADOW_HEIGHT_SMALL  = 38;
-        constexpr bn::fixed SHADOW_HEIGHT_MEDIUM = 20;
-        
-        constexpr bn::fixed SHADOW_X_COEF = 2.5;
-        constexpr bn::fixed SHADOW_Y_COEF = 12;
-        
-        namespace shadow_tile
-        {
-            constexpr int SMALL = 2;
-            constexpr int MEDIUM = 1;
-            constexpr int BIG = 0;
-        }
-    }
-    
     namespace bag
     {
         constexpr bn::size BODY_SIZE = {16, 16};
@@ -131,24 +152,19 @@ namespace prj
         }
     }
     
-    namespace lvl
+    namespace crab
     {
-        constexpr bn::fixed PLAYER_START_X = 0;
+        constexpr bn::size BODY_SIZE = {20, 20};
         
-        constexpr bn::fixed Y_LIM = 16;
-        constexpr bn::fixed X_LIM = 114;
+        constexpr int MAX_ANIM_FRAMES = 2;
+        constexpr int ANIM_WAIT = 6;
         
-        constexpr int MAX_ENTITY = 10;
+        constexpr bn::fixed RUN_SPEED = 1.1;
         
-        constexpr int BG_FORE_PRIORITY = 0;
-        constexpr int ENTITY_PRIORITY  = 1;
-        constexpr int BG_MAIN_PRIORITY = 2;
-        constexpr int BG_BACK_PRIORITY = 3;
-        
-        constexpr int CAMERA_PARALLAX_COEF = 800;
-        constexpr int BG_FORE_PARALLAX_COEF = 500;
-        
-        constexpr int PARALLAX_EASE_COEF = 10;
+        namespace anim
+        {
+            constexpr uint16_t RUN[] = {0, 1};
+        }
     }
 }
 
