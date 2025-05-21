@@ -64,7 +64,19 @@ namespace prj
     
     void Player::take_damage(bool from_left)
     {
-        stun(from_left);
+        if(_inv_frames == 0 && !_stun)
+        {
+            _stun = true;
+            _inv_frames = 1;
+            _turn_frames = 0;
+            _atk_frames = 0;
+            if(is_spinning())
+            {
+                _spin = not_spin;
+                set_hitbox_size(false);
+            }
+            set_face_left(from_left);
+        }
     }
     
     bool Player::is_attacking()
@@ -125,23 +137,6 @@ namespace prj
                 pos.y().round_integer(),
                 player::ATK_SIZE.width(), player::ATK_SIZE.height()
             );
-        }
-    }
-    
-    void Player::stun(bool from_left)
-    {
-        if(_inv_frames == 0 && !_stun)
-        {
-            _stun = true;
-            _inv_frames = 1;
-            _turn_frames = 0;
-            _atk_frames = 0;
-            if(is_spinning())
-            {
-                _spin = not_spin;
-                set_hitbox_size(false);
-            }
-            set_face_left(from_left);
         }
     }
     

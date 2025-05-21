@@ -73,7 +73,6 @@ namespace prj
     // update functions
         void set_face_left(bool flip);
         void set_hitbox_size(bool is_spin = false);
-        void stun(bool from_left);
         
         void update_states();
         void process_input();
