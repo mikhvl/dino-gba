@@ -208,8 +208,8 @@ namespace prj
                 (bn::keypad::left_pressed() && !_stun && !is_spinning() &&
                     (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && !_face_left))) ||
             // if left held
-                (bn::keypad::left_held() && !is_spinning() && (_atk_frames == player::wait_data::ATK_STOP ||
-                    (_fall == end_fall && !is_spinning())))
+                (bn::keypad::left_held() && !is_spinning() &&
+                    (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall))
         )
         {
         // change spin direction
@@ -235,8 +235,8 @@ namespace prj
                 (bn::keypad::right_pressed() && !_stun && !is_spinning() &&
                     (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && _face_left))) ||
             // if right held
-                (bn::keypad::right_held() && !is_spinning() && (_atk_frames == player::wait_data::ATK_STOP ||
-                    (_fall == end_fall && !is_spinning())))
+                (bn::keypad::right_held() && !is_spinning() &&
+                    (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall))
         )
         {
         // change spin direction
