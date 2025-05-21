@@ -45,7 +45,7 @@ namespace prj
         enum JUMP_STATE { start_jump, full_jump, release_jump, end_jump, not_jump };
         enum FALL_STATE { start_fall, full_fall, end_fall, not_fall };
         enum DASH_STATE { start_dash, full_dash, not_dash };
-        enum SPIN_STATE { start_spin, full_spin, not_spin };
+        enum SPIN_STATE { start_spin, full_spin, end_spin, not_spin };
         
         RUN_STATE  _run  = not_run;
         JUMP_STATE _jump = not_jump;

@@ -80,7 +80,7 @@ namespace prj
     bool Player::is_jumping() { return _jump != not_jump; }
     bool Player::is_falling() { return _fall == start_fall || _fall == full_fall; }
     bool Player::is_dashing() { return _dash == start_dash || _dash == full_dash; }
-    bool Player::is_spinning() { return _spin != not_spin; }
+    bool Player::is_spinning() { return _spin == start_spin || _spin == full_spin; }
     bool Player::is_on_ground() { return !is_jumping() && !is_falling(); }
     
     void Player::set_face_left(bool flip)
@@ -146,6 +146,7 @@ namespace prj
     {
     // SPIN STATES
         if(_spin == start_spin) _spin = full_spin;
+        else if(_spin == end_spin) _spin = not_spin;
         
     // DASH STATES
         if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
