@@ -77,6 +77,7 @@ namespace prj
         void process_input();
         void apply_movement();
         void set_hitbox_position();
+        void set_sprite_position();
         void run_animation();
     };
 }

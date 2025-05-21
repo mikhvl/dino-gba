@@ -55,6 +55,7 @@ namespace prj
         apply_movement();
         set_hitbox_position();
         
+        set_sprite_position();
         Entity::position_shadow();
         run_animation();
     }
@@ -285,13 +286,11 @@ namespace prj
         
     // set position
         pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
-        spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
         
     // level bounds
         if(bn::abs(pos.x()) > lvl::X_LIM)
         {
             pos.set_x(pos.x() < 0 ? -lvl::X_LIM : lvl::X_LIM);
-            spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
         }
         
     // VERTICAL MOVEMENT
@@ -335,8 +334,6 @@ namespace prj
                     set_hitbox_size(false);
                 }
             }
-            
-            spr.set_y(pos.y());
         }
     }
     
@@ -375,6 +372,14 @@ namespace prj
         hitbox_corners[5].set_position(atk_hitbox.bottom_left());
         hitbox_corners[6].set_position(atk_hitbox.top_right());
         hitbox_corners[7].set_position(atk_hitbox.top_left());
+    }
+    
+    void Player::set_sprite_position()
+    {
+        if(is_spinning()) spr.set_x(pos.x());
+        else spr.set_x(pos.x() + (_face_left ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X));
+        
+        spr.set_y(pos.y());
     }
     
     void Player::run_animation()
