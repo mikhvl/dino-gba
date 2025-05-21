@@ -19,7 +19,7 @@ namespace prj
         dino = bn::make_unique<Player>(lvl::PLAYER_START_X);
     
     // debug
-        all_entity.emplace_back(bn::make_unique<Bag>(40));
+        all_entity.emplace_back(bn::make_unique<Crab>(40));
         
         set_camera_entity();
     }
