@@ -175,19 +175,26 @@ namespace prj
     void Player::process_input()
     {
     // ATTACK
-        if((bn::keypad::b_pressed() || bn::keypad::b_held()) && _inv_frames == 0)
+        if((bn::keypad::b_pressed() || bn::keypad::b_held()) && _inv_frames == 0 && !is_spinning())
         {
-            if(is_on_ground() && _atk_frames == 0 && !_queue_jump) _atk_frames = 1;
-            else if(!is_on_ground() && !is_spinning())
+        // start jaw attack
+            if(is_on_ground())
+            {
+                if(_atk_frames == 0 && !_queue_jump) _atk_frames = 1;
+            }
+        // start spin attack
+            else
             {
                 _spin = start_spin;
                 set_hitbox_size(true);
             }
         }
+    
+    // START INVINCIBILITY
         if(_atk_frames == player::wait_data::ATK_FULL /*|| _spin == start_spin*/) _inv_frames = 1;
         
     // QUEUE JUMP
-        if(is_falling())
+        if(is_falling() && !is_spinning())
         {
             if(bn::keypad::a_pressed()) _queue_jump = true;
             else if(bn::keypad::a_released()) _queue_jump = false;
@@ -196,8 +203,10 @@ namespace prj
     // VERTICAL MOVEMENT
     // start stun jump
         if(_stun && _inv_frames == 1) _jump = start_jump;
+    // start spin jump
+        else if(is_spinning() && _fall == end_fall) _jump = start_jump;
     // start normal jump
-        else if(is_on_ground() &&
+        else if(is_on_ground() && !is_spinning() &&
             (
                 (_queue_jump && bn::keypad::a_held()) ||
                 (bn::keypad::a_pressed() && _atk_frames == 0) ||
@@ -205,8 +214,7 @@ namespace prj
                     _atk_frames >= player::wait_data::ATK_SLIDE)
             ))
         {
-            if(_atk_frames >= player::wait_data::ATK_SLIDE &&
-                bn::keypad::a_pressed()) _dash = start_dash;
+            if(_atk_frames >= player::wait_data::ATK_SLIDE && bn::keypad::a_pressed()) _dash = start_dash;
             if(_queue_jump) _queue_jump = false;
             _jump = start_jump;
         }
@@ -219,7 +227,7 @@ namespace prj
                 if(_jump == release_jump) _jump = end_jump;
                 else if(_jump != end_jump)
                 {
-                    if(bn::keypad::a_held() || _stun) _jump = full_jump;
+                    if(bn::keypad::a_held() || _stun || is_spinning()) _jump = full_jump;
                     else if(bn::keypad::a_released()) _jump = release_jump;
                 }
             }
@@ -227,10 +235,21 @@ namespace prj
         
     // HORIZONTAL MOVEMENT
     // start run left
-        if((bn::keypad::left_pressed() && !_stun &&
-            (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && !_face_left))) ||
-            (bn::keypad::left_held() && (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall)))
+        if
+        (
+            // change spin direction
+                (is_spinning() && _level_bound_right) ||
+            // if left pressed
+                (bn::keypad::left_pressed() && !_stun && !is_spinning() &&
+                    (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && !_face_left))) ||
+            // if left held
+                (bn::keypad::left_held() && !is_spinning() && (_atk_frames == player::wait_data::ATK_STOP ||
+                    (_fall == end_fall && !is_spinning())))
+        )
         {
+        // change spin direction
+            if(is_spinning() && _level_bound_right) _level_bound_right = false;
+            
         // cancel attack
             if(bn::keypad::left_pressed() && (_atk_frames < player::wait_data::ATK_FULL && !_face_left))
             {
@@ -243,10 +262,21 @@ namespace prj
             set_face_left(true);
         }
     //start run right
-        else if((bn::keypad::right_pressed() && !_stun &&
-            (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && _face_left))) ||
-            (bn::keypad::right_held() && (_atk_frames == player::wait_data::ATK_STOP || _fall == end_fall)))
+        else if
+        (
+            // change spin direction
+                (is_spinning() && _level_bound_left) ||
+            // if right pressed
+                (bn::keypad::right_pressed() && !_stun && !is_spinning() &&
+                    (_atk_frames == 0 || (_atk_frames < player::wait_data::ATK_FULL && _face_left))) ||
+            // if right held
+                (bn::keypad::right_held() && !is_spinning() && (_atk_frames == player::wait_data::ATK_STOP ||
+                    (_fall == end_fall && !is_spinning())))
+        )
         {
+        // change spin direction
+            if(is_spinning() && _level_bound_left) _level_bound_left = false;
+            
         // cancel attack
             if(bn::keypad::right_pressed() && (_atk_frames < player::wait_data::ATK_FULL && _face_left))
             {
