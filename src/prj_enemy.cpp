@@ -53,8 +53,6 @@ namespace prj
         if(_damage_frames == 0) _damage_frames = 1;
     }
     
-    bool Bag::is_attacking() { return true; }
-    
     void Bag::update_states()
     {
         if(_damage_frames > 0 && _damage_frames < bag::wait::DAMAGE_STOP) ++_damage_frames;
