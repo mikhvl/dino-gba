@@ -28,6 +28,7 @@ namespace prj
         constexpr bn::fixed GRAVITY = 0.2;
         constexpr bn::fixed FRICTION = 0.16;
         constexpr bn::fixed AIR_FRICTION = 0.1;
+        constexpr bn::fixed SPIN_FRICTION = 0.4;
         
         constexpr int SPR_OFFSET_X = 4;
         constexpr int BODY_HITBOX_OFFSET_X = 3;
@@ -48,13 +49,15 @@ namespace prj
             constexpr bn::fixed STUN_X = 1.6;
             constexpr bn::fixed STUN_Y = 3;
             
-            constexpr bn::fixed SPIN_X = 5;
-            constexpr bn::fixed SPIN_Y = 5;
+            constexpr bn::fixed SPIN_X = 2.7;
+            constexpr bn::fixed SPIN_Y = 1;
+            constexpr bn::fixed SPIN_STOP_X = 2;
         }
         
         namespace wait_data
         {
             constexpr int ANIM_WAIT = 4;
+            constexpr int SPIN_ANIM_WAIT = 3;
             
             constexpr int TURN_STOP = 5;
         
