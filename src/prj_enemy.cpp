@@ -25,6 +25,8 @@ namespace prj
     
     void Bag::update()
     {
+        update_states();
+        
         if(_damage_frames == 1)
         {
             act = bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once
@@ -43,7 +45,6 @@ namespace prj
         }
         
         if(!act.done()) act.update();
-        count_frames();
     }
     
     void Bag::take_damage(bool from_left)
@@ -54,7 +55,7 @@ namespace prj
     
     bool Bag::is_attacking() { return true; }
     
-    void Bag::count_frames()
+    void Bag::update_states()
     {
         if(_damage_frames > 0 && _damage_frames < bag::wait_data::DAMAGE_STOP) ++_damage_frames;
         else _damage_frames = 0;

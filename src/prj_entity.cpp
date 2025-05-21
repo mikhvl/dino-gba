@@ -13,7 +13,7 @@ namespace prj
         , spr(spr_item.create_sprite(pos))
         , shadow(bn::sprite_items::shadow.create_sprite())
     {
-        position_shadow();
+        set_shadow_position();
         
         spr.set_bg_priority(lvl::ENTITY_PRIORITY);
         shadow.set_bg_priority(lvl::ENTITY_PRIORITY);
@@ -26,7 +26,7 @@ namespace prj
     bn::rect& Entity::get_body_hitbox() { return body_hitbox; }
     bn::rect& Entity::get_atk_hitbox() { return atk_hitbox; }
     
-    void Entity::update() { position_shadow(); }
+    void Entity::update() {}
     void Entity::take_damage(bool from_left) { if(from_left) {} }
     bool Entity::is_attacking() { return false; }
     bool Entity::is_dead() { return false; }
@@ -37,7 +37,7 @@ namespace prj
         shadow.set_camera(cam);
     }
     
-    void Entity::position_shadow()
+    void Entity::set_shadow_position()
     {
         bn::fixed height = lvl::Y_LIM - pos.y();
         

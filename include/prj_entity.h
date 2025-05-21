@@ -49,7 +49,7 @@ namespace prj
         bn::sprite_ptr spr;
         bn::sprite_ptr shadow;
         
-        void position_shadow();
+        void set_shadow_position();
     };
 }
 

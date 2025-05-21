@@ -58,7 +58,7 @@ namespace prj
         set_hitbox_position();
         
         set_sprite_position();
-        Entity::position_shadow();
+        set_shadow_position();
         run_animation();
     }
     

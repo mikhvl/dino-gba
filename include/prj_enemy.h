@@ -23,7 +23,7 @@ namespace prj
         bn::sprite_animate_action<bag::MAX_ANIM_FRAMES> act;
         
         int _damage_frames = 0;
-        void count_frames();
+        void update_states();
     };
 }
 

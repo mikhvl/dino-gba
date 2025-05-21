@@ -30,9 +30,9 @@ namespace prj
         bn::unique_ptr<Player> dino;
         bn::vector<bn::unique_ptr<Entity>, lvl::MAX_ENTITY> all_entity;
         
-        void position_cam();
         void manage_entity();
-        void set_camera_for_all();
+        void set_camera_entity();
+        void set_camera_position();
     };
 }
 

@@ -21,10 +21,10 @@ namespace prj
     // debug
         all_entity.emplace_back(bn::make_unique<Bag>(40));
         
-        set_camera_for_all();
+        set_camera_entity();
     }
     
-    void Scene::set_camera_for_all()
+    void Scene::set_camera_entity()
     {
         dino->set_camera(cam);
         bg_main.set_camera(cam);
@@ -34,11 +34,11 @@ namespace prj
     
     void Scene::update()
     {
-        position_cam();
+        set_camera_position();
         manage_entity();
     }
     
-    void Scene::position_cam()
+    void Scene::set_camera_position()
     {
     // player x
         bn::fixed x = dino->get_pos().x();
