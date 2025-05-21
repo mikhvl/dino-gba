@@ -1,6 +1,5 @@
 #include "prj_player.h"
 
-#include "bn_math.h"
 #include "bn_fixed.h"
 #include "bn_fixed_point.h"
 #include "bn_rect.h"
