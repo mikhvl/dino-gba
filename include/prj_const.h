@@ -28,20 +28,28 @@ namespace prj
         constexpr bn::fixed FRICTION = 0.16;
         constexpr bn::fixed AIR_FRICTION = 0.1;
         
-        constexpr bn::fixed X_SPEED = 2;
-        constexpr bn::fixed START_Y_SPEED = 4;
-        constexpr bn::fixed RELEASE_Y_SPEED = 1.3;
-        constexpr bn::fixed DASH_X_SPEED = 4.6;
-        constexpr bn::fixed START_DASH_Y_SPEED = 3;
-        //constexpr bn::fixed RELEASE_DASH_Y_SPEED = 1.2;
-        constexpr bn::fixed STUN_X_SPEED = 1.6;
-        constexpr bn::fixed STUN_Y_SPEED = 3;
-        
         constexpr int SPR_OFFSET_X = 4;
         constexpr int BODY_HITBOX_OFFSET_X = 3;
         constexpr int ATK_HITBOX_OFFSET_X = 13;
         
         constexpr int MAX_ANIM_FRAMES = 3;
+        
+        namespace speed
+        {
+            constexpr bn::fixed RUN_X = 2;
+            
+            constexpr bn::fixed JUMP_START_Y = 4;
+            constexpr bn::fixed JUMP_RELEASE_Y = 1.3;
+            
+            constexpr bn::fixed DASH_X = 4.6;
+            constexpr bn::fixed DASH_Y = 3;
+            
+            constexpr bn::fixed STUN_X = 1.6;
+            constexpr bn::fixed STUN_Y = 3;
+            
+            constexpr bn::fixed SPIN_X = 5;
+            constexpr bn::fixed SPIN_Y = 5;
+        }
         
         namespace wait_data
         {

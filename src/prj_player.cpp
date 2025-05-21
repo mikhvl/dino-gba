@@ -247,9 +247,9 @@ namespace prj
     // sets x speed
         if((is_on_ground() && !is_running() && !is_dashing() && _atk_frames == 0 && !_stun) || 
             (_atk_frames > 0 && _atk_frames < player::wait_data::ATK_FULL)) x_speed = 0;
-        else if(_stun && _inv_frames == 1) x_speed = -player::STUN_X_SPEED;
-        else if(_dash == start_dash && _jump != start_jump) x_speed = player::DASH_X_SPEED;
-        else if(_run == start_run) x_speed = player::X_SPEED;
+        else if(_stun && _inv_frames == 1) x_speed = -player::speed::STUN_X;
+        else if(_dash == start_dash && _jump != start_jump) x_speed = player::speed::DASH_X;
+        else if(_run == start_run) x_speed = player::speed::RUN_X;
         
     // apply friction
         if(is_on_ground() && is_dashing() &&
@@ -271,9 +271,9 @@ namespace prj
     // VERTICAL MOVEMENT
         if(_jump == start_jump) // sets y speed
         {
-            if(_stun) y_speed = player::STUN_Y_SPEED;
-            else if(is_dashing()) y_speed = player::START_DASH_Y_SPEED;
-            else y_speed = player::START_Y_SPEED;
+            if(_stun) y_speed = player::speed::STUN_Y;
+            else if(is_dashing()) y_speed = player::speed::DASH_Y;
+            else y_speed = player::speed::JUMP_START_Y;
         }
         if(_fall == end_fall || _jump == start_jump) _fall = not_fall; // resets fall state
         
@@ -291,9 +291,9 @@ namespace prj
             };
         
         // button release
-            if(_jump == release_jump && !is_dashing() && y_speed > player::RELEASE_Y_SPEED)
+            if(_jump == release_jump && !is_dashing() && y_speed > player::speed::JUMP_RELEASE_Y)
             {
-                y_speed = player::RELEASE_Y_SPEED;
+                y_speed = player::speed::JUMP_RELEASE_Y;
             }
             
         // landing
