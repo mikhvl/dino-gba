@@ -51,8 +51,6 @@ namespace prj
     
     void Player::update()
     {
-        update_states();
-        
         process_input();
         apply_movement();
         set_hitbox_position();
@@ -60,6 +58,8 @@ namespace prj
         set_sprite_position();
         set_shadow_position();
         run_animation();
+        
+        update_states();
     }
     
     void Player::take_damage(bool from_left)
@@ -140,36 +140,6 @@ namespace prj
         }
     }
     
-    void Player::update_states()
-    {
-    // SPIN STATES
-        if(_spin == start_spin) _spin = full_spin;
-        else if(_spin == end_spin) _spin = not_spin;
-        
-    // DASH STATES
-        if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
-        else if(_dash == start_dash) _dash = full_dash;
-        else if(_fall == end_fall ||
-            (_atk_frames == player::wait_data::ATK_STOP && is_on_ground())) _dash = not_dash;  
-        
-    // INVINCIBILITY
-        if(!is_spinning())
-        {
-            if(0 < _inv_frames && _inv_frames < player::wait_data::INV_STOP) ++_inv_frames;
-            else _inv_frames = 0;
-        }
-        
-        if(_atk_frames == player::wait_data::ATK_STUN) _inv_frames = 0;
-        
-    // TURN
-        if(0 < _turn_frames && _turn_frames < player::wait_data::TURN_STOP) ++_turn_frames;
-        else _turn_frames = 0;
-    
-    // ATTACK
-        if(0 < _atk_frames && _atk_frames < player::wait_data::ATK_STOP) ++_atk_frames;
-        else _atk_frames = 0;
-    }
-    
     void Player::process_input()
     {
     // ATTACK
@@ -187,9 +157,6 @@ namespace prj
                 set_hitbox_size(true);
             }
         }
-    
-    // START INVINCIBILITY
-        if(_atk_frames == player::wait_data::ATK_FULL /*|| _spin == start_spin*/) _inv_frames = 1;
         
     // QUEUE JUMP
         if(is_falling() && !is_spinning())
@@ -601,5 +568,33 @@ namespace prj
         
     // ANIMATION UPDATE
         if(!act.done()) act.update();
+    }
+    
+    void Player::update_states()
+    {
+    // SPIN STATES
+        if(_spin == start_spin) _spin = full_spin;
+        else if(_spin == end_spin) _spin = not_spin;
+        
+    // DASH STATES
+        if(_dash == not_dash && _atk_frames == player::wait_data::ATK_FULL) _dash = start_dash;
+        else if(_dash == start_dash) _dash = full_dash;
+        else if(_fall == end_fall ||
+            (_atk_frames == player::wait_data::ATK_STOP && is_on_ground())) _dash = not_dash;
+        
+    // INVINCIBILITY
+        if(0 < _inv_frames && _inv_frames < player::wait_data::INV_STOP) ++_inv_frames;
+        else _inv_frames = 0;
+        
+        if(_atk_frames == player::wait_data::ATK_FULL) _inv_frames = 1;
+        if(_atk_frames == player::wait_data::INV_ATK_STOP) _inv_frames = 0;
+        
+    // TURN
+        if(0 < _turn_frames && _turn_frames < player::wait_data::TURN_STOP) ++_turn_frames;
+        else _turn_frames = 0;
+    
+    // ATTACK
+        if(0 < _atk_frames && _atk_frames < player::wait_data::ATK_STOP) ++_atk_frames;
+        else _atk_frames = 0;
     }
 }

@@ -64,11 +64,11 @@ namespace prj
             constexpr int ATK_FULL  = 10;
             constexpr int ATK_SLOW  = 14;
             constexpr int ATK_SLIDE = 16;
-            constexpr int ATK_STUN  = 22;
             constexpr int ATK_STOP  = 35;
             
             constexpr int INV_WAIT = 5;
             constexpr int INV_STOP = 80;
+            constexpr int INV_ATK_STOP = 22;
         }
         
         namespace anim_data

@@ -74,12 +74,12 @@ namespace prj
         void set_face_left(bool flip);
         void set_hitbox_size(bool is_spin = false);
         
-        void update_states();
         void process_input();
         void apply_movement();
         void set_hitbox_position();
         void set_sprite_position();
         void run_animation();
+        void update_states();
     };
 }
 
