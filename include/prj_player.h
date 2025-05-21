@@ -73,11 +73,11 @@ namespace prj
         void set_hitbox_size(bool is_spin = false);
         void stun(bool from_left);
         
+        void update_states();
         void process_input();
         void apply_movement();
         void set_hitbox_position();
         void run_animation();
-        void count_frames();
     };
 }
 
