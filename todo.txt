@@ -6,12 +6,10 @@ code:
     stomp attack
     spin attack
         hitboxes change
-    stun
 
 art:
     attack animation
         stomp
         spin
         fall after spin
-    stun animation
     beach bg
