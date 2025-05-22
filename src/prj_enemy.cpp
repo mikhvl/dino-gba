@@ -11,9 +11,6 @@ namespace prj
         bool flip
     )
         : Entity(x, lvl::Y_LIM, bn::sprite_items::bag)
-        , act(bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once(
-                spr, bag::ANIM_WAIT, spr_item.tiles_item(),
-                bag::anim::IDLE))
     {
     // hitboxes
         body_hitbox = bn::rect(
@@ -41,22 +38,12 @@ namespace prj
     {
         if(_damage_frames == 1)
         {
-            act = bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once
-            (
-                spr, bag::ANIM_WAIT, spr_item.tiles_item(),
-                bag::anim::DAMAGE
-            );
+            spr.set_tiles(bn::sprite_items::bag.tiles_item(), bag::tile::DAMAGE);
         }
         else if(_damage_frames == bag::wait::DAMAGE_STOP)
         {
-            act = bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once
-            (
-                spr, bag::ANIM_WAIT, spr_item.tiles_item(),
-                bag::anim::IDLE
-            );
+            spr.set_tiles(bn::sprite_items::bag.tiles_item(), bag::tile::IDLE);
         }
-        
-        if(!act.done()) act.update();
     }
     
     void Bag::update_states()

@@ -19,7 +19,6 @@ namespace prj
         void take_damage(bool from_left = false) override;
         
     private:
-        bn::sprite_animate_action<bag::MAX_ANIM_FRAMES> act;
         int _damage_frames = 0;
         
         void run_animation();

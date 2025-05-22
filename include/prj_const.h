@@ -137,18 +137,15 @@ namespace prj
     {
         constexpr bn::size BODY_SIZE = {16, 16};
         
-        constexpr int MAX_ANIM_FRAMES = 2;
-        constexpr int ANIM_WAIT = 4;
-        
         namespace wait
         {
             constexpr int DAMAGE_STOP = 10;
         }
         
-        namespace anim
+        namespace tile
         {
-            constexpr uint16_t IDLE[]   = {0, 0};
-            constexpr uint16_t DAMAGE[] = {1, 1};
+            constexpr int IDLE   = 0;
+            constexpr int DAMAGE = 1;
         }
     }
     
