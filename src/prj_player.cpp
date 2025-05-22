@@ -18,25 +18,17 @@ namespace prj
         bn::fixed y,
         bool flip
     )
-    // main parameters
         : Entity(x, y, bn::sprite_items::dino)
-        , _face_left(flip)
-        
-    // animation
         , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
                 spr, player::ANIM_WAIT, spr_item.tiles_item(),
                 player::anim::IDLE))
-        
-    // debug sprites
         , hitbox_corner_builder(bn::sprite_builder(bn::sprite_items::x_corner))
     {
     // initial logic
-        set_hitbox_size();
-        
-        spr.set_z_order(entity::PLAYER_Z_ORDER);
         set_face_left(flip);
-        spr.set_position(pos.x() + (flip ? -player::SPR_OFFSET_X : player::SPR_OFFSET_X), pos.y());
-        
+        set_hitbox_size();
+        set_sprite_position();
+        spr.set_z_order(entity::PLAYER_Z_ORDER);
         if(pos.y() < lvl::Y_LIM) _fall = start_fall;
     
     // debug
@@ -250,11 +242,8 @@ namespace prj
         }
         
     // manage run states
-        else if(bn::keypad::left_held())      _run = full_run;
-        else if(bn::keypad::left_released())  _run = end_run;
-        
-        else if(bn::keypad::right_held())     _run = full_run;
-        else if(bn::keypad::right_released()) _run = end_run;
+        else if(bn::keypad::left_held() || bn::keypad::right_held()) _run = full_run;
+        else if(bn::keypad::left_released() || bn::keypad::right_released()) _run = end_run;
         
         else _run = not_run;
     }
@@ -321,17 +310,9 @@ namespace prj
         }
         
     // set x speed
-        if
-        (
-            // if player literally does nothing
-                (is_on_ground() && !is_running() && !is_dashing() &&
-                    _atk_frames == 0 && !_stun && !is_spinning()) ||
-            // or if attack is charging
-                (_atk_frames > 0 && _atk_frames < player::wait::ATK_FULL)
-        )
-        {
-            x_speed = 0;
-        }
+        if((is_on_ground() && !is_running() && !is_dashing() &&
+                _atk_frames == 0 && !_stun && !is_spinning()) ||
+                (_atk_frames > 0 && _atk_frames < player::wait::ATK_FULL)) x_speed = 0;
         else if(_stun && _inv_frames == 1) x_speed = -player::speed::STUN_X;
         else if(_spin == start_spin) x_speed = player::speed::SPIN_X;
         else if(_dash == start_dash && _jump != start_jump) x_speed = player::speed::DASH_X;
