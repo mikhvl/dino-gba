@@ -1,15 +1,14 @@
-music:
+sound:
     mermaid falls
     alex gordon intro
+    dino + enemy sfx
+    beach sfx
 
 code:
-    stomp attack
-    spin attack
-        hitboxes change
+    entity different container
+    entity spawner
+    crab death
 
 art:
-    attack animation
-        stomp
-        spin
-        fall after spin
-    beach bg
+    starfish
+    coconut bird
