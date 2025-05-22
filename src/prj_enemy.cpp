@@ -8,10 +8,9 @@ namespace prj
     Bag::Bag
     (
         bn::fixed x,
-        bn::fixed y,
         bool flip
     )
-        : Entity(x, y, bn::sprite_items::bag)
+        : Entity(x, lvl::Y_LIM, bn::sprite_items::bag)
         , act(bn::sprite_animate_action<bag::MAX_ANIM_FRAMES>::once(
                 spr, bag::ANIM_WAIT, spr_item.tiles_item(),
                 bag::anim::IDLE))
@@ -27,6 +26,18 @@ namespace prj
     }
     
     void Bag::update()
+    {
+        run_animation();
+        update_states();
+    }
+    
+    void Bag::take_damage(bool from_left)
+    {
+        spr.set_horizontal_flip(from_left);
+        if(_damage_frames == 0) _damage_frames = 1;
+    }
+    
+    void Bag::run_animation()
     {
         if(_damage_frames == 1)
         {
@@ -46,14 +57,6 @@ namespace prj
         }
         
         if(!act.done()) act.update();
-        
-        update_states();
-    }
-    
-    void Bag::take_damage(bool from_left)
-    {
-        if(from_left) {}
-        if(_damage_frames == 0) _damage_frames = 1;
     }
     
     void Bag::update_states()
@@ -66,8 +69,7 @@ namespace prj
     Crab::Crab
     (
         bn::fixed x,
-        bn::fixed y,
-        bool flip
+        bn::fixed y
     )
         : Entity(x, y, bn::sprite_items::crab)
         , act(bn::sprite_animate_action<crab::MAX_ANIM_FRAMES>::forever(
@@ -79,23 +81,29 @@ namespace prj
             pos.x().round_integer(), pos.y().round_integer(),
             crab::BODY_SIZE.width(), crab::BODY_SIZE.height());
         atk_hitbox = body_hitbox;
-    
-    // initial logic
-        spr.set_horizontal_flip(flip);
     }
     
     void Crab::update()
     {
-        pos.set_x(pos.x() + x_speed);
-        spr.set_x(pos.x());
-        
-        if(bn::abs(pos.x()) > lvl::X_LIM) x_speed = -x_speed;
-        
+        apply_movement();
+        set_sprite_position();
         set_shadow_position();
-        
-        if(!act.done()) act.update();
+        run_animation();
     }
     
-    void Crab::take_damage(bool from_left) {}
+    //void Crab::take_damage(bool from_left) {}
     bool Crab::is_attacking() { return false; }
+    
+    void Crab::apply_movement()
+    {
+        pos.set_x(pos.x() + x_speed);
+        if(bn::abs(pos.x()) > lvl::X_LIM) x_speed = -x_speed;
+    }
+    
+    void Crab::set_sprite_position() { spr.set_position(pos); }
+    
+    void Crab::run_animation()
+    {
+        if(!act.done()) act.update();
+    }
 }
