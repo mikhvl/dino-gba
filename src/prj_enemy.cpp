@@ -55,10 +55,15 @@ namespace prj
 // Crab
     Crab::Crab
     (
-        bn::fixed x,
-        bn::fixed y
+        bool from_left
     )
-        : Entity(x, y, bn::sprite_items::crab)
+        : Entity
+            (
+                from_left ? -lvl::X_LIM - entity::OFFSCREEN_X : lvl::X_LIM + entity::OFFSCREEN_X,
+                lvl::Y_LIM,
+                bn::sprite_items::crab
+            )
+        , _face_left(!from_left)
         , act(bn::sprite_animate_action<crab::MAX_ANIM_FRAMES>::forever(
                 spr, crab::ANIM_WAIT, spr_item.tiles_item(),
                 crab::anim::RUN))
@@ -73,24 +78,71 @@ namespace prj
     void Crab::update()
     {
         apply_movement();
+        set_hitbox_position();
         set_sprite_position();
         set_shadow_position();
         run_animation();
+        update_states();
     }
     
-    //void Crab::take_damage(bool from_left) {}
-    bool Crab::is_attacking() { return false; }
+    void Crab::take_damage(bool from_left)
+    {
+        if(!is_dying())
+        {
+            _death = start_death;
+            _face_left = !from_left;
+            shadow.set_visible(false);
+        }
+    }
     
     void Crab::apply_movement()
     {
-        pos.set_x(pos.x() + x_speed);
-        if(bn::abs(pos.x()) > lvl::X_LIM) x_speed = -x_speed;
+    // death jump
+        if(_death == start_death)
+        {
+            x_speed = crab::speed::DAMAGE_X;
+            y_speed = crab::speed::DAMAGE_Y;
+        }
+        
+    // death jump trajectory
+        if(is_dying() && (pos.y() < lvl::Y_DEATH_LIM)) y_speed -= force::GRAVITY;
+        
+    // set position
+        pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
+        pos.set_y(pos.y() - y_speed);
+        
+    // level bounds
+        if((bn::abs(pos.x()) > lvl::X_LIM) && !is_dying() && !_entering) _face_left = !_face_left;
+        
+    // spawn enter toggle
+        if(_entering && (bn::abs(pos.x()) < lvl::X_LIM)) _entering = false;
+    }
+    
+    void Crab::set_hitbox_position()
+    {
+        body_hitbox.set_position(pos.x().round_integer(), pos.y().round_integer() + crab::HITBOX_OFFSET_Y);
+        atk_hitbox = body_hitbox;
     }
     
     void Crab::set_sprite_position() { spr.set_position(pos); }
     
     void Crab::run_animation()
     {
+        if(_death == start_death)
+        {
+            act = bn::sprite_animate_action<crab::MAX_ANIM_FRAMES>::once
+                (
+                    spr, crab::ANIM_WAIT, spr_item.tiles_item(),
+                    crab::anim::DAMAGE
+                );
+        }
+        
         if(!act.done()) act.update();
+    }
+    
+    void Crab::update_states()
+    {
+        if(_death == start_death) _death = full_death;
+        if(pos.y() > lvl::Y_DEATH_LIM) _death = end_death;
     }
 }

@@ -28,22 +28,25 @@ namespace prj
     class Crab : public Entity
     {
     public:
-        explicit Crab(bn::fixed x = 0, bn::fixed y = lvl::Y_LIM);
+        explicit Crab(bool from_left);
         
         void update() override;
-        //void take_damage(bool from_left = false) override;
-        bool is_attacking() override;
+        void take_damage(bool from_left = false) override;
         
     private:
-        bn::fixed x_speed = crab::RUN_SPEED;
+        bn::fixed x_speed = crab::speed::RUN_X;
+        bn::fixed y_speed = 0;
+        
+        bool _face_left = false;
+        bool _entering = true;
+        
         bn::sprite_animate_action<crab::MAX_ANIM_FRAMES> act;
         
         void apply_movement();
+        void set_hitbox_position();
         void set_sprite_position();
         void run_animation();
-        
-        //int _damage_frames = 0;
-        //void update_states();
+        void update_states();
     };
 }
 

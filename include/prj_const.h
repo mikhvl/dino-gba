@@ -24,6 +24,7 @@ namespace prj
         constexpr bn::fixed PLAYER_START_X = 0;
         
         constexpr bn::fixed Y_LIM = 16;
+        constexpr bn::fixed Y_DEATH_LIM = 60;
         constexpr bn::fixed X_LIM = 114;
         
         constexpr int MAX_ENTITY = 10;
@@ -49,6 +50,8 @@ namespace prj
     
     namespace entity
     {
+        constexpr bn::fixed OFFSCREEN_X = 32;
+        
         constexpr int PLAYER_Z_ORDER = 0;
         constexpr int ENTITY_Z_ORDER = 1;
         constexpr int SHADOW_Z_ORDER = 2;
@@ -156,16 +159,29 @@ namespace prj
     
     namespace crab
     {
-        constexpr bn::size BODY_SIZE = {20, 20};
+        constexpr bn::size BODY_SIZE = {26, 16};
+        constexpr int HITBOX_OFFSET_Y = -2;
         
         constexpr int MAX_ANIM_FRAMES = 2;
         constexpr int ANIM_WAIT = 6;
         
-        constexpr bn::fixed RUN_SPEED = 1.1;
+        namespace speed
+        {
+            constexpr bn::fixed RUN_X = 1.1;
+            
+            constexpr bn::fixed DAMAGE_X = 2;
+            constexpr bn::fixed DAMAGE_Y = 3;
+        }
+        
+        namespace wait
+        {
+            constexpr int DAMAGE_STOP = 40;
+        }
         
         namespace anim
         {
-            constexpr uint16_t RUN[] = {0, 1};
+            constexpr uint16_t RUN[]    = {0, 1};
+            constexpr uint16_t DAMAGE[] = {2, 2};
         }
     }
 }

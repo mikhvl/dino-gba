@@ -8,7 +8,7 @@ namespace prj
         bn::fixed y,
         bn::sprite_item sprite_item
     )
-        : pos(x < 0 ? bn::max(x, -lvl::X_LIM) : bn::min(x, lvl::X_LIM), bn::min(y, lvl::Y_LIM))
+        : pos(x, bn::min(y, lvl::Y_LIM))
         , spr_item(sprite_item)
         , spr(spr_item.create_sprite(pos))
         , shadow(bn::sprite_items::shadow.create_sprite())

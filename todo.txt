@@ -5,9 +5,7 @@ sound:
     beach sfx
 
 code:
-    entity different container
     entity spawner
-    crab death
 
 art:
     starfish
