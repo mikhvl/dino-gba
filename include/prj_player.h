@@ -29,7 +29,7 @@ namespace prj
         
     private:
     // movement
-        bn::fixed x_speed = player::speed::RUN_X;
+        bn::fixed x_speed = 0;
         bn::fixed y_speed = 0;
         
     // state logic

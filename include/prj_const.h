@@ -53,6 +53,8 @@ namespace prj
         constexpr int ENTITY_Z_ORDER = 1;
         constexpr int SHADOW_Z_ORDER = 2;
         
+        constexpr bn::fixed SHADOW_Y_OFFSET = 16;
+        
         constexpr bn::fixed SHADOW_HEIGHT_SMALL  = 38;
         constexpr bn::fixed SHADOW_HEIGHT_MEDIUM = 20;
         

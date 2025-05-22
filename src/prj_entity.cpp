@@ -59,7 +59,7 @@ namespace prj
         shadow.set_position
         (
             pos.x() + height.division(entity::SHADOW_X_COEF),
-            lvl::Y_LIM + 16 - height.division(entity::SHADOW_Y_COEF)
+            lvl::Y_LIM + entity::SHADOW_Y_OFFSET - height.division(entity::SHADOW_Y_COEF)
         );
     }
 }
