@@ -61,12 +61,12 @@ namespace prj
             _inv_frames = 1;
             _turn_frames = 0;
             _atk_frames = 0;
+            set_face_left(from_left);
             if(is_spinning())
             {
                 _spin = not_spin;
                 set_hitbox_size(false);
             }
-            set_face_left(from_left);
         }
     }
     
