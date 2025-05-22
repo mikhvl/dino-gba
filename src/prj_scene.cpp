@@ -17,26 +17,23 @@ namespace prj
         
     // player
         dino = bn::make_unique<Player>(lvl::PLAYER_START_X);
-    
-    // debug
-        all_entity.emplace_back(bn::make_unique<Crab>(false));
-        //all_entity.emplace_back(bn::make_unique<Bag>(-40));
         
-        set_camera_entity();
-    }
-    
-    void Scene::set_camera_entity()
-    {
+    // initialize all_entity with nullptr
+        while(all_entity.size() < all_entity.max_size())
+        {
+            all_entity.emplace_back(bn::unique_ptr<Crab>(nullptr));
+        }
+        
+    // camera link
         bg_main.set_camera(cam);
         bg_fore.set_camera(cam);
-        
         dino->set_camera(cam);
-        for(bn::unique_ptr<Entity>& entity : all_entity) entity->set_camera(cam);
     }
     
     void Scene::update()
     {
         set_camera_position();
+        spawn_entity();
         manage_entity();
     }
     
@@ -59,6 +56,25 @@ namespace prj
     // set position
         cam.set_position(cam.x() + camera_ease, 0);
         bg_fore.set_position(bg_fore.x() + bg_fore_ease, 0);
+    }
+    
+    void Scene::spawn_entity()
+    {
+        if(_spawn_frames % 200 == 0)
+        {
+            for(bn::unique_ptr<Entity>& entity : all_entity)
+            {
+                if(!entity)
+                {
+                    entity = bn::make_unique<Crab>(_spawn_frames % 300 == 0);
+                    entity->set_camera(cam);
+                    break;
+                }
+            }
+        }
+        
+        if(_spawn_frames > 1000) _spawn_frames = 1;
+        else ++_spawn_frames;
     }
     
     void Scene::manage_entity()

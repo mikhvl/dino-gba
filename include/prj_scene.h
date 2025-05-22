@@ -30,8 +30,10 @@ namespace prj
         bn::unique_ptr<Player> dino;
         bn::vector<bn::unique_ptr<Entity>, lvl::MAX_ENTITY> all_entity;
         
+        int _spawn_frames = 200;
+        
+        void spawn_entity();
         void manage_entity();
-        void set_camera_entity();
         void set_camera_position();
     };
 }
