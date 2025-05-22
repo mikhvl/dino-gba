@@ -64,6 +64,8 @@ namespace prj
     {
         for(bn::unique_ptr<Entity>& entity : all_entity)
         {
+            if(!entity) continue;
+            
             if(dino->is_attacking())
             {
                 if(dino->get_atk_hitbox().intersects(entity->get_body_hitbox()))
@@ -81,6 +83,8 @@ namespace prj
             }
             
             entity->update();
+            
+            if(entity->is_dead()) entity.reset();
         }
         
         dino->update();

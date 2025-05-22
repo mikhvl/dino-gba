@@ -33,8 +33,10 @@ namespace prj
     // for entity manager
         virtual void update();
         virtual void take_damage(bool from_left);
+        
+        bool is_dying();
+        bool is_dead();
         virtual bool is_attacking();
-        virtual bool is_dead();
         
     // for scene
         virtual void set_camera(const bn::camera_ptr& cam);
@@ -44,6 +46,9 @@ namespace prj
         
         bn::rect body_hitbox;
         bn::rect atk_hitbox;
+        
+        enum DEATH_STATE { start_death, full_death, end_death, not_death };
+        DEATH_STATE _death = not_death;
         
         bn::sprite_item spr_item;
         bn::sprite_ptr spr;

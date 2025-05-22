@@ -28,8 +28,10 @@ namespace prj
     
     void Entity::update() {}
     void Entity::take_damage(bool from_left) { if(from_left) {} }
-    bool Entity::is_attacking() { return true; }
-    bool Entity::is_dead() { return false; }
+    
+    bool Entity::is_dying() { return _death != not_death; }
+    bool Entity::is_dead() { return _death == end_death; }
+    bool Entity::is_attacking() { return !is_dying(); }
     
     void Entity::set_camera(const bn::camera_ptr& cam)
     {
