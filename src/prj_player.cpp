@@ -272,7 +272,7 @@ namespace prj
         {
         // apply speed
             pos.set_y(pos.y() - y_speed);
-            y_speed -= player::GRAVITY;
+            y_speed -= force::GRAVITY;
             
         // fall
             if(y_speed < 0)
@@ -306,7 +306,7 @@ namespace prj
                 _spin = end_spin;
                 set_hitbox_size(false);
             }
-            else x_speed -= player::SPIN_FRICTION;
+            else x_speed -= force::SPIN_FRICTION;
         }
         
     // set x speed
@@ -322,9 +322,9 @@ namespace prj
         if(!is_spinning())
         {
             if(is_on_ground() && is_dashing() &&
-                x_speed > player::FRICTION) x_speed -= player::FRICTION;
+                x_speed > force::FRICTION) x_speed -= force::FRICTION;
             else if(!is_on_ground() && (!is_running() || _stun) &&
-                x_speed > player::AIR_FRICTION) x_speed -= player::AIR_FRICTION;
+                x_speed > force::AIR_FRICTION) x_speed -= force::AIR_FRICTION;
         }
         
     // apply speed

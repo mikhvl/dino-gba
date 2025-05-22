@@ -39,6 +39,14 @@ namespace prj
         constexpr int PARALLAX_EASE_COEF = 10;
     }
     
+    namespace force
+    {
+        constexpr bn::fixed GRAVITY = 0.2;
+        constexpr bn::fixed FRICTION = 0.16;
+        constexpr bn::fixed AIR_FRICTION = 0.1;
+        constexpr bn::fixed SPIN_FRICTION = 0.4;
+    }
+    
     namespace entity
     {
         constexpr int PLAYER_Z_ORDER = 0;
@@ -62,13 +70,8 @@ namespace prj
     namespace player
     {
         constexpr bn::size BODY_SIZE = {16, 16};
-        constexpr bn::size ATK_SIZE = {24, 30};
-        constexpr bn::size SPIN_SIZE = {20, 20};
-        
-        constexpr bn::fixed GRAVITY = 0.2;
-        constexpr bn::fixed FRICTION = 0.16;
-        constexpr bn::fixed AIR_FRICTION = 0.1;
-        constexpr bn::fixed SPIN_FRICTION = 0.4;
+        constexpr bn::size ATK_SIZE  = {24, 30};
+        constexpr bn::size SPIN_SIZE = {16, 16};
         
         constexpr int SPR_OFFSET_X = 4;
         constexpr int BODY_HITBOX_OFFSET_X = 3;
