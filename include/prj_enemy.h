@@ -28,13 +28,13 @@ namespace prj
     class Crab : public Entity
     {
     public:
-        explicit Crab(bool from_left);
+        explicit Crab(bool from_left = false, bn::fixed speed = crab::speed::RUN_X_DEFAULT);
         
         void update() override;
         void take_damage(bool from_left = false) override;
         
     private:
-        bn::fixed x_speed = crab::speed::RUN_X;
+        bn::fixed x_speed = 0;
         bn::fixed y_speed = 0;
         
         bool _face_left = false;

@@ -55,7 +55,8 @@ namespace prj
 // Crab
     Crab::Crab
     (
-        bool from_left
+        bool from_left,
+        bn::fixed speed
     )
         : Entity
             (
@@ -63,6 +64,7 @@ namespace prj
                 lvl::Y_LIM,
                 bn::sprite_items::crab
             )
+        , x_speed(speed)
         , _face_left(!from_left)
         , act(bn::sprite_animate_action<crab::MAX_ANIM_FRAMES>::forever(
                 spr, crab::ANIM_WAIT, spr_item.tiles_item(),

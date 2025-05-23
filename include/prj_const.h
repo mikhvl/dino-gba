@@ -167,9 +167,11 @@ namespace prj
         
         namespace speed
         {
-            constexpr bn::fixed RUN_X = 1.1;
+            constexpr bn::fixed RUN_X_DEFAULT = 1;
+            constexpr bn::fixed RUN_X_MIN = 0.9;
+            constexpr bn::fixed RUN_X_MAX = 1.2;
             
-            constexpr bn::fixed DAMAGE_X = 2;
+            constexpr bn::fixed DAMAGE_X = 2.2;
             constexpr bn::fixed DAMAGE_Y = 3;
         }
         
