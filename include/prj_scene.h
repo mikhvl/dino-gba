@@ -36,7 +36,7 @@ namespace prj
         bn::vector<bn::unique_ptr<Entity>, lvl::MAX_ENTITY> all_entity;
         
     // for entity spawner
-        int _spawn_frames = 200;
+        int _spawn_frames = 0;
         
     // update functions
         void spawn_entity();

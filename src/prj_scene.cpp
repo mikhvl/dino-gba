@@ -28,6 +28,9 @@ namespace prj
         bg_main.set_camera(cam);
         bg_fore.set_camera(cam);
         dino->set_camera(cam);
+        
+    // set seed (not random at first)
+        Random.update();
     }
     
     void Scene::update()
@@ -60,7 +63,7 @@ namespace prj
     
     void Scene::spawn_entity()
     {
-        if(_spawn_frames % 200 == 0)
+        if(_spawn_frames % lvl::SPAWN_FRAMES_CYCLE == 0)
         {
             for(bn::unique_ptr<Entity>& entity : all_entity)
             {
@@ -77,8 +80,10 @@ namespace prj
             }
         }
         
-        if(_spawn_frames > 10000) _spawn_frames = 1;
+        if(_spawn_frames > lvl::SPAWN_FRAMES_MAX) _spawn_frames = 1;
         else ++_spawn_frames;
+        
+        Random.update();
     }
     
     void Scene::manage_entity()
@@ -93,6 +98,7 @@ namespace prj
                 {
                     entity->take_damage(dino->get_pos().x() < entity->get_pos().x());
                 }
+                Random.update();
             }
             
             if(entity->is_attacking())
