@@ -48,6 +48,35 @@ namespace prj
         void run_animation();
         void update_states();
     };
+    
+    class Starfish : public Entity
+    {
+    public:
+        explicit Starfish(bool from_left = false, bn::fixed speed = starfish::speed::RUN_X_DEFAULT);
+        
+        void update() override;
+        void take_damage(bool from_left = false) override;
+        
+    private:
+        bn::fixed x_speed = 0;
+        bn::fixed y_speed = 0;
+        
+        bool _face_left = false;
+        bool _entering = true;
+        
+        enum JUMP_STATE { start_jump, full_jump, not_jump };
+        JUMP_STATE _jump = start_jump;
+        
+        bn::sprite_animate_action<starfish::MAX_ANIM_FRAMES> act;
+        
+        void set_face_left(bool flip);
+        
+        void apply_movement();
+        void set_hitbox_position();
+        void set_sprite_position();
+        void run_animation();
+        void update_states();
+    };
 }
 
 #endif

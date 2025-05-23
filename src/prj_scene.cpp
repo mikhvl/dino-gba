@@ -21,7 +21,7 @@ namespace prj
     // initialize all_entity with nullptr
         while(all_entity.size() < all_entity.max_size())
         {
-            all_entity.emplace_back(bn::unique_ptr<Crab>(nullptr));
+            all_entity.emplace_back(bn::unique_ptr<Entity>(nullptr));
         }
         
     // camera link
@@ -72,11 +72,23 @@ namespace prj
             {
                 if(!entity)
                 {
-                    entity = bn::make_unique<Crab>
-                        (
-                            Random.get_bool(),
-                            Random.get_fixed(crab::speed::RUN_X_MIN, crab::speed::RUN_X_MAX)
-                        );
+                    if(Random.get_bool())
+                    {
+                        entity = bn::make_unique<Crab>
+                            (
+                                Random.get_bool(),
+                                Random.get_fixed(crab::speed::RUN_X_MIN, crab::speed::RUN_X_MAX)
+                            );
+                    }
+                    else
+                    {
+                        entity = bn::make_unique<Starfish>
+                            (
+                                Random.get_bool(),
+                                Random.get_fixed(starfish::speed::RUN_X_MIN, starfish::speed::RUN_X_MAX)
+                            );
+                    }
+                    
                     entity->set_camera(cam);
                     break;
                 }

@@ -8,6 +8,7 @@
 #include "bn_sprite_items_dino.h"
 #include "bn_sprite_items_bag.h"
 #include "bn_sprite_items_crab.h"
+#include "bn_sprite_items_starfish.h"
 
 #include "bn_sprite_items_gatito.h"
 #include "bn_sprite_items_x_corner.h"
@@ -183,15 +184,36 @@ namespace prj
             constexpr bn::fixed DAMAGE_Y = 3;
         }
         
-        namespace wait
-        {
-            constexpr int DAMAGE_STOP = 40;
-        }
-        
         namespace anim
         {
             constexpr uint16_t RUN[]    = {0, 1};
             constexpr uint16_t DAMAGE[] = {2, 2};
+        }
+    }
+    
+    namespace starfish
+    {
+        constexpr bn::size BODY_SIZE = {20, 20};
+        
+        constexpr int MAX_ANIM_FRAMES = 8;
+        constexpr int ANIM_WAIT = 3;
+        
+        namespace speed
+        {
+            constexpr bn::fixed RUN_X_DEFAULT = 1;
+            constexpr bn::fixed RUN_X_MIN = 1;
+            constexpr bn::fixed RUN_X_MAX = 1.8;
+            
+            constexpr bn::fixed JUMP_Y = 4;
+            
+            constexpr bn::fixed DAMAGE_X = 2.2;
+            constexpr bn::fixed DAMAGE_Y = 3;
+        }
+        
+        namespace anim
+        {
+            constexpr uint16_t RUN[]    = {0, 1, 2, 3, 4, 5, 6, 7};
+            constexpr uint16_t DAMAGE[] = {8, 8};
         }
     }
 }

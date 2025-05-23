@@ -107,7 +107,7 @@ namespace prj
         }
         
     // death jump trajectory
-        if(is_dying() && (pos.y() < lvl::Y_DEATH_LIM)) y_speed -= force::GRAVITY;
+        if(is_dying()) y_speed -= force::GRAVITY;
         
     // set position
         pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
@@ -144,6 +144,123 @@ namespace prj
     
     void Crab::update_states()
     {
+        if(_death == start_death) _death = full_death;
+        if(pos.y() > lvl::Y_DEATH_LIM) _death = end_death;
+    }
+
+// Starfish
+    Starfish::Starfish
+    (
+        bool from_left,
+        bn::fixed speed
+    )
+        : Entity
+            (
+                from_left ? -lvl::X_LIM - entity::OFFSCREEN_X : lvl::X_LIM + entity::OFFSCREEN_X,
+                lvl::Y_LIM,
+                bn::sprite_items::starfish
+            )
+        , x_speed(speed)
+        , act(bn::sprite_animate_action<starfish::MAX_ANIM_FRAMES>::forever(
+                spr, starfish::ANIM_WAIT, spr_item.tiles_item(),
+                starfish::anim::RUN))
+    {
+    // initial logic
+        set_face_left(!from_left);
+        
+    // hitboxes
+        body_hitbox = bn::rect(
+            pos.x().round_integer(), pos.y().round_integer(),
+            starfish::BODY_SIZE.width(), starfish::BODY_SIZE.height());
+        atk_hitbox = body_hitbox;
+    }
+    
+    void Starfish::update()
+    {
+        apply_movement();
+        set_hitbox_position();
+        set_sprite_position();
+        set_shadow_position();
+        run_animation();
+        update_states();
+    }
+    
+    void Starfish::take_damage(bool from_left)
+    {
+        if(!is_dying())
+        {
+            _death = start_death;
+            _jump = start_jump;
+            set_face_left(!from_left);
+            shadow.set_visible(false);
+        }
+    }
+    
+    void Starfish::set_face_left(bool flip)
+    {
+        _face_left = flip;
+        spr.set_horizontal_flip(flip);
+    }
+    
+    void Starfish::apply_movement()
+    {
+    // set speed
+        if(_jump == start_jump)
+        {
+            if(_death == start_death)
+            {
+                x_speed = starfish::speed::DAMAGE_X;
+                y_speed = starfish::speed::DAMAGE_Y;
+            }
+            else y_speed = starfish::speed::JUMP_Y;
+        }
+        
+    // apply friction
+        if(_jump == full_jump) y_speed -= force::GRAVITY;
+        
+    // set position
+        pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
+        pos.set_y(pos.y() - y_speed);
+        
+    // level bounds
+        if(pos.y() > lvl::Y_LIM && !is_dying())
+        {
+            pos.set_y(lvl::Y_LIM);
+            _jump = not_jump;
+        }
+        if((bn::abs(pos.x()) > lvl::X_LIM) && !is_dying() && !_entering) set_face_left(!_face_left);
+        
+    // spawn enter toggle
+        if(_entering && (bn::abs(pos.x()) < lvl::X_LIM)) _entering = false;
+    }
+    
+    void Starfish::set_hitbox_position()
+    {
+        body_hitbox.set_position(pos.x().round_integer(), pos.y().round_integer());
+        atk_hitbox = body_hitbox;
+    }
+    
+    void Starfish::set_sprite_position() { spr.set_position(pos); }
+    
+    void Starfish::run_animation()
+    {
+        if(_death == start_death)
+        {
+            act = bn::sprite_animate_action<starfish::MAX_ANIM_FRAMES>::once
+                (
+                    spr, starfish::ANIM_WAIT, spr_item.tiles_item(),
+                    starfish::anim::DAMAGE
+                );
+        }
+        
+        if(!act.done()) act.update();
+    }
+    
+    void Starfish::update_states()
+    {
+        if(_jump == not_jump)   _jump = start_jump;
+        else if(_jump == start_jump) _jump = full_jump;
+        
         if(_death == start_death) _death = full_death;
         if(pos.y() > lvl::Y_DEATH_LIM) _death = end_death;
     }
