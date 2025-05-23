@@ -1,15 +1,15 @@
 sound:
-    mermaid falls
+    mermaid falls ~?
     alex gordon intro
     dino + enemy sfx
     beach sfx
 
 code:
     gradual spawning rate
-    starfish
     coconut bird
     sfx + music
 
 art:
-    starfish
     coconut bird
+    redo player sprite
+    redo starfish sprite
