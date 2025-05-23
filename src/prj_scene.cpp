@@ -1,6 +1,7 @@
 #include "prj_scene.h"
 
 #include "prj_const.h"
+#include "prj_music.h"
 
 namespace prj
 {
@@ -31,6 +32,9 @@ namespace prj
         
     // set seed (not random at first)
         Random.update();
+        
+    // music
+        bn::music_items::mermaid_falls_loop.play();
     }
     
     void Scene::update()
