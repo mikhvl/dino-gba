@@ -17,6 +17,11 @@
 #include "bn_regular_bg_items_bg_beach_back.h"
 #include "bn_regular_bg_items_bg_beach_fore.h"
 
+#include "bn_config_audio.h"
+#define BN_CFG_AUDIO_MAX_MUSIC_CHANNELS 2
+
+#include "bn_music_items.h"
+
 namespace prj
 {
     namespace lvl
