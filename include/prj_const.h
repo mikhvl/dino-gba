@@ -196,7 +196,7 @@ namespace prj
         constexpr bn::size BODY_SIZE = {20, 20};
         
         constexpr int MAX_ANIM_FRAMES = 8;
-        constexpr int ANIM_WAIT = 3;
+        constexpr int ANIM_WAIT = 2;
         
         namespace speed
         {
