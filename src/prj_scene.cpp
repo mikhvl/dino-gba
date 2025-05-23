@@ -82,8 +82,6 @@ namespace prj
         
         if(_spawn_frames > lvl::SPAWN_FRAMES_MAX) _spawn_frames = 1;
         else ++_spawn_frames;
-        
-        Random.update();
     }
     
     void Scene::manage_entity()

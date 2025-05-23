@@ -40,7 +40,7 @@ namespace prj
         constexpr int PARALLAX_EASE_COEF = 10;
         
         constexpr int SPAWN_FRAMES_MAX = 10000;
-        constexpr int SPAWN_FRAMES_CYCLE = 170;
+        constexpr int SPAWN_FRAMES_CYCLE = 110;
     }
     
     namespace force
