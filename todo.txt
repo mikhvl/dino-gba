@@ -6,9 +6,10 @@ sound:
 
 code:
     entity spawner
-    shorten foreground
+    starfish
+    coconut bird
+    sfx + music
 
 art:
-    shorten foreground
     starfish
     coconut bird
