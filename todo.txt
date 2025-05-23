@@ -5,6 +5,7 @@ sound:
     beach sfx
 
 code:
+    gradual spawning rate
     starfish
     coconut bird
     sfx + music
