@@ -41,7 +41,7 @@ namespace prj
     {
     // player x
         bn::fixed x = dino->get_pos().x();
-        bool player_x_is_negative  = x < 0;
+        bool player_x_is_negative = x < 0;
         
     // position target
         bn::fixed camera_x_target  = x.multiplication(x).division(lvl::CAMERA_PARALLAX_COEF);
@@ -66,14 +66,18 @@ namespace prj
             {
                 if(!entity)
                 {
-                    entity = bn::make_unique<Crab>(_spawn_frames % 300 == 0);
+                    entity = bn::make_unique<Crab>
+                        (
+                            Random.get_bool(),
+                            Random.get_fixed(crab::speed::RUN_X_MIN, crab::speed::RUN_X_MAX)
+                        );
                     entity->set_camera(cam);
                     break;
                 }
             }
         }
         
-        if(_spawn_frames > 1000) _spawn_frames = 1;
+        if(_spawn_frames > 10000) _spawn_frames = 1;
         else ++_spawn_frames;
     }
     
