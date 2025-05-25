@@ -11,7 +11,7 @@
 #include "bn_vector.h"
 #include "bn_sprite_builder.h"
 
-#include "prj_const.h"
+#include "prj_config.h"
 #include "prj_entity.h"
 
 namespace prj

@@ -5,7 +5,7 @@
 #include "bn_sprite_ptr.h"
 #include "bn_sprite_animate_actions.h"
 
-#include "prj_const.h"
+#include "prj_config.h"
 #include "prj_entity.h"
 
 namespace prj

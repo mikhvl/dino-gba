@@ -1,5 +1,5 @@
-#ifndef PRJ_CONST_H
-#define PRJ_CONST_H
+#ifndef PRJ_CONFIG_H
+#define PRJ_CONFIG_H
 
 #include "bn_fixed.h"
 #include "bn_size.h"
@@ -20,9 +20,6 @@
 #include "bn_regular_bg_items_bg_beach_main.h"
 #include "bn_regular_bg_items_bg_beach_back.h"
 #include "bn_regular_bg_items_bg_beach_fore.h"
-
-#include "bn_config_audio.h"
-#define BN_CFG_AUDIO_MAX_MUSIC_CHANNELS 2
 
 #include "bn_music_items.h"
 

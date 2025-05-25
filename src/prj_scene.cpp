@@ -1,6 +1,6 @@
 #include "prj_scene.h"
 
-#include "prj_const.h"
+#include "prj_config.h"
 
 namespace prj
 {

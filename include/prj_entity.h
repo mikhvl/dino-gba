@@ -10,7 +10,7 @@
 
 #include "bn_camera_ptr.h"
 
-#include "prj_const.h"
+#include "prj_config.h"
 
 namespace prj
 {
