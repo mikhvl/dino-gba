@@ -5,11 +5,13 @@ sound:
     beach sfx
 
 code:
+    menu
+    score
+    lives
     gradual spawning rate
     coconut bird
     sfx + music
 
 art:
     coconut bird
-    redo player sprite
-    redo starfish sprite
+    menu
