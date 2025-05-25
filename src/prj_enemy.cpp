@@ -144,7 +144,7 @@ namespace prj
     
     void Crab::update_states()
     {
-        if(_death == start_death) _death = full_death;
+        if(_death == start_death)      _death = full_death;
         if(pos.y() > lvl::Y_DEATH_LIM) _death = end_death;
     }
 
@@ -258,10 +258,102 @@ namespace prj
     
     void Starfish::update_states()
     {
-        if(_jump == not_jump)   _jump = start_jump;
+        if(_jump == not_jump)        _jump = start_jump;
         else if(_jump == start_jump) _jump = full_jump;
         
-        if(_death == start_death) _death = full_death;
+        if(_death == start_death)      _death = full_death;
         if(pos.y() > lvl::Y_DEATH_LIM) _death = end_death;
+    }
+    
+// Bird
+    Bird::Bird
+    (
+        bool from_left,
+        bn::fixed speed,
+        bn::fixed height
+    )
+        : Entity
+            (
+                from_left ? -lvl::X_LIM - entity::OFFSCREEN_X : lvl::X_LIM + entity::OFFSCREEN_X,
+                height,
+                bn::sprite_items::toucan
+            )
+        , x_speed(speed)
+        , act(bn::sprite_animate_action<bird::MAX_ANIM_FRAMES>::forever(
+                spr, bird::ANIM_WAIT, spr_item.tiles_item(),
+                bird::anim::FLY))
+    {
+    // initial logic
+        set_face_left(!from_left);
+        shadow.set_visible(false);
+        
+    // hitboxes
+        /*body_hitbox = bn::rect(
+            pos.x().round_integer(), pos.y().round_integer(),
+            bird::BODY_SIZE.width(), bird::BODY_SIZE.height());
+        atk_hitbox = body_hitbox;*/
+    }
+    
+    void Bird::update()
+    {
+        apply_movement();
+        set_hitbox_position();
+        set_sprite_position();
+        run_animation();
+        update_states();
+    }
+    
+    bool Bird::is_attacking() { return _jump == full_jump && !is_dying(); }
+    
+    void Bird::set_face_left(bool flip)
+    {
+        _face_left = flip;
+        spr.set_horizontal_flip(flip);
+    }
+    
+    void Bird::apply_movement()
+    {
+    // set speed
+        /*if(_jump == start_jump)
+        {
+            if(_death == start_death)
+            {
+                x_speed = bird::speed::DAMAGE_X;
+                y_speed = bird::speed::DAMAGE_Y;
+            }
+            else y_speed = bird::speed::JUMP_Y;
+        }*/
+        
+    // apply friction
+        //if(_jump == full_jump) y_speed -= force::GRAVITY;
+        
+    // set position
+        pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
+        
+    // level bounds
+        /*if(pos.y() > lvl::Y_LIM && !is_dying())
+        {
+            pos.set_y(lvl::Y_LIM);
+            _jump = not_jump;
+        }*/
+        
+    // spawn enter toggle
+        if(_entering && (bn::abs(pos.x()) < lvl::X_LIM)) _entering = false;
+    }
+    
+    void Bird::set_hitbox_position()
+    {
+        //body_hitbox.set_position(pos.x().round_integer(), pos.y().round_integer());
+        //atk_hitbox = body_hitbox;
+    }
+    
+    void Bird::set_sprite_position() { spr.set_position(pos); }
+    
+    void Bird::run_animation() { if(!act.done()) act.update(); }
+    
+    void Bird::update_states()
+    {
+        if(_death == start_death) _death = full_death;
+        if(bn::abs(pos.x()) > lvl::X_LIM + entity::OFFSCREEN_X && !_entering) _death = end_death;
     }
 }

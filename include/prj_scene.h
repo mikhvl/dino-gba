@@ -39,6 +39,8 @@ namespace prj
         int _spawn_frames = 0;
         
     // update functions
+        bn::unique_ptr<Entity> choose_entity(int id = -1);
+        
         void spawn_entity();
         void manage_entity();
         void set_camera_position();

@@ -4,11 +4,14 @@
 #include "bn_fixed.h"
 #include "bn_size.h"
 
-#include "bn_sprite_items_shadow.h"
 #include "bn_sprite_items_dino.h"
 #include "bn_sprite_items_bag.h"
 #include "bn_sprite_items_crab.h"
 #include "bn_sprite_items_starfish.h"
+#include "bn_sprite_items_toucan.h"
+
+#include "bn_sprite_items_shadow.h"
+#include "bn_sprite_items_coconut.h"
 
 #include "bn_sprite_items_gatito.h"
 #include "bn_sprite_items_x_corner.h"
@@ -59,6 +62,8 @@ namespace prj
     
     namespace entity
     {
+        constexpr int ENTITY_COUNT = 3;
+        
         constexpr bn::fixed OFFSCREEN_X = 32;
         
         constexpr int PLAYER_Z_ORDER = 0;
@@ -214,6 +219,32 @@ namespace prj
         {
             constexpr uint16_t RUN[]    = {0, 1, 2, 3, 4, 5, 6, 7};
             constexpr uint16_t DAMAGE[] = {8, 8};
+        }
+    }
+    
+    namespace bird
+    {
+        constexpr bn::size COCO_SIZE = {10, 10};
+        
+        constexpr bn::fixed START_Y_MIN = -50;
+        constexpr bn::fixed START_Y_MAX = -60;
+        
+        constexpr int MAX_ANIM_FRAMES = 2;
+        constexpr int ANIM_WAIT = 8;
+        
+        namespace speed
+        {
+            constexpr bn::fixed RUN_X_DEFAULT = 1;
+            constexpr bn::fixed RUN_X_MIN = 1;
+            constexpr bn::fixed RUN_X_MAX = 1.8;
+            
+            constexpr bn::fixed COCO_X = 2.2;
+            constexpr bn::fixed COCO_Y = 3;
+        }
+        
+        namespace anim
+        {
+            constexpr uint16_t FLY[] = {0, 1};
         }
     }
 }

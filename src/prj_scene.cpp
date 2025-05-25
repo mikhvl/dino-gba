@@ -64,6 +64,41 @@ namespace prj
         bg_fore.set_position(bg_fore.x() + bg_fore_ease, 0);
     }
     
+    bn::unique_ptr<Entity> Scene::choose_entity(int id)
+    {
+        if(id == -1)
+        {
+            bn::fixed position = Random.get_fixed(-lvl::X_LIM, lvl::X_LIM);
+            return bn::make_unique<Bag>(position, position > 0);
+        }
+        else if(id == 0)
+        {
+            return bn::make_unique<Crab>
+                (
+                    Random.get_bool(),
+                    Random.get_fixed(crab::speed::RUN_X_MIN, crab::speed::RUN_X_MAX)
+                );
+        }
+        else if(id == 1)
+        {
+            return bn::make_unique<Starfish>
+                (
+                    Random.get_bool(),
+                    Random.get_fixed(starfish::speed::RUN_X_MIN, starfish::speed::RUN_X_MAX)
+                );
+        }
+        else if(id == 2)
+        {
+            return bn::make_unique<Bird>
+                (
+                    Random.get_bool(),
+                    Random.get_fixed(bird::speed::RUN_X_MIN, bird::speed::RUN_X_MAX),
+                    Random.get_fixed(bird::START_Y_MAX, bird::START_Y_MIN)
+                );
+        }
+        else return nullptr;
+    }
+    
     void Scene::spawn_entity()
     {
         if(_spawn_frames % lvl::SPAWN_FRAMES_CYCLE == 0)
@@ -72,24 +107,11 @@ namespace prj
             {
                 if(!entity)
                 {
-                    if(Random.get_bool())
-                    {
-                        entity = bn::make_unique<Crab>
-                            (
-                                Random.get_bool(),
-                                Random.get_fixed(crab::speed::RUN_X_MIN, crab::speed::RUN_X_MAX)
-                            );
-                    }
-                    else
-                    {
-                        entity = bn::make_unique<Starfish>
-                            (
-                                Random.get_bool(),
-                                Random.get_fixed(starfish::speed::RUN_X_MIN, starfish::speed::RUN_X_MAX)
-                            );
-                    }
+                    int id = Random.get_unbiased_int(entity::ENTITY_COUNT);
                     
+                    entity = choose_entity(id);
                     entity->set_camera(cam);
+                    
                     break;
                 }
             }
@@ -111,7 +133,8 @@ namespace prj
                 {
                     entity->take_damage(dino->get_pos().x() < entity->get_pos().x());
                 }
-                Random.update();
+                
+                Random.update(); // random variety
             }
             
             if(entity->is_attacking())

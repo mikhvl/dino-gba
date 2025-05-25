@@ -77,6 +77,42 @@ namespace prj
         void run_animation();
         void update_states();
     };
+    
+    class Bird : public Entity
+    {
+    public:
+        explicit Bird
+            (
+                bool from_left = false,
+                bn::fixed speed = bird::speed::RUN_X_DEFAULT,
+                bn::fixed height = bird::START_Y_MIN
+            );
+        
+        void update() override;
+        bool is_attacking() override;
+        
+    private:
+        bn::fixed x_speed = 0;
+        
+        bn::fixed coco_x_speed = 0;
+        bn::fixed coco_y_speed = 0;
+        
+        bool _face_left = false;
+        bool _entering = true;
+        
+        enum JUMP_STATE { start_jump, full_jump, not_jump };
+        JUMP_STATE _jump = start_jump;
+        
+        bn::sprite_animate_action<bird::MAX_ANIM_FRAMES> act;
+        
+        void set_face_left(bool flip);
+        
+        void apply_movement();
+        void set_hitbox_position();
+        void set_sprite_position();
+        void run_animation();
+        void update_states();
+    };
 }
 
 #endif
