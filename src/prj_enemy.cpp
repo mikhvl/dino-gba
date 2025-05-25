@@ -10,7 +10,7 @@ namespace prj
         bn::fixed x,
         bool flip
     )
-        : Entity(x, lvl::Y_LIM, bn::sprite_items::bag)
+        : Entity(entity::type::BAG, x, lvl::Y_LIM, bn::sprite_items::bag)
     {
     // hitboxes
         body_hitbox = bn::rect(
@@ -60,6 +60,7 @@ namespace prj
     )
         : Entity
             (
+                entity::type::CRAB,
                 from_left ? -lvl::X_LIM - entity::OFFSCREEN_X : lvl::X_LIM + entity::OFFSCREEN_X,
                 lvl::Y_LIM,
                 bn::sprite_items::crab
@@ -156,6 +157,7 @@ namespace prj
     )
         : Entity
             (
+                entity::type::STARFISH,
                 from_left ? -lvl::X_LIM - entity::OFFSCREEN_X : lvl::X_LIM + entity::OFFSCREEN_X,
                 lvl::Y_LIM,
                 bn::sprite_items::starfish
@@ -274,6 +276,7 @@ namespace prj
     )
         : Entity
             (
+                entity::type::BIRD,
                 from_left ? -lvl::X_LIM - entity::OFFSCREEN_X : lvl::X_LIM + entity::OFFSCREEN_X,
                 height,
                 bn::sprite_items::toucan

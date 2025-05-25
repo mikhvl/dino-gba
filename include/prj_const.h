@@ -62,7 +62,20 @@ namespace prj
     
     namespace entity
     {
-        constexpr int ENTITY_COUNT = 3;
+        namespace type
+        {
+            constexpr int DEFAULT  = -128;
+            
+            constexpr int PLAYER   = -1;
+            
+            constexpr int BAG      = 0;
+            constexpr int CRAB     = 1;
+            constexpr int STARFISH = 2;
+            constexpr int BIRD     = 3;
+        }
+        
+        constexpr int TYPE_MIN = type::CRAB;
+        constexpr int TYPE_MAX = type::BIRD + 1;
         
         constexpr bn::fixed OFFSCREEN_X = 32;
         

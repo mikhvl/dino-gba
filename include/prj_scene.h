@@ -39,7 +39,7 @@ namespace prj
         int _spawn_frames = 0;
         
     // update functions
-        bn::unique_ptr<Entity> choose_entity(int id = -1);
+        bn::unique_ptr<Entity> choose_entity(int id = 0);
         
         void spawn_entity();
         void manage_entity();

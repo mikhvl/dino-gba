@@ -18,7 +18,7 @@ namespace prj
         bn::fixed y,
         bool flip
     )
-        : Entity(x, y, bn::sprite_items::dino)
+        : Entity(entity::type::PLAYER, x, y, bn::sprite_items::dino)
         , act(bn::sprite_animate_action<player::MAX_ANIM_FRAMES>::once(
                 spr, player::ANIM_WAIT, spr_item.tiles_item(),
                 player::anim::IDLE))

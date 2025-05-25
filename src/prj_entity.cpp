@@ -4,11 +4,13 @@ namespace prj
 {
     Entity::Entity
     (
+        int entity_type,
         bn::fixed x,
         bn::fixed y,
         bn::sprite_item sprite_item
     )
-        : pos(x, bn::min(y, lvl::Y_LIM))
+        : type(entity_type)
+        , pos(x, bn::min(y, lvl::Y_LIM))
         , spr_item(sprite_item)
         , spr(spr_item.create_sprite(pos))
         , shadow(bn::sprite_items::shadow.create_sprite())
@@ -22,9 +24,10 @@ namespace prj
         shadow.set_z_order(entity::SHADOW_Z_ORDER);
     }
     
-    bn::fixed_point& Entity::get_pos() { return pos; }
-    bn::rect& Entity::get_body_hitbox() { return body_hitbox; }
-    bn::rect& Entity::get_atk_hitbox() { return atk_hitbox; }
+    int Entity::get_type() { return type; }
+    bn::fixed_point Entity::get_pos() { return pos; }
+    bn::rect Entity::get_body_hitbox() { return body_hitbox; }
+    bn::rect Entity::get_atk_hitbox() { return atk_hitbox; }
     
     void Entity::update() {}
     void Entity::take_damage(bool from_left) { if(from_left) {} }

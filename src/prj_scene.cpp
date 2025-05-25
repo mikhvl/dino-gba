@@ -66,12 +66,12 @@ namespace prj
     
     bn::unique_ptr<Entity> Scene::choose_entity(int id)
     {
-        if(id == -1)
+        if(id == entity::type::BAG)
         {
             bn::fixed position = Random.get_fixed(-lvl::X_LIM, lvl::X_LIM);
             return bn::make_unique<Bag>(position, position > 0);
         }
-        else if(id == 0)
+        else if(id == entity::type::CRAB)
         {
             return bn::make_unique<Crab>
                 (
@@ -79,7 +79,7 @@ namespace prj
                     Random.get_fixed(crab::speed::RUN_X_MIN, crab::speed::RUN_X_MAX)
                 );
         }
-        else if(id == 1)
+        else if(id == entity::type::STARFISH)
         {
             return bn::make_unique<Starfish>
                 (
@@ -87,7 +87,7 @@ namespace prj
                     Random.get_fixed(starfish::speed::RUN_X_MIN, starfish::speed::RUN_X_MAX)
                 );
         }
-        else if(id == 2)
+        else if(id == entity::type::BIRD)
         {
             return bn::make_unique<Bird>
                 (
@@ -107,7 +107,7 @@ namespace prj
             {
                 if(!entity)
                 {
-                    int id = Random.get_unbiased_int(entity::ENTITY_COUNT);
+                    int id = Random.get_unbiased_int(entity::TYPE_MIN, entity::TYPE_MAX);
                     
                     entity = choose_entity(id);
                     entity->set_camera(cam);

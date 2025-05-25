@@ -19,6 +19,7 @@ namespace prj
     public:
         explicit Entity
         (
+            int entity_type,
             bn::fixed x = 0,
             bn::fixed y = lvl::Y_LIM,
             bn::sprite_item sprite_item = bn::sprite_items::gatito
@@ -26,9 +27,10 @@ namespace prj
         virtual ~Entity() = default;
         
     // interaction
-        bn::fixed_point& get_pos();
-        bn::rect& get_body_hitbox();
-        bn::rect& get_atk_hitbox();
+        int get_type();
+        bn::fixed_point get_pos();
+        bn::rect get_body_hitbox();
+        bn::rect get_atk_hitbox();
         
     // for entity manager
         virtual void update();
@@ -42,6 +44,8 @@ namespace prj
         virtual void set_camera(const bn::camera_ptr& cam);
         
     protected:
+        int type = entity::type::DEFAULT;
+        
         bn::fixed_point pos;
         
         bn::rect body_hitbox;
