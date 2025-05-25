@@ -1,7 +1,7 @@
 #ifndef PRJ_SCENE_H
 #define PRJ_SCENE_H
 
-#include "bn_random.h"
+#include "bn_seed_random.h"
 #include "bn_unique_ptr.h"
 #include "bn_vector.h"
 
@@ -29,7 +29,7 @@ namespace prj
         
     // utility
         bn::camera_ptr cam;
-        bn::random Random;
+        bn::seed_random Random;
         
     // entities
         bn::unique_ptr<Player> dino;
@@ -40,6 +40,7 @@ namespace prj
         
     // update functions
         bn::unique_ptr<Entity> choose_entity(int id = 0);
+        bn::unique_ptr<Entity> random_entity();
         
         void spawn_entity();
         void manage_entity();

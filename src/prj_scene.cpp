@@ -29,8 +29,8 @@ namespace prj
         bg_fore.set_camera(cam);
         dino->set_camera(cam);
         
-    // set seed (not random at first)
-        Random.update();
+    // set seed
+        Random.set_seed(lvl::LUCKY_SEED);
         
     // music
         bn::music_items::mermaid_falls_loop.play();
@@ -99,6 +99,38 @@ namespace prj
         else return nullptr;
     }
     
+    bn::unique_ptr<Entity> Scene::random_entity()
+    {
+        int chance = Random.get_int(100);
+        
+        if(chance <= entity::type_threshold::CRAB)
+        {
+            return bn::make_unique<Crab>
+                (
+                    Random.get_bool(),
+                    Random.get_fixed(crab::speed::RUN_X_MIN, crab::speed::RUN_X_MAX)
+                );
+        }
+        else if(chance <= entity::type_threshold::STARFISH)
+        {
+            return bn::make_unique<Starfish>
+                (
+                    Random.get_bool(),
+                    Random.get_fixed(starfish::speed::RUN_X_MIN, starfish::speed::RUN_X_MAX)
+                );
+        }
+        else if(chance <= entity::type_threshold::BIRD)
+        {
+            return bn::make_unique<Bird>
+                (
+                    Random.get_bool(),
+                    Random.get_fixed(bird::speed::RUN_X_MIN, bird::speed::RUN_X_MAX),
+                    Random.get_fixed(bird::START_Y_MAX, bird::START_Y_MIN)
+                );
+        }
+        else return nullptr;
+    }
+    
     void Scene::spawn_entity()
     {
         if(_spawn_frames % lvl::SPAWN_FRAMES_CYCLE == 0)
@@ -107,11 +139,8 @@ namespace prj
             {
                 if(!entity)
                 {
-                    int id = Random.get_unbiased_int(entity::TYPE_MIN, entity::TYPE_MAX);
-                    
-                    entity = choose_entity(id);
+                    entity = random_entity();
                     entity->set_camera(cam);
-                    
                     break;
                 }
             }

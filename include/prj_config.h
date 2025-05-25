@@ -27,6 +27,8 @@ namespace prj
 {
     namespace lvl
     {
+        constexpr unsigned LUCKY_SEED = 3;
+        
         constexpr bn::fixed PLAYER_START_X = 0;
         
         constexpr bn::fixed Y_LIM = 16;
@@ -71,8 +73,12 @@ namespace prj
             constexpr int BIRD     = 3;
         }
         
-        constexpr int TYPE_MIN = type::CRAB;
-        constexpr int TYPE_MAX = type::BIRD + 1;
+        namespace type_threshold // 0 - 100
+        {
+            constexpr int CRAB     = 50;
+            constexpr int STARFISH = 90;
+            constexpr int BIRD     = 100;
+        }
         
         constexpr bn::fixed OFFSCREEN_X = 32;
         
