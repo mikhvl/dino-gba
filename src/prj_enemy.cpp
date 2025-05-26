@@ -267,6 +267,87 @@ namespace prj
         if(pos.y() > lvl::Y_DEATH_LIM) _death = end_death;
     }
     
+// Coconut
+    Coconut::Coconut(bn::fixed x, bn::fixed y, bn::fixed fall_speed, bool flip)
+        : Entity(entity::type::COCONUT, x, y, bn::sprite_items::coconut)
+        , x_speed(fall_speed)
+        , _face_left(flip)
+    {
+        shadow.set_visible(false);
+        
+        body_hitbox = bn::rect(
+            pos.x().round_integer(), pos.y().round_integer(),
+            coco::BODY_SIZE.width(), coco::BODY_SIZE.height());
+        atk_hitbox = body_hitbox;
+    }
+    
+    void Coconut::update()
+    {
+        apply_movement();
+        set_hitbox_position();
+        set_sprite_position();
+        update_states();
+    }
+    
+    void Coconut::set_position(bn::fixed x, bn::fixed y)
+    {
+        if(!is_dying() && _fall == not_fall)
+        {
+            pos.set_x(x);
+            pos.set_y(y);
+        }
+    }
+    
+    void Coconut::drop()
+    {
+        if(_fall == not_fall) _fall = full_fall;
+    }
+    
+    void Coconut::apply_movement()
+    {
+    // death jump
+        if(pos.y() > lvl::Y_LIM && !is_dying())
+        {
+            pos.set_y(lvl::Y_LIM);
+            _fall = start_fall;
+            _death = full_death;
+        }
+        
+    // set speed
+        if(_fall == start_fall)
+        {
+            x_speed = coco::speed::JUMP_X;
+            y_speed = coco::speed::JUMP_Y;
+        }
+        //else if(_fall == full_fall) x_speed = coco::speed::FALL_X;
+        
+    
+        if(_fall != not_fall)
+        {
+        // apply friction
+            y_speed -= force::GRAVITY;
+        
+        // set position
+            pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
+            pos.set_y(pos.y() - y_speed);
+        }
+    }
+    
+    void Coconut::set_hitbox_position()
+    {
+        body_hitbox.set_position(pos.x().round_integer(), pos.y().round_integer());
+        atk_hitbox = body_hitbox;
+    }
+    
+    void Coconut::set_sprite_position() { spr.set_position(pos); }
+    
+    void Coconut::update_states()
+    {
+        if(_fall == start_fall) _fall = full_fall;
+        
+        if(pos.y() > lvl::Y_DEATH_LIM) _death = end_death;
+    }
+    
 // Bird
     Bird::Bird
     (
@@ -281,6 +362,14 @@ namespace prj
                 height,
                 bn::sprite_items::toucan
             )
+        , coco
+            (
+                pos.x() + (!from_left ? -bird::COCONUT_OFFSET_X : bird::COCONUT_OFFSET_X),
+                pos.y() + bird::COCONUT_OFFSET_Y,
+                coco::speed::FALL_X,
+                //Random.get_fixed(coco::speed::FALL_X_MIN, coco::speed::FALL_X_MAX),
+                !from_left
+            )
         , x_speed(speed)
         , act(bn::sprite_animate_action<bird::MAX_ANIM_FRAMES>::forever(
                 spr, bird::ANIM_WAIT, spr_item.tiles_item(),
@@ -291,22 +380,68 @@ namespace prj
         shadow.set_visible(false);
         
     // hitboxes
-        /*body_hitbox = bn::rect(
+        body_hitbox = bn::rect(
             pos.x().round_integer(), pos.y().round_integer(),
             bird::BODY_SIZE.width(), bird::BODY_SIZE.height());
-        atk_hitbox = body_hitbox;*/
+        atk_hitbox = coco.get_atk_hitbox();
+    }
+    
+    void Bird::set_camera(const bn::camera_ptr& cam)
+    {
+        Entity::set_camera(cam);
+        coco.set_camera(cam);
     }
     
     void Bird::update()
     {
+        //Random.update();
+        
         apply_movement();
         set_hitbox_position();
         set_sprite_position();
         run_animation();
         update_states();
+        
+        coco.set_position
+            (
+                pos.x() + (_face_left ? -bird::COCONUT_OFFSET_X : bird::COCONUT_OFFSET_X),
+                pos.y() + bird::COCONUT_OFFSET_Y
+            );
+        coco.update();
     }
     
-    bool Bird::is_attacking() { return _jump == full_jump && !is_dying(); }
+    bool Bird::is_attacking()
+    {
+        return coco.is_attacking();
+        /*for(auto& coco : coconuts)
+        {
+            if(coco.is_attacking()) return true;
+        }
+        return false;*/
+    }
+    
+    void Bird::type_specific_action(bn::fixed_point player_position) // drop coconut
+    {
+        /*if(coconuts.empty())
+        {*/
+        // checking range
+            bn::fixed diff = player_position.x() - pos.x();
+            diff = _face_left ? -diff : diff;
+            bool in_range = 0 < diff && diff < bird::DROP_RANGE_X;
+            
+        // drop if in range
+            if(in_range)
+            {
+                coco.drop();
+                /*while(coconuts.size() < coconuts.max_size())
+                {
+                    coconuts.emplace_back(Coconut(pos.x(), pos.y(),
+                        Random.get_fixed(coco::speed::FALL_X_MIN, coco::speed::FALL_X_MAX), !from_left));
+                    coconuts.back().drop();
+                }*/
+            }
+        //}
+    }
     
     void Bird::set_face_left(bool flip)
     {
@@ -316,29 +451,8 @@ namespace prj
     
     void Bird::apply_movement()
     {
-    // set speed
-        /*if(_jump == start_jump)
-        {
-            if(_death == start_death)
-            {
-                x_speed = bird::speed::DAMAGE_X;
-                y_speed = bird::speed::DAMAGE_Y;
-            }
-            else y_speed = bird::speed::JUMP_Y;
-        }*/
-        
-    // apply friction
-        //if(_jump == full_jump) y_speed -= force::GRAVITY;
-        
     // set position
         pos.set_x(pos.x() + (_face_left ? -x_speed : x_speed));
-        
-    // level bounds
-        /*if(pos.y() > lvl::Y_LIM && !is_dying())
-        {
-            pos.set_y(lvl::Y_LIM);
-            _jump = not_jump;
-        }*/
         
     // spawn enter toggle
         if(_entering && (bn::abs(pos.x()) < lvl::X_LIM)) _entering = false;
@@ -346,8 +460,8 @@ namespace prj
     
     void Bird::set_hitbox_position()
     {
-        //body_hitbox.set_position(pos.x().round_integer(), pos.y().round_integer());
-        //atk_hitbox = body_hitbox;
+        body_hitbox.set_position(pos.x().round_integer(), pos.y().round_integer());
+        atk_hitbox = coco.get_atk_hitbox();
     }
     
     void Bird::set_sprite_position() { spr.set_position(pos); }
@@ -356,7 +470,7 @@ namespace prj
     
     void Bird::update_states()
     {
-        if(_death == start_death) _death = full_death;
-        if(bn::abs(pos.x()) > lvl::X_LIM + entity::OFFSCREEN_X && !_entering) _death = end_death;
+        if(bn::abs(pos.x()) > lvl::X_LIM + entity::OFFSCREEN_X && !_entering &&
+            coco.is_dead()) _death = end_death;
     }
 }

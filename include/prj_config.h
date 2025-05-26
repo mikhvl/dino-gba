@@ -74,19 +74,14 @@ namespace prj
         {
             constexpr int DEFAULT  = -128;
             
+            constexpr int BAG      = -2;
+            constexpr int COCONUT  = -3;
+            
             constexpr int PLAYER   = -1;
             
-            constexpr int BAG      = 0;
-            constexpr int CRAB     = 1;
-            constexpr int STARFISH = 2;
-            constexpr int BIRD     = 3;
-        }
-        
-        namespace type_threshold // 0 - 100
-        {
-            constexpr int CRAB     = 50;
-            constexpr int STARFISH = 90;
-            constexpr int BIRD     = 100;
+            constexpr int CRAB     = 0;
+            constexpr int STARFISH = 1;
+            constexpr int BIRD     = 2;
         }
         
         constexpr bn::fixed OFFSCREEN_X = 32;
@@ -247,24 +242,40 @@ namespace prj
         }
     }
     
+    namespace coco
+    {
+        constexpr bn::size BODY_SIZE = {10, 10};
+        
+        namespace speed
+        {
+            constexpr bn::fixed JUMP_X = 1.6;
+            constexpr bn::fixed JUMP_Y = 2;
+            
+            constexpr bn::fixed FALL_X = 2.2;
+        }
+    }
+    
     namespace bird
     {
-        constexpr bn::size COCO_SIZE = {10, 10};
+        constexpr bn::size BODY_SIZE = {20, 20};
         
         constexpr bn::fixed START_Y_MIN = -50;
         constexpr bn::fixed START_Y_MAX = -60;
+        
+        constexpr bn::fixed MAX_COCONUTS = 5;
+        constexpr bn::fixed DROP_RANGE_X = 40;
+        
+        constexpr bn::fixed COCONUT_OFFSET_X = -18;
+        constexpr bn::fixed COCONUT_OFFSET_Y = 10;
         
         constexpr int MAX_ANIM_FRAMES = 2;
         constexpr int ANIM_WAIT = 8;
         
         namespace speed
         {
-            constexpr bn::fixed RUN_X_DEFAULT = 1;
-            constexpr bn::fixed RUN_X_MIN = 1;
-            constexpr bn::fixed RUN_X_MAX = 1.8;
-            
-            constexpr bn::fixed COCO_X = 2.2;
-            constexpr bn::fixed COCO_Y = 3;
+            constexpr bn::fixed RUN_X_DEFAULT = 2.5;
+            constexpr bn::fixed RUN_X_MIN = 2;
+            constexpr bn::fixed RUN_X_MAX = 3;
         }
         
         namespace anim
