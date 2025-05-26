@@ -149,8 +149,16 @@ namespace prj
     {
         for(bn::unique_ptr<Entity>& entity : all_entity)
         {
+        // skip empty pointer
             if(!entity) continue;
             
+        // type specific actions
+            if(entity->get_type() == entity::type::BIRD)
+            {
+                entity->type_specific_action(dino->get_pos());
+            }
+            
+        // register dino attack
             if(dino->is_attacking())
             {
                 if(dino->get_atk_hitbox().intersects(entity->get_body_hitbox()))
@@ -161,6 +169,7 @@ namespace prj
                 Random.update(); // random variety
             }
             
+        // register entity attack
             if(entity->is_attacking())
             {
                 if(entity->get_atk_hitbox().intersects(dino->get_body_hitbox()))
@@ -169,8 +178,10 @@ namespace prj
                 }
             }
             
+        // update entity
             entity->update();
             
+        // delete dead entity pointer
             if(entity->is_dead())
             {
                 entity.reset();

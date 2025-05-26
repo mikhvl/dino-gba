@@ -36,6 +36,8 @@ namespace prj
     bool Entity::is_dead() { return _death == end_death; }
     bool Entity::is_attacking() { return !is_dying(); }
     
+    void Entity::type_specific_action(bn::fixed_point player_position) {}
+    
     void Entity::set_camera(const bn::camera_ptr& cam)
     {
         spr.set_camera(cam);

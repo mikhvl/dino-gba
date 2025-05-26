@@ -40,6 +40,8 @@ namespace prj
         bool is_dead();
         virtual bool is_attacking();
         
+        virtual void type_specific_action(bn::fixed_point player_position);
+        
     // for scene
         virtual void set_camera(const bn::camera_ptr& cam);
         
