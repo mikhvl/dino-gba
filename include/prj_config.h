@@ -37,6 +37,13 @@ namespace prj
         
         constexpr int MAX_ENTITY = 10;
         
+        namespace entity_threshold // 0 - 100
+        {
+            constexpr int CRAB     = 40;  //50;
+            constexpr int STARFISH = 80;  //90;
+            constexpr int BIRD     = 100; //100
+        }
+        
         constexpr int BG_FORE_PRIORITY = 0;
         constexpr int ENTITY_PRIORITY  = 1;
         constexpr int BG_MAIN_PRIORITY = 2;
@@ -48,7 +55,9 @@ namespace prj
         constexpr int PARALLAX_EASE_COEF = 10;
         
         constexpr int SPAWN_FRAMES_MAX = 10000;
-        constexpr int SPAWN_FRAMES_CYCLE = 110;
+        constexpr int SPAWN_FRAMES_CYCLE_MIN = 100;
+        constexpr int SPAWN_FRAMES_CYCLE_MAX = 160;
+        constexpr int SPAWN_FRAMES_REDUCTION = 5;
     }
     
     namespace force

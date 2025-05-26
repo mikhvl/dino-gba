@@ -8,7 +8,6 @@ code:
     menu
     score
     lives
-    gradual spawning rate
     coconut bird
     sfx + music
 

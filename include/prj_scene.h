@@ -37,6 +37,7 @@ namespace prj
         
     // for entity spawner
         int _spawn_frames = 0;
+        int _spawn_frames_cycle = lvl::SPAWN_FRAMES_CYCLE_MAX;
         
     // update functions
         bn::unique_ptr<Entity> choose_entity(int id = 0);

@@ -66,12 +66,7 @@ namespace prj
     
     bn::unique_ptr<Entity> Scene::choose_entity(int id)
     {
-        if(id == entity::type::BAG)
-        {
-            bn::fixed position = Random.get_fixed(-lvl::X_LIM, lvl::X_LIM);
-            return bn::make_unique<Bag>(position, position > 0);
-        }
-        else if(id == entity::type::CRAB)
+        if(id == entity::type::CRAB)
         {
             return bn::make_unique<Crab>
                 (
@@ -103,7 +98,7 @@ namespace prj
     {
         int chance = Random.get_int(100);
         
-        if(chance <= entity::type_threshold::CRAB)
+        if(chance <= lvl::entity_threshold::CRAB)
         {
             return bn::make_unique<Crab>
                 (
@@ -111,7 +106,7 @@ namespace prj
                     Random.get_fixed(crab::speed::RUN_X_MIN, crab::speed::RUN_X_MAX)
                 );
         }
-        else if(chance <= entity::type_threshold::STARFISH)
+        else if(chance <= lvl::entity_threshold::STARFISH)
         {
             return bn::make_unique<Starfish>
                 (
@@ -119,7 +114,7 @@ namespace prj
                     Random.get_fixed(starfish::speed::RUN_X_MIN, starfish::speed::RUN_X_MAX)
                 );
         }
-        else if(chance <= entity::type_threshold::BIRD)
+        else if(chance <= lvl::entity_threshold::BIRD)
         {
             return bn::make_unique<Bird>
                 (
@@ -133,7 +128,7 @@ namespace prj
     
     void Scene::spawn_entity()
     {
-        if(_spawn_frames % lvl::SPAWN_FRAMES_CYCLE == 0)
+        if(_spawn_frames % _spawn_frames_cycle == 0)
         {
             for(bn::unique_ptr<Entity>& entity : all_entity)
             {
@@ -176,7 +171,15 @@ namespace prj
             
             entity->update();
             
-            if(entity->is_dead()) entity.reset();
+            if(entity->is_dead())
+            {
+                entity.reset();
+                
+                if(_spawn_frames_cycle > lvl::SPAWN_FRAMES_CYCLE_MIN)
+                {
+                    _spawn_frames_cycle -= lvl::SPAWN_FRAMES_REDUCTION;
+                }
+            }
         }
         
         dino->update();
