@@ -35,7 +35,7 @@ namespace prj
         constexpr bn::fixed Y_DEATH_LIM = 60;
         constexpr bn::fixed X_LIM = 114;
         
-        constexpr int MAX_ENTITY = 10;
+        constexpr int MAX_ENTITY = 5;
         
         namespace entity_threshold // 0 - 100
         {
