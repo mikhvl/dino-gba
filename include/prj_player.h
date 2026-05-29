@@ -54,14 +54,14 @@ namespace prj
         FALL_STATE _fall = not_fall;
         DASH_STATE _dash = not_dash;
         SPIN_STATE _spin = not_spin;
-
+        
     // sprite/animation
         bn::sprite_animate_action<player::MAX_ANIM_FRAMES> act;
         
     // hitbox debug
         bn::sprite_builder hitbox_corner_builder;
         bn::vector<bn::sprite_ptr, 8> hitbox_corners;
-
+        
     // state functions
         bool is_running();
         bool is_jumping();
@@ -69,7 +69,7 @@ namespace prj
         bool is_dashing();
         bool is_spinning();
         bool is_on_ground();
-
+        
     // update functions
         void set_face_left(bool flip);
         void set_hitbox_size(bool is_spin = false);
